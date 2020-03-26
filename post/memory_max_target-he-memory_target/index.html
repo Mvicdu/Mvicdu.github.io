@@ -1,20 +1,13 @@
-<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" >
-
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>修改Oracle的memory_max_target和memory_target | Vic Notes</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585209225426">
+<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585209874493">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://mvicdu.github.io/styles/main.css">
-
-
-
-<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<link rel="alternate" type="application/atom+xml" title="修改Oracle的memory_max_target和memory_target | Vic Notes - Atom Feed" href="https://mvicdu.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
@@ -22,81 +15,86 @@
 最初安装Orale11g时，采用默认自动内存管理，使用1/2Mem。后来想增大最大内存使用值。
 系统内存16G Mem，想修改为3/4Mem: 16*3/4=..." />
     <meta name="keywords" content="oracle" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
   <body>
-    <div id="app" class="main">
-
-      <div class="sidebar" :class="{ 'full-height': menuVisible }">
-  <div class="top-container" data-aos="fade-right">
-    <div class="top-header-container">
-      <a class="site-title-container" href="https://mvicdu.github.io">
-        <img src="https://mvicdu.github.io/images/avatar.png?v=1585209225426" class="site-logo">
-        <h1 class="site-title">Vic Notes</h1>
-      </a>
-      <div class="menu-btn" @click="menuVisible = !menuVisible">
-        <div class="line"></div>
-      </div>
-    </div>
-    <div>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://mvicdu.github.io">
+  <img class="avatar" src="https://mvicdu.github.io/images/avatar.png?v=1585209874493" alt="">
+  </a>
+  <h1 class="site-title">
+    Vic Notes
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
       
-        
-          <a href="/" class="site-nav">
-            首页
-          </a>
-        
+        <a href="/" class="menu">
+          首页
+        </a>
       
-        
-          <a href="/archives" class="site-nav">
-            归档
-          </a>
-        
+    
       
-        
-          <a href="/tags" class="site-nav">
-            标签
-          </a>
-        
+        <a href="/archives" class="menu">
+          归档
+        </a>
       
-        
-          <a href="/post/about" class="site-nav">
-            关于
-          </a>
-        
+    
       
-    </div>
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
   </div>
-  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
-    <div class="social-container">
+  <div class="social-container">
+    
       
-        
+    
       
-        
+    
       
-        
+    
       
-        
+    
       
-        
-      
-    </div>
-    <div class="site-description">
-      温故而知新
-    </div>
-    <div class="site-footer">
-      记录学习每一天 | <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">RSS</a>
-    </div>
+    
   </div>
 </div>
 
-
-      <div class="main-container">
-        <div class="content-container" data-aos="fade-up">
-          <div class="post-detail">
-            <h2 class="post-title">修改Oracle的memory_max_target和memory_target</h2>
-            <div class="post-date">2019-08-14</div>
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              修改Oracle的memory_max_target和memory_target
+            </h2>
+            <div class="post-info">
+              <span>
+                2019-08-14
+              </span>
+              <span>
+                2 min read
+              </span>
+              
+                <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="post-tag">
+                  # oracle
+                </a>
+              
+            </div>
             
-            <div class="post-content" v-pre>
-              <p>修改Oracle的memory_max_target和memory_target</p>
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>修改Oracle的memory_max_target和memory_target</p>
 <p>最初安装Orale11g时，采用默认自动内存管理，使用1/2Mem。后来想增大最大内存使用值。<br>
 系统内存16G Mem，想修改为3/4Mem: 16*3/4=12G=12288M。</p>
 <h1 id="vim-etcsysctlconf">vim /etc/sysctl.conf</h1>
@@ -117,53 +115,82 @@ oracle 11g中新增的内存自动管理的参数MEMORY_TARGET，它能自动调
 <h1 id="mount-o-remountsize12288m-devshm2为了确保操作系统重启之后能生效需要修改etcfstab文件">mount -o remount,size=12288M /dev/shm2.为了确保操作系统重启之后能生效，需要修改/etc/fstab文件</h1>
 <p>tmpfs /dev/shm tmpfs  defaults,size=12288M      0 0</p>
 
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#vim-etcsysctlconf">vim /etc/sysctl.conf</a></li>
+<li><a href="#sysctl-p%E5%86%8D%E4%BF%AE%E6%94%B9oracle-%E5%8F%82%E6%95%B0">sysctl -p再修改ORACLE 参数</a></li>
+<li><a href="#mount-t-tmpfs-shmfs-o-size12288m-devshm">mount -t tmpfs shmfs -o size=12288M /dev/shm</a></li>
+<li><a href="#mount-o-remountsize12288m-devshm2%E4%B8%BA%E4%BA%86%E7%A1%AE%E4%BF%9D%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%87%8D%E5%90%AF%E4%B9%8B%E5%90%8E%E8%83%BD%E7%94%9F%E6%95%88%E9%9C%80%E8%A6%81%E4%BF%AE%E6%94%B9etcfstab%E6%96%87%E4%BB%B6">mount -o remount,size=12288M /dev/shm2.为了确保操作系统重启之后能生效，需要修改/etc/fstab文件</a></li>
+</ul>
+
+              </div>
             </div>
-            
-              <div class="tag-container">
-                
-                  <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="tag">
-                    oracle
-                  </a>
-                
-              </div>
-            
-            
-              <div class="next-post">
-                <div class="next">下一篇</div>
-                <a href="https://mvicdu.github.io/post/cha-xun-zui-jin-oracle-geng-gai-de-shu-ju/">
-                  <h3 class="post-title">
-                    查询最近oracle更改的数据
-                  </h3>
-                </a>
-              </div>
-            
-
-            
-
-          </div>
-
+          </article>
         </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://mvicdu.github.io/post/cha-xun-zui-jin-oracle-geng-gai-de-shu-ju/">
+              <h3 class="post-title">
+                查询最近oracle更改的数据
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  记录学习每一天
+  <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
       </div>
     </div>
 
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-<script type="application/javascript">
+    <script>
+      hljs.initHighlightingOnLoad()
 
-AOS.init();
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
 
-var app = new Vue({
-  el: '#app',
-  data: {
-    menuVisible: false,
-  },
-})
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
 
-</script>
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
 
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
 
-
-
-
-
+    </script>
   </body>
 </html>

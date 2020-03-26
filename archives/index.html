@@ -1,517 +1,453 @@
-<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" >
-
-<title>文章归档 | Vic Notes</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585209225426">
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vic Notes</title>
+<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585209874493">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://mvicdu.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Vic Notes - Atom Feed" href="https://mvicdu.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-
-
-
-    <meta name="description" content="温故而知新">
+    <meta name="description" content="温故而知新" />
   </head>
   <body>
-    <div id="app" class="main">
-
-      <div class="sidebar" :class="{ 'full-height': menuVisible }">
-  <div class="top-container" data-aos="fade-right">
-    <div class="top-header-container">
-      <a class="site-title-container" href="https://mvicdu.github.io">
-        <img src="https://mvicdu.github.io/images/avatar.png?v=1585209225426" class="site-logo">
-        <h1 class="site-title">Vic Notes</h1>
-      </a>
-      <div class="menu-btn" @click="menuVisible = !menuVisible">
-        <div class="line"></div>
-      </div>
-    </div>
-    <div>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://mvicdu.github.io">
+  <img class="avatar" src="https://mvicdu.github.io/images/avatar.png?v=1585209874493" alt="">
+  </a>
+  <h1 class="site-title">
+    Vic Notes
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
       
-        
-          <a href="/" class="site-nav">
-            首页
-          </a>
-        
+        <a href="/" class="menu">
+          首页
+        </a>
       
-        
-          <a href="/archives" class="site-nav">
-            归档
-          </a>
-        
+    
       
-        
-          <a href="/tags" class="site-nav">
-            标签
-          </a>
-        
+        <a href="/archives" class="menu">
+          归档
+        </a>
       
-        
-          <a href="/post/about" class="site-nav">
-            关于
-          </a>
-        
+    
       
-    </div>
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
   </div>
-  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
-    <div class="social-container">
+  <div class="social-container">
+    
       
-        
+    
       
-        
+    
       
-        
+    
       
-        
+    
       
-        
-      
-    </div>
-    <div class="site-description">
-      温故而知新
-    </div>
-    <div class="site-footer">
-      记录学习每一天 | <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">RSS</a>
-    </div>
+    
   </div>
 </div>
 
+    
+        
 
-      <div class="main-container">
-        <div class="content-container" data-aos="fade-up">
-          
+<div class="archives-container">
+  
+    <h2 class="year">2019</h2>
+    
+      
+        <a href="https://mvicdu.github.io/post/RESETLOGS&amp;NORESETLOGS/" class="post">
+          <h2 class="post-title">
+            RESETLOGS 和 NORESETLOGS 区别及使用说明
+          </h2>
+          <div class="time">2019-08-27</div>
+        </a>
+      
+    
+      
+        <a href="https://mvicdu.github.io/post/online-database-backup/" class="post">
+          <h2 class="post-title">
+            联机备份（online database backup）
+          </h2>
+          <div class="time">2019-08-26</div>
+        </a>
+      
+    
+      
+        <a href="https://mvicdu.github.io/post/pei-zhi-shan-hui-shu-ju-ku-frakuai-su-hui-fu-qu/" class="post">
+          <h2 class="post-title">
+            配置闪回数据库（FRA，快速恢复区）
+          </h2>
+          <div class="time">2019-08-25</div>
+        </a>
+      
+    
+      
+        <a href="https://mvicdu.github.io/post/shan-hui-gui-dang/" class="post">
+          <h2 class="post-title">
+            闪回归档
+          </h2>
+          <div class="time">2019-08-25</div>
+        </a>
+      
+    
+      
+        <a href="https://mvicdu.github.io/post/rman-hui-fu-bei-fen/" class="post">
+          <h2 class="post-title">
+            RMAN恢复备份
+          </h2>
+          <div class="time">2019-08-25</div>
+        </a>
+      
+    
+      
+        <a href="https://mvicdu.github.io/post/huifuchongzuorizhi/" class="post">
+          <h2 class="post-title">
+            LGWR输入/输出(I/O)由于永久性介质故障而崩溃，导致重做日志丢失
+          </h2>
+          <div class="time">2019-08-24</div>
+        </a>
+      
+    
+      
+        <a href="https://mvicdu.github.io/post/lgwr-shu-ru-shu-chu-ioyou-yu-yong-jiu-xing-jie-zhi-gu-zhang-er-beng-kui-dao-zhi-chong-zuo-ri-zhi-diu-shi/" class="post">
+          <h2 class="post-title">
+            LGWR输入/输出(I/O)由于永久性介质故障而崩溃，导致重做日志丢失
+          </h2>
+          <div class="time">2019-08-24</div>
+        </a>
+      
+    
+      
+        <a href="https://mvicdu.github.io/post/zi-dong-gong-xiang-nei-cun-guan-li/" class="post">
+          <h2 class="post-title">
+            自动共享内存管理
+          </h2>
+          <div class="time">2019-08-24</div>
+        </a>
+      
+    
+      
+        <a href="https://mvicdu.github.io/post/jian-shi-rman-zuo-ye-jin-du/" class="post">
+          <h2 class="post-title">
+            监视RMAN作业进度
+          </h2>
+          <div class="time">2019-08-21</div>
+        </a>
+      
+    
+      
+        <a href="https://mvicdu.github.io/post/shu-ju-ku-bei-fen/" class="post">
+          <h2 class="post-title">
+            數據庫備份
+          </h2>
+          <div class="time">2019-08-21</div>
+        </a>
+      
+    
+      
+        <a href="https://mvicdu.github.io/post/kouling/" class="post">
+          <h2 class="post-title">
+            丢失口令文件后恢复
+          </h2>
+          <div class="time">2019-08-20</div>
+        </a>
+      
+    
+      
+        <a href="https://mvicdu.github.io/post/zhi-ding-bao-liu-ce-lue/" class="post">
+          <h2 class="post-title">
+            指定保留策略
+          </h2>
+          <div class="time">2019-08-20</div>
+        </a>
+      
+    
+      
+        <a href="https://mvicdu.github.io/post/pei-zhi-gui-dang-ri-zhi-mu-biao-wei-zhi/" class="post">
+          <h2 class="post-title">
+            配置归档日志目标位置
+          </h2>
+          <div class="time">2019-08-18</div>
+        </a>
+      
+    
+      
+        <a href="https://mvicdu.github.io/post/oracle-restart-jian-hua-shu-ju-ku-guan-li/" class="post">
+          <h2 class="post-title">
+            Oracle Restart 简化数据库管理
+          </h2>
+          <div class="time">2019-08-16</div>
+        </a>
+      
+    
+      
+        <a href="https://mvicdu.github.io/post/xiuguikuaizhao/" class="post">
+          <h2 class="post-title">
+            Oracle 11g修改AWR数据采样时间间隔及历史快照保留时间
+          </h2>
+          <div class="time">2019-08-16</div>
+        </a>
+      
+    
+      
+        <a href="https://mvicdu.github.io/post/memory_max_target-he-memory_target/" class="post">
+          <h2 class="post-title">
+            修改Oracle的memory_max_target和memory_target
+          </h2>
+          <div class="time">2019-08-14</div>
+        </a>
+      
+    
+      
+        <a href="https://mvicdu.github.io/post/cha-xun-zui-jin-oracle-geng-gai-de-shu-ju/" class="post">
+          <h2 class="post-title">
+            查询最近oracle更改的数据
+          </h2>
+          <div class="time">2019-08-03</div>
+        </a>
+      
+    
+      
+        <a href="https://mvicdu.github.io/post/chong-zuo-ri-zhi-zu-de-jie-jue-ban-fa/" class="post">
+          <h2 class="post-title">
+            丢失联机重做日志组的解决办法
+          </h2>
+          <div class="time">2019-08-02</div>
+        </a>
+      
+    
+      
+        <a href="https://mvicdu.github.io/post/oracle-cha-kan-gao-jing-ri-zhi/" class="post">
+          <h2 class="post-title">
+            oracle查看告警日志
+          </h2>
+          <div class="time">2019-08-01</div>
+        </a>
+      
+    
+      
+        <a href="https://mvicdu.github.io/post/si-suo-cha-xun-ji-jie-jue-ban-fa/" class="post">
+          <h2 class="post-title">
+            死锁查询及解决办法
+          </h2>
+          <div class="time">2019-07-30</div>
+        </a>
+      
+    
+      
+        <a href="https://mvicdu.github.io/post/chuang-jian-wai-bu-biao/" class="post">
+          <h2 class="post-title">
+            Oracle 创建外部表
+          </h2>
+          <div class="time">2019-07-25</div>
+        </a>
+      
+    
+      
+        <a href="https://mvicdu.github.io/post/yan-chi-fen-pei/" class="post">
+          <h2 class="post-title">
+            oracle 表空间的延迟分配
+          </h2>
+          <div class="time">2019-07-11</div>
+        </a>
+      
+    
+      
+        <a href="https://mvicdu.github.io/post/alter-system-yu-alter-database/" class="post">
+          <h2 class="post-title">
+            alter system与alter database的区别
+          </h2>
+          <div class="time">2019-07-08</div>
+        </a>
+      
+    
+      
+        <a href="https://mvicdu.github.io/post/oracle-rong-zai-fang-an/" class="post">
+          <h2 class="post-title">
+            oracle容灾方案
+          </h2>
+          <div class="time">2019-06-12</div>
+        </a>
+      
+    
+      
+        <a href="https://mvicdu.github.io/post/flashback-shan-hui/" class="post">
+          <h2 class="post-title">
+            flashback 闪回
+          </h2>
+          <div class="time">2019-06-03</div>
+        </a>
+      
+    
+      
+        <a href="https://mvicdu.github.io/post/qiantao-chaxun/" class="post">
+          <h2 class="post-title">
+            嵌套子查询和关联子查询
+          </h2>
+          <div class="time">2019-05-29</div>
+        </a>
+      
+    
+      
+        <a href="https://mvicdu.github.io/post/oracle-kong-xian-chao-shi/" class="post">
+          <h2 class="post-title">
+            设置Oracle空闲超时
+          </h2>
+          <div class="time">2019-05-21</div>
+        </a>
+      
+    
+      
+        <a href="https://mvicdu.github.io/post/sqlplus_fanye/" class="post">
+          <h2 class="post-title">
+            sqlplus窗口下支持上下翻页
+          </h2>
+          <div class="time">2019-05-15</div>
+        </a>
+      
+    
+      
+        <a href="https://mvicdu.github.io/post/zhi-shi-tu-cha-kan/" class="post">
+          <h2 class="post-title">
+            辅助管理之视图查看
+          </h2>
+          <div class="time">2019-05-06</div>
+        </a>
+      
+    
+      
+        <a href="https://mvicdu.github.io/post/unique_index-normal_index/" class="post">
+          <h2 class="post-title">
+            oracle唯一索引与普通索引的区别和联系以及using index用法
+          </h2>
+          <div class="time">2019-04-29</div>
+        </a>
+      
+    
+      
+        <a href="https://mvicdu.github.io/post/lie-yue-shu-ji-biao-yue-shu/" class="post">
+          <h2 class="post-title">
+            列约束及表约束
+          </h2>
+          <div class="time">2019-04-22</div>
+        </a>
+      
+    
+      
+    
+  
+    <h2 class="year">2018</h2>
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        <a href="https://mvicdu.github.io/post/linux-ansible-zi-dong-hua-yun-wei-pei-zhi/" class="post">
+          <h2 class="post-title">
+            linux Ansible 自动化运维配置
+          </h2>
+          <div class="time">2018-09-05</div>
+        </a>
+      
+    
+  
+</div>
 
-          <h2 class="archives-title">文章归档</h2>
-          <div class="archives-container">
-            
-              <h2 class="year" data-aos="fade-in" data-aos-delay="500">2019</h2>
-              
-                
-                  <article class="post">
-                    <a href="https://mvicdu.github.io/post/RESETLOGS&amp;NORESETLOGS/">
-                      <h2 class="post-title">
-                        RESETLOGS 和 NORESETLOGS 区别及使用说明
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://mvicdu.github.io/post/online-database-backup/">
-                      <h2 class="post-title">
-                        联机备份（online database backup）
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://mvicdu.github.io/post/pei-zhi-shan-hui-shu-ju-ku-frakuai-su-hui-fu-qu/">
-                      <h2 class="post-title">
-                        配置闪回数据库（FRA，快速恢复区）
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://mvicdu.github.io/post/shan-hui-gui-dang/">
-                      <h2 class="post-title">
-                        闪回归档
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://mvicdu.github.io/post/rman-hui-fu-bei-fen/">
-                      <h2 class="post-title">
-                        RMAN恢复备份
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://mvicdu.github.io/post/huifuchongzuorizhi/">
-                      <h2 class="post-title">
-                        LGWR输入/输出(I/O)由于永久性介质故障而崩溃，导致重做日志丢失
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://mvicdu.github.io/post/lgwr-shu-ru-shu-chu-ioyou-yu-yong-jiu-xing-jie-zhi-gu-zhang-er-beng-kui-dao-zhi-chong-zuo-ri-zhi-diu-shi/">
-                      <h2 class="post-title">
-                        LGWR输入/输出(I/O)由于永久性介质故障而崩溃，导致重做日志丢失
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://mvicdu.github.io/post/zi-dong-gong-xiang-nei-cun-guan-li/">
-                      <h2 class="post-title">
-                        自动共享内存管理
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://mvicdu.github.io/post/jian-shi-rman-zuo-ye-jin-du/">
-                      <h2 class="post-title">
-                        监视RMAN作业进度
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://mvicdu.github.io/post/shu-ju-ku-bei-fen/">
-                      <h2 class="post-title">
-                        數據庫備份
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://mvicdu.github.io/post/kouling/">
-                      <h2 class="post-title">
-                        丢失口令文件后恢复
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://mvicdu.github.io/post/zhi-ding-bao-liu-ce-lue/">
-                      <h2 class="post-title">
-                        指定保留策略
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://mvicdu.github.io/post/pei-zhi-gui-dang-ri-zhi-mu-biao-wei-zhi/">
-                      <h2 class="post-title">
-                        配置归档日志目标位置
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://mvicdu.github.io/post/oracle-restart-jian-hua-shu-ju-ku-guan-li/">
-                      <h2 class="post-title">
-                        Oracle Restart 简化数据库管理
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://mvicdu.github.io/post/xiuguikuaizhao/">
-                      <h2 class="post-title">
-                        Oracle 11g修改AWR数据采样时间间隔及历史快照保留时间
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://mvicdu.github.io/post/memory_max_target-he-memory_target/">
-                      <h2 class="post-title">
-                        修改Oracle的memory_max_target和memory_target
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://mvicdu.github.io/post/cha-xun-zui-jin-oracle-geng-gai-de-shu-ju/">
-                      <h2 class="post-title">
-                        查询最近oracle更改的数据
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://mvicdu.github.io/post/chong-zuo-ri-zhi-zu-de-jie-jue-ban-fa/">
-                      <h2 class="post-title">
-                        丢失联机重做日志组的解决办法
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://mvicdu.github.io/post/oracle-cha-kan-gao-jing-ri-zhi/">
-                      <h2 class="post-title">
-                        oracle查看告警日志
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://mvicdu.github.io/post/si-suo-cha-xun-ji-jie-jue-ban-fa/">
-                      <h2 class="post-title">
-                        死锁查询及解决办法
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://mvicdu.github.io/post/chuang-jian-wai-bu-biao/">
-                      <h2 class="post-title">
-                        Oracle 创建外部表
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://mvicdu.github.io/post/yan-chi-fen-pei/">
-                      <h2 class="post-title">
-                        oracle 表空间的延迟分配
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://mvicdu.github.io/post/alter-system-yu-alter-database/">
-                      <h2 class="post-title">
-                        alter system与alter database的区别
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://mvicdu.github.io/post/oracle-rong-zai-fang-an/">
-                      <h2 class="post-title">
-                        oracle容灾方案
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://mvicdu.github.io/post/flashback-shan-hui/">
-                      <h2 class="post-title">
-                        flashback 闪回
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://mvicdu.github.io/post/qiantao-chaxun/">
-                      <h2 class="post-title">
-                        嵌套子查询和关联子查询
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://mvicdu.github.io/post/oracle-kong-xian-chao-shi/">
-                      <h2 class="post-title">
-                        设置Oracle空闲超时
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://mvicdu.github.io/post/sqlplus_fanye/">
-                      <h2 class="post-title">
-                        sqlplus窗口下支持上下翻页
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://mvicdu.github.io/post/zhi-shi-tu-cha-kan/">
-                      <h2 class="post-title">
-                        辅助管理之视图查看
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://mvicdu.github.io/post/unique_index-normal_index/">
-                      <h2 class="post-title">
-                        oracle唯一索引与普通索引的区别和联系以及using index用法
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://mvicdu.github.io/post/lie-yue-shu-ji-biao-yue-shu/">
-                      <h2 class="post-title">
-                        列约束及表约束
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-              
-            
-              <h2 class="year" data-aos="fade-in" data-aos-delay="500">2018</h2>
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-                  <article class="post">
-                    <a href="https://mvicdu.github.io/post/linux-ansible-zi-dong-hua-yun-wei-pei-zhi/">
-                      <h2 class="post-title">
-                        linux Ansible 自动化运维配置
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-            
-          </div>
-
-          <div class="pagination-container">
+    
+        <div class="pagination-container">
   
   
 </div>
 
-        </div>
+    
+        <div class="site-footer">
+  记录学习每一天
+  <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
       </div>
     </div>
-
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-<script type="application/javascript">
-
-AOS.init();
-
-var app = new Vue({
-  el: '#app',
-  data: {
-    menuVisible: false,
-  },
-})
-
-</script>
-
-
-
-
-
-
   </body>
 </html>
