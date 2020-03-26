@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>闪回归档 | Vic Notes</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585208850032">
+<link rel="stylesheet" href="https://mvicdu.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="1.创建闪回数据归档表空间
+create flashback archive default fla1 tablespace tbs1 quota 10 retention 5 year;    #创建fla1归档表空间10G保存5年
+2...." />
+    <meta name="keywords" content="oracle" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://mvicdu.github.io">
+        <img src="https://mvicdu.github.io/images/avatar.png?v=1585208850032" class="site-logo">
+        <h1 class="site-title">Vic Notes</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+        
+          <a href="https://mvicdu.github.io/post/" class="site-nav">
+            Oracle
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      记录学习每一天 | <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">闪回归档</h2>
+            <div class="post-date">2019-08-25</div>
+            
+            <div class="post-content" v-pre>
+              <p>1.创建闪回数据归档表空间<br>
+create flashback archive default fla1 tablespace tbs1 quota 10 retention 5 year;    #创建fla1归档表空间10G保存5年</p>
+<p>2.设置为默认闪回归档<br>
+alter flashback archive fla1 set default；                                                                   #设置fla1为默认归档表空间</p>
+<p>3.启动闪回数据归档<br>
+alter table inventory flashback archive;<br>
+alter table stock_data flashback archive;</p>
+<p>打开闪回数据库：<br>
+alter database flashback on;<br>
+查询闪回数据库是否已经开启：<br>
+select flashback_on from v$database;<br>
+关闭闪回数据库：<br>
+alter database flashback off;                                                                                    # 如果关闭数据库会自动删除所有现有的闪回数据库日志</p>
+<p>增加闪回归档表空间：<br>
+alter flashback archive fla1 add tablespace tbs3 quota 5G;</p>
+<p>更改保留时间：<br>
+alter flashback archive fla1 modify retention 2 year;</p>
+<p>清除数据：<br>
+alter flashback archive fla1 purge before timestamp(systimestamp-interval '1' day);   #清除一天前的历史记录</p>
+<p>删除闪回数据归档：<br>
+drop flashback archive fla1;                                                                                             #删除闪回数据归档fla1和历史数据，不删除表空间<br>
+ps：删除闪回数据归档的全部表空间会引发错误。</p>
+<p>从回收站中还原表：<br>
+flashback table &lt;table_name&gt; to before drop [rename to &lt;new_name&gt;];</p>
+<p>闪回数据库示例：<br>
+<img src="https://mvicdu.github.io/post-images/1585200123483.png" alt="" loading="lazy"></p>
+<p>监视闪回数据库：<br>
+查看快速恢复区的磁盘限额：<br>
+SQL&gt; select estimated_flashback_size,flashback_size from v<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mi>l</mi><mi>a</mi><mi>s</mi><mi>h</mi><mi>b</mi><mi>a</mi><mi>c</mi><msub><mi>k</mi><mi>d</mi></msub><mi>a</mi><mi>t</mi><mi>a</mi><mi>b</mi><mi>a</mi><mi>s</mi><msub><mi>e</mi><mi>l</mi></msub><mi>o</mi><mi>g</mi><mo separator="true">;</mo><mi mathvariant="normal">确</mi><mi mathvariant="normal">认</mi><mi mathvariant="normal">当</mi><mi mathvariant="normal">前</mi><mi mathvariant="normal">闪</mi><mi mathvariant="normal">回</mi><mi mathvariant="normal">窗</mi><mi mathvariant="normal">口</mi><mi mathvariant="normal">：</mi><mi>S</mi><mi>Q</mi><mi>L</mi><mo>&gt;</mo><mi>s</mi><mi>e</mi><mi>l</mi><mi>e</mi><mi>c</mi><mi>t</mi><mi>o</mi><mi>l</mi><mi>d</mi><mi>e</mi><mi>s</mi><msub><mi>t</mi><mi>f</mi></msub><mi>l</mi><mi>a</mi><mi>s</mi><mi>h</mi><mi>b</mi><mi>a</mi><mi>c</mi><msub><mi>k</mi><mi>s</mi></msub><mi>c</mi><mi>n</mi><mo separator="true">,</mo><mi>o</mi><mi>l</mi><mi>d</mi><mi>e</mi><mi>s</mi><msub><mi>t</mi><mi>f</mi></msub><mi>l</mi><mi>a</mi><mi>s</mi><mi>h</mi><mi>b</mi><mi>a</mi><mi>c</mi><msub><mi>k</mi><mi>t</mi></msub><mi>i</mi><mi>m</mi><mi>e</mi><mi>f</mi><mi>r</mi><mi>o</mi><mi>m</mi><mi>v</mi></mrow><annotation encoding="application/x-tex">flashback_database_log;
+确认当前闪回窗口：
+SQL&gt; select oldest_flashback_scn,oldest_flashback_time from v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">a</span><span class="mord mathdefault">s</span><span class="mord mathdefault">h</span><span class="mord mathdefault">b</span><span class="mord mathdefault">a</span><span class="mord mathdefault">c</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.03148em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">d</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">a</span><span class="mord mathdefault">t</span><span class="mord mathdefault">a</span><span class="mord mathdefault">b</span><span class="mord mathdefault">a</span><span class="mord mathdefault">s</span><span class="mord"><span class="mord mathdefault">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.01968em;">l</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mpunct">;</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord cjk_fallback">确</span><span class="mord cjk_fallback">认</span><span class="mord cjk_fallback">当</span><span class="mord cjk_fallback">前</span><span class="mord cjk_fallback">闪</span><span class="mord cjk_fallback">回</span><span class="mord cjk_fallback">窗</span><span class="mord cjk_fallback">口</span><span class="mord cjk_fallback">：</span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mord mathdefault">Q</span><span class="mord mathdefault">L</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.980548em;vertical-align:-0.286108em;"></span><span class="mord mathdefault">s</span><span class="mord mathdefault">e</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">e</span><span class="mord mathdefault">c</span><span class="mord mathdefault">t</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">d</span><span class="mord mathdefault">e</span><span class="mord mathdefault">s</span><span class="mord"><span class="mord mathdefault">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">a</span><span class="mord mathdefault">s</span><span class="mord mathdefault">h</span><span class="mord mathdefault">b</span><span class="mord mathdefault">a</span><span class="mord mathdefault">c</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.03148em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">s</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">c</span><span class="mord mathdefault">n</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">d</span><span class="mord mathdefault">e</span><span class="mord mathdefault">s</span><span class="mord"><span class="mord mathdefault">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">a</span><span class="mord mathdefault">s</span><span class="mord mathdefault">h</span><span class="mord mathdefault">b</span><span class="mord mathdefault">a</span><span class="mord mathdefault">c</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.03148em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">i</span><span class="mord mathdefault">m</span><span class="mord mathdefault">e</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">o</span><span class="mord mathdefault">m</span><span class="mord mathdefault" style="margin-right:0.03588em;">v</span></span></span></span>flashback_database_log;<br>
+监视闪回数据库日志中的日志记录：<br>
+SQL&gt;select * from v$flashback_database_stat;</p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="tag">
+                    oracle
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://mvicdu.github.io/post/rman-hui-fu-bei-fen/">
+                  <h3 class="post-title">
+                    RMAN恢复备份
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>

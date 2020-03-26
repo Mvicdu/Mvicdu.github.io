@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>oracle容灾方案 | Vic Notes</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585208850032">
+<link rel="stylesheet" href="https://mvicdu.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="方案：
+磁盘阵列复制技术，主要由一些磁盘阵列厂商提供，如EMC SRDF、IBM PPRC 、HP BusinessCopy、HDS TrueCopy等
+存储卷复制技术，由一些卷管理软件厂商提供，如VERITAS VVR；
+数据库复制技术，..." />
+    <meta name="keywords" content="容灾" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://mvicdu.github.io">
+        <img src="https://mvicdu.github.io/images/avatar.png?v=1585208850032" class="site-logo">
+        <h1 class="site-title">Vic Notes</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+        
+          <a href="https://mvicdu.github.io/post/" class="site-nav">
+            Oracle
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      记录学习每一天 | <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">oracle容灾方案</h2>
+            <div class="post-date">2019-06-12</div>
+            
+            <div class="post-content" v-pre>
+              <p>方案：<br>
+磁盘阵列复制技术，主要由一些磁盘阵列厂商提供，如EMC SRDF、IBM PPRC 、HP BusinessCopy、HDS TrueCopy等<br>
+存储卷复制技术，由一些卷管理软件厂商提供，如VERITAS VVR；<br>
+数据库复制技术，由数据库厂商以及一些第三方厂商提供，如DSG RealSync，Quest SharePlex等；<br>
+应用层复制技术，由各系统的应用厂商自己提供。</p>
+<p>优劣：<br>
+----磁盘阵列复制技术主要适用于数据中心级的海量数据复制<br>
+----存储卷复制技术主要适用于工作组级的数据复制，它对CPU资源占用高<br>
+----而应用层复制技术只适合那些在应用中提供了该技术的应用，由于它的非标准化、开发和维护工作量大，使得其应用不成熟也不普遍。关键行业对数据的可靠性要求又非常之高，使得关键行业用户也不敢冒然选择此种复制技术。<br>
+----DSG RealSync属于数据库复制技术，它适用于从工作组级、企业级到数据中心级的复制需求，无论系统采用什么样的服务器平台、什么样的存储平台，只要是ORACLE系统之间的复制即可适用。采用DSG RealSync复制技术，其目标端数据库在复制过程中处于可用状态，帮助关键行业用户实现生产系统与查询统计报表系统的分离；其源端系统和目标端系统可以采用异构的操作系统平台、存储平台；支持选择性复制，即支持只复制指定的user、指定的Table、指定的行和列，从而节省存储空间，提高应用灵活性；支持1对多，多对1的复制结构，即：能够将多个数据库中的数据复制到一个数据库中，能够将一个数据库中的不同数据分发到不同的数据库中；也节约带宽和网络资源，其所需带宽一般在几Mbps,几十Mbps</p>
+<p>Oracle公司目前的容灾产品有我们常见的DataGuard和属于中间件部门的Oracle GoldenGate(以下简称OGG)产品，</p>
+<p>在Oracle到Oracle的容灾方面，DataGuard在维护及预算支持上都优于Oracle GoldenGate</p>
+<p>Oracle的Extended RAC 容灾高可用，Extended RAC就是将传统的RAC两个节点从同一个机房改成分别放在两个不同的机房来实现单点容灾。RAC两个节点不能放置的距离太远(随着网络延迟的增加，RAC的性能成几何倍的衰弱，这就是为什么Exadata为什么将RAC所有节点放在同一个机柜的原因)，而距离太近又不能实现真正的灾备，如电网，台风，水灾，地震等等。</p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://mvicdu.github.io/tag/ssj3lGz5l/" class="tag">
+                    容灾
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://mvicdu.github.io/post/flashback-shan-hui/">
+                  <h3 class="post-title">
+                    flashback 闪回
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>

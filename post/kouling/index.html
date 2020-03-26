@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>ansible | Vic Notes</title>
+<title>丢失口令文件后恢复 | Vic Notes</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,7 +18,11 @@
 
 
 
-    <meta name="description" content="温故而知新">
+    <meta name="description" content="1.使用orapwd 重新创建口令文件
+$ orapwd file=$ORACLE_HOME/dbs/orapworcal password=ora entries=5
+2.向口令文件添加用户并向每个用户分配适当的权限
+..." />
+    <meta name="keywords" content="oracle" />
   </head>
   <body>
     <div id="app" class="main">
@@ -94,28 +98,39 @@
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
-          <h2 class="current-tag">标签: ansible</h2>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://mvicdu.github.io/post/linux-ansible-zi-dong-hua-yun-wei-pei-zhi/">
-                  <h2 class="post-title">linux Ansible 自动化运维配置</h2>
-                </a>
-                <div class="post-date">
-                  2018-09-05
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
+          <div class="post-detail">
+            <h2 class="post-title">丢失口令文件后恢复</h2>
+            <div class="post-date">2019-08-20</div>
+            
+            <div class="post-content" v-pre>
+              <p>1.使用orapwd 重新创建口令文件<br>
+$ orapwd file=$ORACLE_HOME/dbs/orapworcal password=ora entries=5<br>
+2.向口令文件添加用户并向每个用户分配适当的权限</p>
 
-          <div class="pagination-container">
-  
-  
-</div>
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="tag">
+                    oracle
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://mvicdu.github.io/post/zhi-ding-bao-liu-ce-lue/">
+                  <h3 class="post-title">
+                    指定保留策略
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
 
         </div>
       </div>

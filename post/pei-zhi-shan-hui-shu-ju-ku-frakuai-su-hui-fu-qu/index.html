@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>ansible | Vic Notes</title>
+<title>配置闪回数据库（FRA，快速恢复区） | Vic Notes</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,7 +18,12 @@
 
 
 
-    <meta name="description" content="温故而知新">
+    <meta name="description" content="配置闪回数据库
+SQL&gt; SHUTDOWNIMMEDIATE
+SQL&gt; STARTUP MOUNT
+SQL&gt; ALTER DATABASE ARCHIVELOG;
+如果数据库处于ARCHIVELOG 模式，则无需重新启动该..." />
+    <meta name="keywords" content="oracle" />
   </head>
   <body>
     <div id="app" class="main">
@@ -94,28 +99,54 @@
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
-          <h2 class="current-tag">标签: ansible</h2>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://mvicdu.github.io/post/linux-ansible-zi-dong-hua-yun-wei-pei-zhi/">
-                  <h2 class="post-title">linux Ansible 自动化运维配置</h2>
-                </a>
-                <div class="post-date">
-                  2018-09-05
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
+          <div class="post-detail">
+            <h2 class="post-title">配置闪回数据库（FRA，快速恢复区）</h2>
+            <div class="post-date">2019-08-25</div>
+            
+            <div class="post-content" v-pre>
+              <p>配置闪回数据库<br>
+SQL&gt; SHUTDOWNIMMEDIATE<br>
+SQL&gt; STARTUP MOUNT<br>
+SQL&gt; ALTER DATABASE ARCHIVELOG;</p>
+<p>如果数据库处于ARCHIVELOG 模式，则无需重新启动该数据库。</p>
+<p>SQL&gt; ALTER SYSTEM SET DB_FLASHBACK_RETENTION_TARGET=2880 SCOPE=BOTH;<br>
+SQL&gt; ALTER DATABASE FLASHBACK ON;<br>
+SQL&gt; ALTER DATABASE OPEN;</p>
+<p>可按以下步骤配置闪回数据库：<br>
+1.配置快速恢复区。<br>
+2.使用DB_FLASHBACK_RETENTION_TARGET初始化参数设置保留目标。可指定一个上限（以分钟为单位），指示数据库能够闪回到多长时间以前。 ALTER SYSTEM SETDB_FLASHBACK_RETENTION_TARGET=2880 SCOPE=BOTH 使用了2,880 分钟，相当于两天。此参数只是一个目标，并不提供任何保证。闪回时间间隔取决于快速恢复区中保存的闪回数据量。<br>
+3.使用以下命令启用闪回数据库：<br>
+ALTER DATABASE FLASHBACK ON;<br>
+必须先针对归档配置数据库，之后才能发出命令来启用闪回数据库。<br>
+可以使用以下查询来确定是否已启用闪回数据库：<br>
+SELECT flashback_on FROM v$database;<br>
+可使用ALTER DATABASE FLASHBACK OFF命令来禁用闪回数据库。这样，会自动删除所有现有的闪回数据库日志。<br>
+注：只有在独占模式下装载数据库后才能启用闪回数据库，在打开状态下则不可以。</p>
 
-          <div class="pagination-container">
-  
-  
-</div>
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="tag">
+                    oracle
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://mvicdu.github.io/post/shan-hui-gui-dang/">
+                  <h3 class="post-title">
+                    闪回归档
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
 
         </div>
       </div>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>ansible | Vic Notes</title>
+<title>Oracle Restart 简化数据库管理 | Vic Notes</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,7 +18,13 @@
 
 
 
-    <meta name="description" content="温故而知新">
+    <meta name="description" content="在重启主机时或发生硬件或软件故障后重新启动Oracle 组件
+该方法适用于单实例环境
+使用crsctl 实用程序启动Oracle Restart
+使用srvctl 实用程序管理Oracle Restart组件
+命令：
+$ srvctl st..." />
+    <meta name="keywords" content="oracle" />
   </head>
   <body>
     <div id="app" class="main">
@@ -94,28 +100,42 @@
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
-          <h2 class="current-tag">标签: ansible</h2>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://mvicdu.github.io/post/linux-ansible-zi-dong-hua-yun-wei-pei-zhi/">
-                  <h2 class="post-title">linux Ansible 自动化运维配置</h2>
-                </a>
-                <div class="post-date">
-                  2018-09-05
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
+          <div class="post-detail">
+            <h2 class="post-title">Oracle Restart 简化数据库管理</h2>
+            <div class="post-date">2019-08-16</div>
+            
+            <div class="post-content" v-pre>
+              <p>在重启主机时或发生硬件或软件故障后重新启动Oracle 组件<br>
+该方法适用于单实例环境<br>
+使用crsctl 实用程序启动Oracle Restart<br>
+使用srvctl 实用程序管理Oracle Restart组件<br>
+命令：<br>
+$ srvctl stop database -d orcl -o abort</p>
 
-          <div class="pagination-container">
-  
-  
-</div>
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="tag">
+                    oracle
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://mvicdu.github.io/post/xiuguikuaizhao/">
+                  <h3 class="post-title">
+                    Oracle 11g修改AWR数据采样时间间隔及历史快照保留时间
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
 
         </div>
       </div>

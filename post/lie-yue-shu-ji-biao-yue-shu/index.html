@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>ansible | Vic Notes</title>
+<title>列约束及表约束 | Vic Notes</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,7 +18,14 @@
 
 
 
-    <meta name="description" content="温故而知新">
+    <meta name="description" content="主键约束（primary key ）
+唯一性约束（unique）
+检查约束（check）
+缺省约束（default）
+外部键约束（foreign）
+
+由上图可知，1，主键、外键、唯一、检查这四项，既可以创建列约束，也可以创建表约束。而缺省 ..." />
+    <meta name="keywords" content="oracle" />
   </head>
   <body>
     <div id="app" class="main">
@@ -94,28 +101,50 @@
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
-          <h2 class="current-tag">标签: ansible</h2>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://mvicdu.github.io/post/linux-ansible-zi-dong-hua-yun-wei-pei-zhi/">
-                  <h2 class="post-title">linux Ansible 自动化运维配置</h2>
-                </a>
-                <div class="post-date">
-                  2018-09-05
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
+          <div class="post-detail">
+            <h2 class="post-title">列约束及表约束</h2>
+            <div class="post-date">2019-04-22</div>
+            
+            <div class="post-content" v-pre>
+              <p>主键约束（primary key ）<br>
+唯一性约束（unique）<br>
+检查约束（check）<br>
+缺省约束（default）<br>
+外部键约束（foreign）</p>
+<p><img src="https://mvicdu.github.io/post-images/1585197297148.png" alt="" loading="lazy"><br>
+由上图可知，1，主键、外键、唯一、检查这四项，既可以创建列约束，也可以创建表约束。而缺省 和 非空只能创建列约束。<br>
+2，列级约束与表级约束的区别：<br>
+（1）列级约束：只能应用于一列上。<br>
+表级约束：可以应用于一列上，也可以应用在一个表中的多个列上。<br>
+（即：如果你创建的约束涉及到该表的多个属性列，则必须创建的是表级约束（必须定义在表级上）；否则既可以定义在列级上也可以定义在表级上此时只是SQL语句格式不同而已）<br>
+（2）列级约束：包含在列定义中，直接跟在该列的其它定义之后 ，用空格分隔；不必指定列名<br>
+表级约束：与列定义相互独立，不包含在列定义中；与定义用‘，’分隔；必须指出要约束的列的名称<br>
+（注：因为在创建列级约束时，只需将创建列约束的语句添加到该字段（列）的定义子句后面；而在创建表级约束时，需要将创建表级约束的语句添加到各个字段（列）定义语句的后面，因为并不是每个定义的字段都要创建约束，所以必须指明需要创建的约束的列名。）</p>
 
-          <div class="pagination-container">
-  
-  
-</div>
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="tag">
+                    oracle
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://mvicdu.github.io/post/linux-ansible-zi-dong-hua-yun-wei-pei-zhi/">
+                  <h3 class="post-title">
+                    linux Ansible 自动化运维配置
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
 
         </div>
       </div>

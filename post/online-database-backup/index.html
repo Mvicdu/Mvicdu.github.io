@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>ansible | Vic Notes</title>
+<title>联机备份（online database backup） | Vic Notes</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,7 +18,11 @@
 
 
 
-    <meta name="description" content="温故而知新">
+    <meta name="description" content="perform an online database backup steps：
+1.alter database begin backup；        #进入备份模式
+2.Back up the database datafiles
+..." />
+    <meta name="keywords" content="oracle" />
   </head>
   <body>
     <div id="app" class="main">
@@ -94,28 +98,42 @@
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
-          <h2 class="current-tag">标签: ansible</h2>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://mvicdu.github.io/post/linux-ansible-zi-dong-hua-yun-wei-pei-zhi/">
-                  <h2 class="post-title">linux Ansible 自动化运维配置</h2>
-                </a>
-                <div class="post-date">
-                  2018-09-05
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
+          <div class="post-detail">
+            <h2 class="post-title">联机备份（online database backup）</h2>
+            <div class="post-date">2019-08-26</div>
+            
+            <div class="post-content" v-pre>
+              <p>perform an online database backup steps：<br>
+1.alter database begin backup；        #进入备份模式<br>
+2.Back up the database datafiles<br>
+3.alter database end backup;             #一定要结束备份模式，不然scn号会一直冻结<br>
+4.alter system switch logfile;<br>
+5.Back up the archive log files.</p>
 
-          <div class="pagination-container">
-  
-  
-</div>
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="tag">
+                    oracle
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://mvicdu.github.io/post/pei-zhi-shan-hui-shu-ju-ku-frakuai-su-hui-fu-qu/">
+                  <h3 class="post-title">
+                    配置闪回数据库（FRA，快速恢复区）
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
 
         </div>
       </div>

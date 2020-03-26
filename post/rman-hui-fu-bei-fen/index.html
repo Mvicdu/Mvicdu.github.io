@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>标签列表 | Vic Notes</title>
+<title>RMAN恢复备份 | Vic Notes</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,7 +18,12 @@
 
 
 
-    <meta name="description" content="温故而知新">
+    <meta name="description" content="
+恢复映像副本：
+例，如果每天运行以下命令：
+RMAN&gt;recover copy of database with tag 'daily_inc';
+RMAN&gt;backup incremental level 1 for rec..." />
+    <meta name="keywords" content="oracle" />
   </head>
   <body>
     <div id="app" class="main">
@@ -94,24 +99,72 @@
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
-          <h2 class="tag-list-title">标签列表</h2>
-          <div class="tags-container">
+          <div class="post-detail">
+            <h2 class="post-title">RMAN恢复备份</h2>
+            <div class="post-date">2019-08-25</div>
             
-              <a class="tag" href="https://mvicdu.github.io/tag/YYinDW3Yw/">oracle</a>
+            <div class="post-content" v-pre>
+              <p><img src="https://mvicdu.github.io/post-images/1585199986076.png" alt="" loading="lazy"><br>
+恢复映像副本：<br>
+例，如果每天运行以下命令：<br>
+RMAN&gt;recover copy of database with tag 'daily_inc';<br>
+RMAN&gt;backup incremental level 1 for recover of copy with tag 'daily_inc' database;<br>
+结果如下：<br>
+<img src="https://mvicdu.github.io/post-images/1585199989794.png" alt="" loading="lazy"></p>
+<p>执行时间点恢复：<br>
+1.确定要还原的时间点<br>
+2.设置环境变量，主要是时间：<br>
+$ export NLS_DATE_FORMAT=&quot;yyyy-mm-dd:hh24:mi:ss&quot;<br>
+3.将数据库开启到挂载状态<br>
+RMAN &gt;shutdown immediate;<br>
+RMAN &gt; startup mount;<br>
+4.运行RUN块：<br>
+run<br>
+{<br>
+set until time '2019-08-14:21:59:00';<br>
+restore database;<br>
+recover database;<br>
+}<br>
+5.在只读状态下开数据库，查看恢复是否符合预期：<br>
+RMAN&gt;sql 'alter database open read only';<br>
+6.如果符合预期，则用resetlogs选项打开数据库：<br>
+RMAN&gt;alter database open resetlogs；</p>
+<p>从控制文件自动备份还原服务器参数文件：<br>
+RMAN&gt;startup force nomount;<br>
+RMAN&gt;restore spfile from autobackup;  #从自动备份中还原spfile<br>
+RMAN&gt;startup force;</p>
+<p>从自动备份还原控制文件：<br>
+RMAN&gt;startup nomount;<br>
+RMAN&gt;restore controlfile from autobackup;<br>
+RMAN&gt;alter database mount;<br>
+RMAN&gt;recover database;<br>
+RMAN&gt;alter database open resetlogs;</p>
+
+            </div>
             
-              <a class="tag" href="https://mvicdu.github.io/tag/SqttMAeE6/">备份</a>
+              <div class="tag-container">
+                
+                  <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="tag">
+                    oracle
+                  </a>
+                
+              </div>
             
-              <a class="tag" href="https://mvicdu.github.io/tag/6fHGo8Ckt/">外部表</a>
             
-              <a class="tag" href="https://mvicdu.github.io/tag/zjku8WmMb/">表空间</a>
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://mvicdu.github.io/post/huifuchongzuorizhi/">
+                  <h3 class="post-title">
+                    LGWR输入/输出(I/O)由于永久性介质故障而崩溃，导致重做日志丢失
+                  </h3>
+                </a>
+              </div>
             
-              <a class="tag" href="https://mvicdu.github.io/tag/95k4ekV9_5/">延迟分配</a>
+
             
-              <a class="tag" href="https://mvicdu.github.io/tag/ssj3lGz5l/">容灾</a>
-            
-              <a class="tag" href="https://mvicdu.github.io/tag/G5zU_6ag2/">ansible</a>
-            
+
           </div>
+
         </div>
       </div>
     </div>

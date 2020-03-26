@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>RESETLOGS 和 NORESETLOGS 区别及使用说明 | Vic Notes</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585208850032">
+<link rel="stylesheet" href="https://mvicdu.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="Set #1. NORESETLOGS case
+The followingcommands will create a new control file and use it to open the database. Dataused ..." />
+    <meta name="keywords" content="oracle" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://mvicdu.github.io">
+        <img src="https://mvicdu.github.io/images/avatar.png?v=1585208850032" class="site-logo">
+        <h1 class="site-title">Vic Notes</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+        
+          <a href="https://mvicdu.github.io/post/" class="site-nav">
+            Oracle
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      记录学习每一天 | <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">RESETLOGS 和 NORESETLOGS 区别及使用说明</h2>
+            <div class="post-date">2019-08-27</div>
+            
+            <div class="post-content" v-pre>
+              <p>Set #1. NORESETLOGS case<br>
+The followingcommands will create a new control file and use it to open the database. Dataused by Recovery Manager will be lost.<br>
+Additional logsmay be required for media recovery of offline.<br>
+Use this only if the current versions of all online logs are available.<br>
+--使用noresetlogs仅是当前所有的online logs可用时。</p>
+<p>Set #2. RESETLOGS case<br>
+The followingcommands will create a new control file and use it to open the database. Dataused by Recovery Manager will be lost.<br>
+The contents ofonline logs will be lost and all backups will be invalidated. Use this only ifonline logs are damaged.<br>
+--使用resetlogs，将导致online logs里的内容丢失，并且所有的备份失效，仅当online logs 随坏的情况下，才使用resetlos模式。<br>
+（1）    第一种情况<br>
+假设仅仅控制文件丢失，而其他文件没有丢失（主要是归档和REDO），那么恢复的时候如果选择从备份中恢复控制文件。恢复后，控制文件会去读数据文件头中与CHECKPOINT SCN对应的RBA信息来确定从那个序列的归档日志开始恢复，一直推进恢复到NEXT SCN是无穷大的那个REDOLOG，此时恢复是完全恢复的，但打开的时候还要以resetlogs方式打开，这样要重置归档日志的sequence，也就是说，如果你恢复时使用了备份控制文件，那么打开数据库时必然是要resetlogs的。</p>
+<p>不完全恢复时是必须RESETLOGS，但是完全恢复时如果使用备份控制文件来恢复，那么使用RESETLOGS一样可以完全恢复。但是丢失控制文件也可以不使用RESETLOGS方式打开数据库，这样也就可以避免重置日志序列号带来的不变，详情请见第四种情况。</p>
+<p>（2）    第二种情况<br>
+不完全恢复，不管是要什么样的不完全恢复，SCN，TIME，跨越REDO，都必须使用resetlogs。</p>
+<p>（3）    第三种情况<br>
+丢失REDOLOG，这就更需要resetlogs了，因为resetlogs能够重建REDOLOG。如果你的REDOLOG、控制文件、数据文件丢失的话，需要先恢复控制文件，然后restore database;recover database;alter database open resetlogs;<br>
+注意，这时候做的是不完全恢复，因为REDO没有了。在recover过程中可能会报错然后自动退出RMAN，无视，alter database open resetlogs即可，</p>
+<p>（4）    第四种情况<br>
+没有丢失控制文件及各种日志，仅丢失数据文件，这种问题比较常见，有可能磁盘损坏造成数据文件丢失，等磁盘故障排除后，需要恢复，此时的恢复就很简单了，restore database;recover database;alter database open;就一切OK，也就是说，在不使用备份控制文件恢复的情况下，是可以使用noresetlog方式打开数据库的。<br>
+前提有一，不能丢失日志文件。假若丢失了控制文件和数据文件但还是想以noresetlog打开的话，就必须手动以noresetlogs方式重建控制文件，而且REDOLOG的状态都必须正常，否则是无法使用noresetlogs方式打开。</p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="tag">
+                    oracle
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://mvicdu.github.io/post/online-database-backup/">
+                  <h3 class="post-title">
+                    联机备份（online database backup）
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>

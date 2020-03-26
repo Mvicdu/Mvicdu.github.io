@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Oracle 创建外部表 | Vic Notes</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585208850032">
+<link rel="stylesheet" href="https://mvicdu.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="Oracle 创建外部表
+Oracle 外部表能迅速的将海量的数据导入到数据库里面，外部表的创建使用步骤如下：
+　　
+　　1 创建一个Directory：必须用sys用户创建，用户存放外部数据文件。
+　　create directory D..." />
+    <meta name="keywords" content="外部表" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://mvicdu.github.io">
+        <img src="https://mvicdu.github.io/images/avatar.png?v=1585208850032" class="site-logo">
+        <h1 class="site-title">Vic Notes</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+        
+          <a href="https://mvicdu.github.io/post/" class="site-nav">
+            Oracle
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      记录学习每一天 | <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Oracle 创建外部表</h2>
+            <div class="post-date">2019-07-25</div>
+            
+            <div class="post-content" v-pre>
+              <p>Oracle 创建外部表</p>
+<p>Oracle 外部表能迅速的将海量的数据导入到数据库里面，外部表的创建使用步骤如下：<br>
+　　<br>
+　　1 创建一个Directory：必须用sys用户创建，用户存放外部数据文件。<br>
+　　create directory DIR_DATA as '/home/oracle/oradata/IN';<br>
+　　给用户授权目录的使用权限，否则用户不能访问该目录以及其下的文件<br>
+　　grant write,read on directory DIR_DATA to Test;<br>
+　　2 将要导入的外部数据文件，test.csv 放到目录下，注意文件每个字段的分隔符，此处csv每列的分隔符为英文的分号&quot;;&quot; 内容如下<br>
+NAME;NAME_DESC<br>
+Latiny1;latiny test file<br>
+Latiny2;latiny test file<br>
+Latiny3;latiny test file<br>
+Latiny4;latiny test file<br>
+Latiny5;latiny test file<br>
+Latiny6;latiny test file<br>
+Latiny7;latiny test file<br>
+Latiny8;latiny test file<br>
+Latiny9;latiny test file<br>
+Latiny10;latiny test file<br>
+　　3 创建语句<br>
+create table ext_test<br>
+(<br>
+name char(256),<br>
+name_desc char(256)<br>
+)<br>
+organization external<br>
+(<br>
+type oracle_loader<br>
+default directory DIR_DATA<br>
+access parameters<br>
+(<br>
+records delimited by newline<br>
+badfile dir_ctrr_data:'test..bad'<br>
+logfile dir_ctrr_data:'test..log'<br>
+discardfile dir_ctrr_data:'test..dsc'<br>
+skip 1<br>
+fields terminated by';'<br>
+reject rows with all null fields<br>
+(<br>
+NAME char(256),<br>
+NAME_DESC char(256)<br>
+)<br>
+)<br>
+location ('test.csv')<br>
+)<br>
+reject limit unlimited<br>
+parallel;<br>
+　　参数说明：</p>
+<ol>
+<li>
+<p>organization external　　-- 关键字，必须要有。以表明定义的表为外部表。</p>
+</li>
+<li>
+<p>type 　　　　　　　　　　-- 外部表的类型<br>
+oracle_loader　　　　　　　 -- 定义外部表的缺省方式，只能只读方式实现文本数据的装载。<br>
+oracle_datapump　　　　　 -- 支持对数据的装载与卸载，数据文件必须为二进制dump文件。可以从外部表提取数据装载到内部表，也可以从内部表卸载数据作为二进制文件填充到外部表。</p>
+</li>
+<li>
+<p>default directory 　　　　   --缺省的目录指明了外部文件所在的路径</p>
+</li>
+<li>
+<p>location　　　　　　　　　　-- 定义了外部表的位置</p>
+</li>
+<li>
+<p>access parameters 　　      -- 描述如何对外部表进行访问<br>
+records　　-- 关键字后定义如何识别数据行<br>
+delimited by 'xxx'　　　　--换行符，常用newline定义换行，并指明字符集。对于特殊的字符则需要单独定义，如特殊符号，可以使用ox'十六位值'，例如tab(/t)的十六位是9，则delimitedby0x'09'；cr(/r)的十六位是d，那么就是delimitedby0x'0d'。<br>
+skip x 　　-- 跳过x行数据，有些文件中第一行是列名，需要跳过第一行，则使用skip 1。<br>
+fields　　 -- 关键字后定义如何识别字段，常用的如下：<br>
+fields：terminated by 'x'　　　--字段分割符。<br>
+enclosed by 'x'　　　　　　　　--字段引用符，包含在此符号内的数据都当成一个字段。例如一行数据格式如：&quot;abc&quot;,&quot;a&quot;&quot;b,&quot;&quot;c,&quot;。使用参数terminated by ',' enclosed by '&quot;'后，系统会读到两个字段，第一个字段的值是abc，第二个字段值是a&quot;b,&quot;c,。<br>
+lrtrim 　　　　　　　　　　　　  --删除首尾空白字符。<br>
+missing field values are null　　--某些字段空缺值都设为null。对于字段长度和分割符不确定且准备用作外部表文件，可以使用ultraedit、editplus等来进行分析测试，如果文件较大，则需要考虑将文件分割成小文件并从中提取数据进行测试。</p>
+</li>
+<li>
+<p>fields terminated by &quot;,&quot; 　　　　 　　--描述字段的终止符</p>
+</li>
+<li>
+<p>reject limit unlimited 　　　　　　　 --描述允许的错误数，此处为无限制</p>
+</li>
+</ol>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://mvicdu.github.io/tag/6fHGo8Ckt/" class="tag">
+                    外部表
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://mvicdu.github.io/post/yan-chi-fen-pei/">
+                  <h3 class="post-title">
+                    oracle 表空间的延迟分配
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>

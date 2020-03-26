@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>ansible | Vic Notes</title>
+<title>监视RMAN作业进度 | Vic Notes</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,7 +18,9 @@
 
 
 
-    <meta name="description" content="温故而知新">
+    <meta name="description" content="监视RMAN作业进度:
+SQL&gt;select opname,context,sofar,totalwork, round(sofar/totalwork*100,2) &quot;%_complete&quot; from v$ses..." />
+    <meta name="keywords" content="oracle" />
   </head>
   <body>
     <div id="app" class="main">
@@ -94,28 +96,43 @@
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
-          <h2 class="current-tag">标签: ansible</h2>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://mvicdu.github.io/post/linux-ansible-zi-dong-hua-yun-wei-pei-zhi/">
-                  <h2 class="post-title">linux Ansible 自动化运维配置</h2>
-                </a>
-                <div class="post-date">
-                  2018-09-05
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
+          <div class="post-detail">
+            <h2 class="post-title">监视RMAN作业进度</h2>
+            <div class="post-date">2019-08-21</div>
+            
+            <div class="post-content" v-pre>
+              <p>监视RMAN作业进度:<br>
+SQL&gt;select opname,context,sofar,totalwork, round(sofar/totalwork*100,2) &quot;%_complete&quot; from v$session_longops<br>
+where opname like 'RMAN%'<br>
+and opname not like '%aggregate'<br>
+and totalwork !=0<br>
+and sofar &lt;&gt; totalwork;</p>
+<figure data-type="image" tabindex="1"><img src="https://mvicdu.github.io/post-images/1585200030083.png" alt="" loading="lazy"></figure>
 
-          <div class="pagination-container">
-  
-  
-</div>
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="tag">
+                    oracle
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://mvicdu.github.io/post/shu-ju-ku-bei-fen/">
+                  <h3 class="post-title">
+                    數據庫備份
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
 
         </div>
       </div>

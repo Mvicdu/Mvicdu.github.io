@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>丢失联机重做日志组的解决办法 | Vic Notes</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585208850032">
+<link rel="stylesheet" href="https://mvicdu.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="重做日志有以下几种状态，如下：
+
+CURRENT：此状态表示正在被 LGWR 使用的日志组；
+ACTIVE：重做日志组中仍含有实例恢复所需的重做数据；
+INACTIVE：表示实例恢复不再需要此日志组，可以覆盖；
+UNUSED：未使用；
+CL..." />
+    <meta name="keywords" content="oracle" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://mvicdu.github.io">
+        <img src="https://mvicdu.github.io/images/avatar.png?v=1585208850032" class="site-logo">
+        <h1 class="site-title">Vic Notes</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+        
+          <a href="https://mvicdu.github.io/post/" class="site-nav">
+            Oracle
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      记录学习每一天 | <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">丢失联机重做日志组的解决办法</h2>
+            <div class="post-date">2019-08-02</div>
+            
+            <div class="post-content" v-pre>
+              <p>重做日志有以下几种状态，如下：</p>
+<ul>
+<li>CURRENT：此状态表示正在被 LGWR 使用的日志组；</li>
+<li>ACTIVE：重做日志组中仍含有实例恢复所需的重做数据；</li>
+<li>INACTIVE：表示实例恢复不再需要此日志组，可以覆盖；</li>
+<li>UNUSED：未使用；</li>
+<li>CLEARING：对已存在的日志组执行 clear 操作的后的状态；</li>
+<li>CLEARING_CURRENT：日志正在清空。当清空出错时，该日志组被置于这种状态。</li>
+</ul>
+<p>查看日志组状态：<br>
+select group#,members,status from v<span class='katex-error' title='ParseError: KaTeX parse error: Expected &#039;EOF&#039;, got &#039;#&#039; at position 27: …径：
+select group#̲,member from v'>log;
+查看日志组路径：
+select group#,member from v</span>logfile;</p>
+<p>解决办法：</p>
+<p>丢失重做日志组中的成员</p>
+<p>直接删除丢失的组，然后重建一个覆盖。<br>
+如果删除出错那么切换日志组：<br>
+alter system switch logfile;<br>
+再删除：<br>
+alter database drop logfile member '路径';<br>
+新增一个覆盖：<br>
+alter database add logfile member '路径' to group X;</p>
+<p>丢失重做日志组：<br>
+1、丢失INACTIVE状态的日志组，恢复时需要：①启动数据库到MOUNT状态；②对丢失的日志组执行CLEAR命令；③打开数据库</p>
+<p>①  startup mount;<br>
+②  alter database clear logfile group X；（X表示丢失的组号）<br>
+③  alter database open;</p>
+<p>2.丢失CURRENT状态下的日志组</p>
+<p>丢失CURRENT状态下的日志组，我们需要如下操作：①重启数据库到MOUNT状态；②recover方式完成恢复；③resetlogs方式打开数据库</p>
+<p>①  startup mount;<br>
+②  recover database until cancel;<br>
+③  alter database open resetlogs;</p>
+<p>3、丢失ACTIVE重做日志组<br>
+丢失active中的重做组的时候，①需要尝试生成检查点 ，如果成功会将所有已经提交的更改写入磁盘的数据文件中。此时就跟INACTIVE重做日志组处理流程一致了。②如果命令执行出现故障，就只能执行不完整恢复。</p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="tag">
+                    oracle
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://mvicdu.github.io/post/oracle-cha-kan-gao-jing-ri-zhi/">
+                  <h3 class="post-title">
+                    oracle查看告警日志
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>ansible | Vic Notes</title>
+<title>oracle查看告警日志 | Vic Notes</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,7 +18,13 @@
 
 
 
-    <meta name="description" content="温故而知新">
+    <meta name="description" content="查看错误日志目录：
+sqlplus 下输入下列命令：
+show parameter background_dump_dest
+可以用OS自带的查看命令 more或者cat 查看
+告警文件错误检查
+每日应检查应用数据库警报日志文件（Alert..." />
+    <meta name="keywords" content="oracle" />
   </head>
   <body>
     <div id="app" class="main">
@@ -94,28 +100,47 @@
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
-          <h2 class="current-tag">标签: ansible</h2>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://mvicdu.github.io/post/linux-ansible-zi-dong-hua-yun-wei-pei-zhi/">
-                  <h2 class="post-title">linux Ansible 自动化运维配置</h2>
-                </a>
-                <div class="post-date">
-                  2018-09-05
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
+          <div class="post-detail">
+            <h2 class="post-title">oracle查看告警日志</h2>
+            <div class="post-date">2019-08-01</div>
+            
+            <div class="post-content" v-pre>
+              <p>查看错误日志目录：<br>
+sqlplus 下输入下列命令：<br>
+show parameter background_dump_dest</p>
+<p>可以用OS自带的查看命令 more或者cat 查看</p>
+<p>告警文件错误检查<br>
+每日应检查应用数据库警报日志文件（Alert_SID.log），检查是否存在数据库系统错误提示信息，查看有无“ORA-”，Error”，“Failed”等出错信息。根据错误信息进行分析并解决。告警日志文件的路径查看：show parameter background_dump_dest<br>
+清除告警日志内容<br>
+将每天的告警日志备份好进行清除。具体方法：在$ORACLE_HOME/SID/bdump/   目录下打开alert_ORACLE_SID.LOG这个文件，然后检查里面是否有错误信息，之后每天把它按日期另存为如：alert_ORACLE_SID070416.LOG。再打开alert_ORACLE_SID.LOG文件可清除掉里面的内容，这样便于查看告警日志内容。</p>
+<p>PDB告警<br>
+查看PDB的告警和错误信息<br>
+可以通过查询 PDB_ PLUG_ IN_ VIOLATIONS视图来查看</p>
 
-          <div class="pagination-container">
-  
-  
-</div>
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="tag">
+                    oracle
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://mvicdu.github.io/post/si-suo-cha-xun-ji-jie-jue-ban-fa/">
+                  <h3 class="post-title">
+                    死锁查询及解决办法
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
 
         </div>
       </div>

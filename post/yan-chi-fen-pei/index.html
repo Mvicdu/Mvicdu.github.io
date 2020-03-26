@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>oracle 表空间的延迟分配 | Vic Notes</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585208850032">
+<link rel="stylesheet" href="https://mvicdu.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="（转：
+https://blog.csdn.net/qq_42774325/article/details/81948349）
+表空间的延迟分配
+登录sysconn / as syadba
+打开表空间的延迟分配
+alter system s..." />
+    <meta name="keywords" content="表空间,延迟分配" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://mvicdu.github.io">
+        <img src="https://mvicdu.github.io/images/avatar.png?v=1585208850032" class="site-logo">
+        <h1 class="site-title">Vic Notes</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+        
+          <a href="https://mvicdu.github.io/post/" class="site-nav">
+            Oracle
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      记录学习每一天 | <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">oracle 表空间的延迟分配</h2>
+            <div class="post-date">2019-07-11</div>
+            
+            <div class="post-content" v-pre>
+              <p>（转：<br>
+https://blog.csdn.net/qq_42774325/article/details/81948349）<br>
+表空间的延迟分配</p>
+<p>登录sysconn / as syadba<br>
+打开表空间的延迟分配<br>
+alter system ser deferred_segment_creation = true;</p>
+<pre><code>删除之前创建的表空间及文件
+</code></pre>
+<p>drop tablespace tbs3 including contents and datafiles;<br>
+创建表空间<br>
+create tablespace tbs3datafile‘/u02/app/oracle/oradata/orcl/tbs301.dbf’ size 10M reuse loggingsegment space management autoextent management local autoallocate;</p>
+<pre><code>创建一个名为u3的用户设置密码为oracle，设置表空间为tbs3，临时表空间为temp；
+</code></pre>
+<p>create user u3 identified by oracle default tablespace tbs3 temporary tablespace temp;</p>
+<pre><code>授予表空间connect,resource,unlimited tablespace三个权限 
+</code></pre>
+<p>grant connect,resource,unlimited tablespace to u3;<br>
+登录u3 查询信息<br>
+select object_name,object_type from user_objects;<br>
+查询对象，这里为空说明用户下数据库中还没表<br>
+select segment_name from user_segments;<br>
+查询段信息，这里为空因为还没有段<br>
+<img src="https://mvicdu.github.io/post-images/1585198596213.png" alt="" loading="lazy"></p>
+<pre><code>创建一个表名为t3，再查看段信息
+</code></pre>
+<p>create table t3 (id number(3),name varchar2(100));select segment_name from user_segments;<br>
+因为开启了表空间延迟分配，所以表中没数据时，没有给表分配空间，也查不到段信息</p>
+<p><img src="https://mvicdu.github.io/post-images/1585198617389.png" alt="" loading="lazy"><br>
+向表中插入数据后，再查看段信息<br>
+insert into t3 values(1,’aaaaaa’);<br>
+select segment_name from user_segments;<br>
+当向表中插入数据以后，系统就给表分配了空间，这样就能查到段信息了<br>
+<img src="https://mvicdu.github.io/post-images/1585198662796.png" alt="" loading="lazy"></p>
+<pre><code>切换到sys用户，关闭表空间的延迟分配
+</code></pre>
+<p>conn / as sysdba<br>
+alter system set deferred_segment_creation = false;<br>
+<img src="https://mvicdu.github.io/post-images/1585198678462.png" alt="" loading="lazy"><br>
+此时再回到用户u3创建一个表，看不插入数据是否能查询到段信息<br>
+conn u3<br>
+create table t4 (id number(3),name varchar2(100));select segment_name from user_segments;<br>
+如图可看出，关闭表空间的延迟分配后，不插入数据也能查到段信息了</p>
+<figure data-type="image" tabindex="1"><img src="https://mvicdu.github.io/post-images/1585198692657.png" alt="" loading="lazy"></figure>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://mvicdu.github.io/tag/zjku8WmMb/" class="tag">
+                    表空间
+                  </a>
+                
+                  <a href="https://mvicdu.github.io/tag/95k4ekV9_5/" class="tag">
+                    延迟分配
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://mvicdu.github.io/post/alter-system-yu-alter-database/">
+                  <h3 class="post-title">
+                    alter system与alter database的区别
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>ansible | Vic Notes</title>
+<title>嵌套子查询和关联子查询 | Vic Notes</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,7 +18,10 @@
 
 
 
-    <meta name="description" content="温故而知新">
+    <meta name="description" content="嵌套子查询和关联子查询
+嵌套子查询: 1. 内部查询只处理一次; 2. 与null比较,总得到null 3.先进行内部查询,然后再进行外部查询
+关联子查询: 1. 外部查询得到的每个记录传入到内部查询; 2.内部查询基于外部查询传入的值; ..." />
+    <meta name="keywords" content="oracle" />
   </head>
   <body>
     <div id="app" class="main">
@@ -94,28 +97,50 @@
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
-          <h2 class="current-tag">标签: ansible</h2>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://mvicdu.github.io/post/linux-ansible-zi-dong-hua-yun-wei-pei-zhi/">
-                  <h2 class="post-title">linux Ansible 自动化运维配置</h2>
-                </a>
-                <div class="post-date">
-                  2018-09-05
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
+          <div class="post-detail">
+            <h2 class="post-title">嵌套子查询和关联子查询</h2>
+            <div class="post-date">2019-05-29</div>
+            
+            <div class="post-content" v-pre>
+              <p>嵌套子查询和关联子查询</p>
+<p>嵌套子查询: 1. 内部查询只处理一次; 2. 与null比较,总得到null 3.先进行内部查询,然后再进行外部查询</p>
+<p>关联子查询: 1. 外部查询得到的每个记录传入到内部查询; 2.内部查询基于外部查询传入的值; 3.内部查询从其结果中把值传回到外部查询，外部查询使用这些值来完成其处理。<br>
+　　外部查询返回较少记录时,关联子查询比嵌套子查询效果高;<br>
+　　内部查询返回较少记录时,嵌套子查询比关联子查询效果高.</p>
+<p>in和exists<br>
+select * from A where cc in (select cc from B)<br>
+　　如果表A较大,那么in比exists的效率要高(可以用到B表上cc列的索引).<br>
+select * from A where exists (select cc from B where cc=A.cc)<br>
+　　如果表A较小,那么exists比in的效率要高(可以用到A表上cc列的索引)</p>
+<p>not in 和not exists<br>
+如果查询语句使用了not in 那么内外表都进行全表扫描，没有用到索引；<br>
+　　而not extsts 的子查询依然能用到表上的索引。<br>
+　　所以无论那个表大，用not exists都比not in要快。</p>
 
-          <div class="pagination-container">
-  
-  
-</div>
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="tag">
+                    oracle
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://mvicdu.github.io/post/oracle-kong-xian-chao-shi/">
+                  <h3 class="post-title">
+                    设置Oracle空闲超时
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
 
         </div>
       </div>

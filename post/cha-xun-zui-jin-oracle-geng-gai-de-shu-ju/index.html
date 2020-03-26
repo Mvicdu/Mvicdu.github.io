@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>查询最近oracle更改的数据 | Vic Notes</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585208850032">
+<link rel="stylesheet" href="https://mvicdu.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="查回滚段就可以
+select语句后使用  VERSIONS BETWEEN TIMESTAMP MINVALUE AND MAXVALUE
+例：
+SQL&gt; create table test(id number,name varcha..." />
+    <meta name="keywords" content="oracle" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://mvicdu.github.io">
+        <img src="https://mvicdu.github.io/images/avatar.png?v=1585208850032" class="site-logo">
+        <h1 class="site-title">Vic Notes</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+        
+          <a href="https://mvicdu.github.io/post/" class="site-nav">
+            Oracle
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      记录学习每一天 | <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">查询最近oracle更改的数据</h2>
+            <div class="post-date">2019-08-03</div>
+            
+            <div class="post-content" v-pre>
+              <p>查回滚段就可以<br>
+select语句后使用  VERSIONS BETWEEN TIMESTAMP MINVALUE AND MAXVALUE</p>
+<p>例：<br>
+SQL&gt; create table test(id number,name varchar2(10),gender varchar2(5));<br>
+表已创建。<br>
+SQL&gt; insert into test values(1,'宋春风','男');  已创建 1 行。<br>
+SQL&gt; insert into test values(2,'叶民','男');     已创建 1 行。<br>
+SQL&gt; insert into test values(3,'白冰','男');     已创建 1 行。<br>
+SQL&gt; insert into test values(4,'方巍森','男');  已创建 1 行。<br>
+SQL&gt; insert into test values(5,'孙书祯','男');  已创建 1 行。<br>
+SQL&gt; insert into test values(6,'史波','男');     已创建 1 行。<br>
+SQL&gt; commit;                                            提交完成。<br>
+利用下面的SQL就可以查处最近更改的数据。<br>
+SQL&gt; SELECT ID,NAME,VERSIONS_STARTTIME,VERSIONS_ENDTIME,VERSIONS_OPERATION<br>
+FROM TEST VERSIONS BETWEEN TIMESTAMP MINVALUE AND MAXVALUE WHERE<br>
+VERSIONS_STARTTIME IS NOT NULL ORDER BY VERSIONS_STARTTIME DESC;<br>
+ID NAME   GENDE VERSIONS_STARTTIME        VERSIONS_ENDTIME          V</p>
+<hr>
+<pre><code>     6 史波   男    30-11月-11 04.02.28 下午                            I
+     5 孙书祯 男    30-11月-11 04.02.28 下午                            I
+     1 宋春风 男    30-11月-11 04.02.28 下午                            I
+     3 白冰   男    30-11月-11 04.02.28 下午                            I
+     2 叶民   男    30-11月-11 04.02.28 下午                            I
+     4 方巍森 男    30-11月-11 04.02.28 下午                            I
+</code></pre>
+<p>已选择6行。</p>
+<p>VERSIONS_STARTTIME是数据被修改的起始时间，VERSIONS_ENDTIME是数据被修改后新数据的有效时间，也就是VERSIONS_STARTTIME和VERSIONS_ENDTIME时间段内，这条数据再没被修改过，如果VERSIONS_ENDTIME为空，就说明这天记录从VERSIONS_STARTTIME时间起再没被修改过。VERSIONS_OPERATION是修改状态，I代表INSERT，U代表UPDATE，D代表DELETE。此时如果想回滚INSERT的数据，只需要DELETE反向操作即可，如果想回滚UPDATE操作，将数据反向UPDATE回去即可</p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="tag">
+                    oracle
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://mvicdu.github.io/post/chong-zuo-ri-zhi-zu-de-jie-jue-ban-fa/">
+                  <h3 class="post-title">
+                    丢失联机重做日志组的解决办法
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>ansible | Vic Notes</title>
+<title>LGWR输入/输出(I/O)由于永久性介质故障而崩溃，导致重做日志丢失 | Vic Notes</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,7 +18,12 @@
 
 
 
-    <meta name="description" content="温故而知新">
+    <meta name="description" content="LGWR输入/输出(I/O)由于永久性介质故障而崩溃，导致重做日志丢失
+文件和LWGR终止，实例崩溃， 从损失中恢复的步骤
+
+Issue a checkpoint and clear the log.
+Perform incomplete ..." />
+    <meta name="keywords" content="oracle" />
   </head>
   <body>
     <div id="app" class="main">
@@ -94,28 +99,44 @@
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
-          <h2 class="current-tag">标签: ansible</h2>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://mvicdu.github.io/post/linux-ansible-zi-dong-hua-yun-wei-pei-zhi/">
-                  <h2 class="post-title">linux Ansible 自动化运维配置</h2>
-                </a>
-                <div class="post-date">
-                  2018-09-05
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
+          <div class="post-detail">
+            <h2 class="post-title">LGWR输入/输出(I/O)由于永久性介质故障而崩溃，导致重做日志丢失</h2>
+            <div class="post-date">2019-08-24</div>
+            
+            <div class="post-content" v-pre>
+              <p>LGWR输入/输出(I/O)由于永久性介质故障而崩溃，导致重做日志丢失<br>
+文件和LWGR终止，实例崩溃， 从损失中恢复的步骤</p>
+<ol>
+<li>Issue a checkpoint and clear the log.</li>
+<li>Perform incomplete recovery.</li>
+<li>Relocate by renaming the member of the damaged online redo log group to a new location.</li>
+<li>Open the database with the RESETLOGS option.</li>
+</ol>
 
-          <div class="pagination-container">
-  
-  
-</div>
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="tag">
+                    oracle
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://mvicdu.github.io/post/lgwr-shu-ru-shu-chu-ioyou-yu-yong-jiu-xing-jie-zhi-gu-zhang-er-beng-kui-dao-zhi-chong-zuo-ri-zhi-diu-shi/">
+                  <h3 class="post-title">
+                    LGWR输入/输出(I/O)由于永久性介质故障而崩溃，导致重做日志丢失
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
 
         </div>
       </div>

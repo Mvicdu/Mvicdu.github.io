@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>辅助管理之视图查看 | Vic Notes</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585208850032">
+<link rel="stylesheet" href="https://mvicdu.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="select * from vdatabase;                         #可以查看数据库信息，其中可以查看数据库是否处于归档模式
+另推荐使用命令： select name,log_mode from vdataba..." />
+    <meta name="keywords" content="oracle" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://mvicdu.github.io">
+        <img src="https://mvicdu.github.io/images/avatar.png?v=1585208850032" class="site-logo">
+        <h1 class="site-title">Vic Notes</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+        
+          <a href="https://mvicdu.github.io/post/" class="site-nav">
+            Oracle
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      记录学习每一天 | <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">辅助管理之视图查看</h2>
+            <div class="post-date">2019-05-06</div>
+            
+            <div class="post-content" v-pre>
+              <p>select * from v<span class='katex-error' title='ParseError: KaTeX parse error: Expected &#039;EOF&#039;, got &#039;#&#039; at position 35: …               #̲可以查看数据库信息，其中可以查…'>database;                         #可以查看数据库信息，其中可以查看数据库是否处于归档模式
+另推荐使用命令： select name,log_mode from v</span>database; 查看是否为归档模式</p>
+<p>select *  from v<span class='katex-error' title='ParseError: KaTeX parse error: Expected &#039;EOF&#039;, got &#039;#&#039; at position 34: …               #̲查看实例；可以查看实例状态
+s…'>instance ；                       #查看实例；可以查看实例状态
+select database_status from v</span>instance;   #查看实例；可以查看实例状态</p>
+<p>select * from v$controlfile ;                        #查询控制文件位置</p>
+<p>select * from v<span class='katex-error' title='ParseError: KaTeX parse error: Expected &#039;EOF&#039;, got &#039;#&#039; at position 61: …               #̲这两个select语句都可以查…'>datafile;
+select * from dba_data_files;                     #这两个select语句都可以查询数据文件位置 .v</span>datafile 是属于动态性能视图（动态数据字典），这类视图在数据库运行时会不断进行跟新<br>
+#dba_data_files属于静态数据字典中的视图，静态数据字典有三种类型，分别为：user_<em>、 all_</em>、 dba_*，要想访问这些视图必须具有相关权限<br>
+ps :也可以直接查询name元素得出文件位置，例如：select name from v$datafile;</p>
+<p>锁表查询的代码有以下的形式：<br>
+select count(*) from v<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mi>o</mi><mi>c</mi><mi>k</mi><mi>e</mi><msub><mi>d</mi><mi>o</mi></msub><mi>b</mi><mi>j</mi><mi>e</mi><mi>c</mi><mi>t</mi><mo separator="true">;</mo><mi>s</mi><mi>e</mi><mi>l</mi><mi>e</mi><mi>c</mi><mi>t</mi><mo>∗</mo><mi>f</mi><mi>r</mi><mi>o</mi><mi>m</mi><mi>v</mi></mrow><annotation encoding="application/x-tex">locked_object;
+select * from v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord mathdefault">c</span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mord mathdefault">e</span><span class="mord"><span class="mord mathdefault">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">o</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">b</span><span class="mord mathdefault" style="margin-right:0.05724em;">j</span><span class="mord mathdefault">e</span><span class="mord mathdefault">c</span><span class="mord mathdefault">t</span><span class="mpunct">;</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">s</span><span class="mord mathdefault">e</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">e</span><span class="mord mathdefault">c</span><span class="mord mathdefault">t</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">o</span><span class="mord mathdefault">m</span><span class="mord mathdefault" style="margin-right:0.03588em;">v</span></span></span></span>locked_object;</p>
+<p>查看哪个表被锁<br>
+select b.owner,b.object_name,a.session_id,a.locked_mode from v$locked_object a,dba_objects b where b.object_id = a.object_id;</p>
+<p>查看是哪个session引起的<br>
+select b.username,b.sid,b.serial#,logon_time from v<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mi>o</mi><mi>c</mi><mi>k</mi><mi>e</mi><msub><mi>d</mi><mi>o</mi></msub><mi>b</mi><mi>j</mi><mi>e</mi><mi>c</mi><mi>t</mi><mi>a</mi><mo separator="true">,</mo><mi>v</mi></mrow><annotation encoding="application/x-tex">locked_object a,v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord mathdefault">c</span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mord mathdefault">e</span><span class="mord"><span class="mord mathdefault">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">o</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">b</span><span class="mord mathdefault" style="margin-right:0.05724em;">j</span><span class="mord mathdefault">e</span><span class="mord mathdefault">c</span><span class="mord mathdefault">t</span><span class="mord mathdefault">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">v</span></span></span></span>session b where a.session_id = b.sid order by b.logon_time;</p>
+<p>管理备份：动态性能视图<br>
+V<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>b</mi><mi>a</mi><mi>c</mi><mi>k</mi><mi>u</mi><msub><mi>p</mi><mi>s</mi></msub><mi>e</mi><mi>t</mi><mo>:</mo><mi mathvariant="normal">创</mi><mi mathvariant="normal">建</mi><mi mathvariant="normal">的</mi><mi mathvariant="normal">备</mi><mi mathvariant="normal">份</mi><mi mathvariant="normal">集</mi><mi>V</mi></mrow><annotation encoding="application/x-tex">backup_set: 创建的备份集
+V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">b</span><span class="mord mathdefault">a</span><span class="mord mathdefault">c</span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mord mathdefault">u</span><span class="mord"><span class="mord mathdefault">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">s</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">e</span><span class="mord mathdefault">t</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord cjk_fallback">创</span><span class="mord cjk_fallback">建</span><span class="mord cjk_fallback">的</span><span class="mord cjk_fallback">备</span><span class="mord cjk_fallback">份</span><span class="mord cjk_fallback">集</span><span class="mord mathdefault" style="margin-right:0.22222em;">V</span></span></span></span>backup_piece:存在的备份片段<br>
+V<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi><mi>a</mi><mi>t</mi><mi>a</mi><mi>f</mi><mi>i</mi><mi>l</mi><msub><mi>e</mi><mi>c</mi></msub><mi>o</mi><mi>p</mi><mi>y</mi><mo>:</mo><mi mathvariant="normal">磁</mi><mi mathvariant="normal">盘</mi><mi mathvariant="normal">上</mi><mi mathvariant="normal">的</mi><mi mathvariant="normal">数</mi><mi mathvariant="normal">据</mi><mi mathvariant="normal">文</mi><mi mathvariant="normal">件</mi><mi mathvariant="normal">副</mi><mi mathvariant="normal">本</mi><mi>V</mi></mrow><annotation encoding="application/x-tex">datafile_copy: 磁盘上的数据文件副本
+V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">d</span><span class="mord mathdefault">a</span><span class="mord mathdefault">t</span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">i</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord"><span class="mord mathdefault">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">o</span><span class="mord mathdefault">p</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord cjk_fallback">磁</span><span class="mord cjk_fallback">盘</span><span class="mord cjk_fallback">上</span><span class="mord cjk_fallback">的</span><span class="mord cjk_fallback">数</span><span class="mord cjk_fallback">据</span><span class="mord cjk_fallback">文</span><span class="mord cjk_fallback">件</span><span class="mord cjk_fallback">副</span><span class="mord cjk_fallback">本</span><span class="mord mathdefault" style="margin-right:0.22222em;">V</span></span></span></span>backup_files:有关创建备份时所创建的所有文件的信息</p>
+<p>查看角色授权<br>
+<img src="https://mvicdu.github.io/post-images/1585197738702.png" alt="" loading="lazy"></p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="tag">
+                    oracle
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://mvicdu.github.io/post/unique_index-normal_index/">
+                  <h3 class="post-title">
+                    oracle唯一索引与普通索引的区别和联系以及using index用法
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>

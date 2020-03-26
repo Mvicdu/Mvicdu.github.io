@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>ansible | Vic Notes</title>
+<title>配置归档日志目标位置 | Vic Notes</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,7 +18,12 @@
 
 
 
-    <meta name="description" content="温故而知新">
+    <meta name="description" content="本地目标和远程目标：设置log_archive_dest_n ；n可以是1到10；
+指定本地存储位置要加上LOCATION
+例：
+LOG_ARCHIVE_DEST_1='LOCATION=/disk3/arch'
+指定备用数据库远程位置，加..." />
+    <meta name="keywords" content="oracle" />
   </head>
   <body>
     <div id="app" class="main">
@@ -94,28 +99,47 @@
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
-          <h2 class="current-tag">标签: ansible</h2>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://mvicdu.github.io/post/linux-ansible-zi-dong-hua-yun-wei-pei-zhi/">
-                  <h2 class="post-title">linux Ansible 自动化运维配置</h2>
-                </a>
-                <div class="post-date">
-                  2018-09-05
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
+          <div class="post-detail">
+            <h2 class="post-title">配置归档日志目标位置</h2>
+            <div class="post-date">2019-08-18</div>
+            
+            <div class="post-content" v-pre>
+              <p>本地目标和远程目标：设置log_archive_dest_n ；n可以是1到10；<br>
+指定本地存储位置要加上LOCATION<br>
+例：<br>
+LOG_ARCHIVE_DEST_1='LOCATION=/disk3/arch'</p>
+<p>指定备用数据库远程位置，加上SERVICE关键字；<br>
+例：<br>
+LOG_RACHIVE_DEST_2=‘SERVICE＝standby1’ #standby1 是备用数据库实例网络服务名</p>
+<p>仅本地目标,最多可以配置两个：<br>
+LOG_ARCHIVE_DEST='/disk1/arch'<br>
+LOG_ARCHIVE_DUPLEX_DEST=‘/disk2/arch’</p>
+<p>ps：建议使用log_archive_dest_n方法配置，该方法在目标类型和数量上具有最大灵活度。</p>
 
-          <div class="pagination-container">
-  
-  
-</div>
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="tag">
+                    oracle
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://mvicdu.github.io/post/oracle-restart-jian-hua-shu-ju-ku-guan-li/">
+                  <h3 class="post-title">
+                    Oracle Restart 简化数据库管理
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
 
         </div>
       </div>

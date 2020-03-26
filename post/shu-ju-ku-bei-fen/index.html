@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>數據庫備份 | Vic Notes</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585208850032">
+<link rel="stylesheet" href="https://mvicdu.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="整庫備份：
+RMAN&gt; backup database plus archivelog;
+或者：
+RMAN&gt; backup database plus archivelog delete input;  #這會使RMAN在备份归..." />
+    <meta name="keywords" content="备份,oracle" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://mvicdu.github.io">
+        <img src="https://mvicdu.github.io/images/avatar.png?v=1585208850032" class="site-logo">
+        <h1 class="site-title">Vic Notes</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+        
+          <a href="https://mvicdu.github.io/post/" class="site-nav">
+            Oracle
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      记录学习每一天 | <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">數據庫備份</h2>
+            <div class="post-date">2019-08-21</div>
+            
+            <div class="post-content" v-pre>
+              <p>整庫備份：<br>
+RMAN&gt; backup database plus archivelog;<br>
+或者：<br>
+RMAN&gt; backup database plus archivelog delete input;  #這會使RMAN在备份归档日志文件之后将其删除。<br>
+必须在发出一下configure命令后才能按上述方式备份<br>
+configure default device type to disk；<br>
+configure device type disk backup type to copy；<br>
+configure controlfile autobackup on；</p>
+<p>创建备份集：</p>
+<p>RMAN&gt;backup as backupset                                             #数据库直接备份到快速恢复区<br>
+RMAN&gt;backup as backupset  format '/backup/df_%d_%s_%p.bus' tablespace hr_data; # 将hr_data 表空间 备份到指定的位置</p>
+<p>创建映像副本：<br>
+RMAN&gt; backup as copy datafile '/oracle/user01_db01.dbf';     #创建user01_db01.dbf数据文件的副本<br>
+RMAN&gt; backup as copy archivelog like '/arch%'                       #创建归档重做日志文件的副本</p>
+<p>RMAN备份类型：<br>
+0级增量备份：<br>
+RMAN&gt; backup incremental level 0 database;                            #执行 0级增量备份<br>
+差异增量备份：<br>
+RMAN&gt; backup incremental level 1 database;<br>
+积累增量备份：<br>
+RMAN&gt; backup incremental level 1 cumulative database;<br>
+ps: 默认情况下如果既没有指定full 也没有指定incremental，则RMAN 将执行完全备份。</p>
+<p>创建双向备份集：<br>
+RMAN &gt; backup as backupset device type sbt copies 2 incremental level 0 database;  #即创建两个备份，备份到磁带</p>
+<p>创建备份集的备份：<br>
+RMAN&gt; backup device type disk as backupset database plus archivelog;<br>
+RMAN&gt; backup device type sbt backupset all;</p>
+<p>只备份快速恢复区的文件：<br>
+RMAN&gt;backup recovery area;<br>
+备份所有恢复文件：<br>
+RMAN&gt;backup recovery files;                                         #可備份所有恢复文件，即使这些文件不再FRA中</p>
+<p>备份加密</p>
+<p>1.口令加密<br>
+口令模式是最为简单的备份加密模式。在备份时通过以下语句设置备份密码，然后备份数据库或对应的表空间、数据文件等即可</p>
+<p>RMAN&gt;set encryption on identified by &quot;密码&quot; only；<br>
+备份：<br>
+RMAN&gt;backup database;<br>
+在恢复时不提供密码会提示错误，不能解密，恢复不能执行<br>
+恢复时同样需要设置密码，操作如下：<br>
+RMAN&gt;set decryption on identified by &quot;密码&quot;<br>
+恢复：<br>
+RMAN&gt;restore database;</p>
+<p>2.透明模式<br>
+透明模式依赖于本地配置的Wallet（钱包），无须设置密码。如果备份仅在本地进行维护，则建议采用这样的加密方法，这样更安全、可靠、简便。但这种方式需要额外配置 Oracle Encryption Wallet</p>
+<p>① 配置sqlnet.ora参数文件<br>
+设置Wallet地址信息，该地址决定了创建Wallet钱包的地址</p>
+<p>oral$cd <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mi>R</mi><mi>A</mi><mi>C</mi><mi>L</mi><msub><mi>E</mi><mi>H</mi></msub><mi>O</mi><mi>M</mi><mi>E</mi><mi mathvariant="normal">/</mi><mi>n</mi><mi>e</mi><mi>t</mi><mi>w</mi><mi>o</mi><mi>r</mi><mi>k</mi><mi mathvariant="normal">/</mi><mi>a</mi><mi>d</mi><mi>m</mi><mi>i</mi><mi>n</mi><mi>o</mi><mi>r</mi><mi>a</mi><mi>l</mi><mo>−</mo><mi mathvariant="normal">/</mi><mi>u</mi><mn>01</mn><mi mathvariant="normal">/</mi><mi>a</mi><mi>p</mi><mi>p</mi><mi mathvariant="normal">/</mi><mi>o</mi><mi>r</mi><mi>a</mi><mi>c</mi><mi>l</mi><mi>e</mi><mi mathvariant="normal">/</mi><mi>p</mi><mi>r</mi><mi>o</mi><mi>d</mi><mi>u</mi><mi>c</mi><mi>t</mi><mi mathvariant="normal">/</mi><mn>11.2.0</mn><mi mathvariant="normal">/</mi><mi>d</mi><msub><mi>b</mi><mn>1</mn></msub><mi mathvariant="normal">/</mi><mi>n</mi><mi>e</mi><mi>t</mi><mi>w</mi><mi>o</mi><mi>r</mi><mi>k</mi><mi mathvariant="normal">/</mi><mi>a</mi><mi>d</mi><mi>m</mi><mi>i</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">ORACLE_HOME/network/admin
+oral-/u01/app/oracle/product/11.2.0/db_1/network/admin</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mord mathdefault">A</span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span><span class="mord mathdefault">L</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.05764em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.08125em;">H</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mord mathdefault" style="margin-right:0.10903em;">M</span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mord">/</span><span class="mord mathdefault">n</span><span class="mord mathdefault">e</span><span class="mord mathdefault">t</span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mord">/</span><span class="mord mathdefault">a</span><span class="mord mathdefault">d</span><span class="mord mathdefault">m</span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">/</span><span class="mord mathdefault">u</span><span class="mord">0</span><span class="mord">1</span><span class="mord">/</span><span class="mord mathdefault">a</span><span class="mord mathdefault">p</span><span class="mord mathdefault">p</span><span class="mord">/</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">a</span><span class="mord mathdefault">c</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">e</span><span class="mord">/</span><span class="mord mathdefault">p</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">o</span><span class="mord mathdefault">d</span><span class="mord mathdefault">u</span><span class="mord mathdefault">c</span><span class="mord mathdefault">t</span><span class="mord">/</span><span class="mord">1</span><span class="mord">1</span><span class="mord">.</span><span class="mord">2</span><span class="mord">.</span><span class="mord">0</span><span class="mord">/</span><span class="mord mathdefault">d</span><span class="mord"><span class="mord mathdefault">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">/</span><span class="mord mathdefault">n</span><span class="mord mathdefault">e</span><span class="mord mathdefault">t</span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mord">/</span><span class="mord mathdefault">a</span><span class="mord mathdefault">d</span><span class="mord mathdefault">m</span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span></span></span></span> cd sqlnet.ora<br>
+ENCRYPTION_WALLET_LOCATION=(SOURCE=(METHOD=FILE) (METHOD_DATA=(DIRECTORY=/u01/app/oracle)))</p>
+<p>② 创建Wallet<br>
+在SYS用户下创建Wallet。<br>
+SQL&gt;alter system set encryption key authenticated by &quot;密码&quot;;<br>
+验证：</p>
+<p>关闭wallet的命令：<br>
+SQL&gt;alter system set encryption wallet close identified by &quot;密码&quot;<br>
+开启wallet的命令：<br>
+SQL&gt;alter system set wallet open identified by &quot;密码&quot;</p>
+<p>现在可以用wallet实现透明数据加密了，如下：<br>
+RMAN&gt;configure encryption for database on;<br>
+RMAN&gt;set encryption on;<br>
+RMAN&gt;backup database;<br>
+ps:恢复数据时wallet要保持开启，否则恢复不可进行，会出现不可解密的错误。</p>
+<p>wallet模式下进行数据恢复<br>
+RMAN&gt;startup mount;<br>
+RMAN&gt;sql 'alter system set wallet open identified by&quot;密码&quot; ';<br>
+RMAN&gt;restore database;</p>
+<p>混合模式</p>
+<p>混合模式是同时启用Wallet和密码。在本地模式下，不需要使用密码进行恢复，实现透明；在异地、异机恢复时，则需要提供口令进行恢复。<br>
+混合模式的密码设置如下（省去了only关键字）<br>
+RMAN&gt;set encryption identified by &quot;密码&quot;<br>
+在异机上恢复时，只需要指定口令就可以恢复，不需要Wallet的配合<br>
+RMAN&gt;set decryption  on identified by &quot;密码&quot;<br>
+RAMN&gt;restore database;</p>
+<p>透明加密（TDE）</p>
+<p>Oracle的透明数据加密，是Oracle高级安全选项中的一个部分，需要付费才能使用<br>
+首先在sqlnet.ora文件中增加一段如下的代码</p>
+<p>在SQL*Plus中创建Wallet密钥</p>
+<p>关闭和打开Wallet。</p>
+<p>在创建数据表时可以指定加密。</p>
+<p>加密和解密是自动进行的。查询dba_encrypted_columns视图可以找到加密列。</p>
+<p>在加密列时，存在两个选项：Salt和No Salt。<br>
+Salt在加密前对数据增加随机字符串，这样可以增加破解的难度，使同样的字符串加密的结果不同；而对于No Salt，同样的字符串可以获得同样的加密输出，其安全性相对略低。<br>
+在加密列上，如果使用Salt方式，则不能创建索引。Salt加密和索引两种属性互斥，不能同时设置<br>
+PS：详情见Oracle DBA手记 4，数据安全警示录- 4.4以安全之期-p382</p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://mvicdu.github.io/tag/SqttMAeE6/" class="tag">
+                    备份
+                  </a>
+                
+                  <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="tag">
+                    oracle
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://mvicdu.github.io/post/kouling/">
+                  <h3 class="post-title">
+                    丢失口令文件后恢复
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>

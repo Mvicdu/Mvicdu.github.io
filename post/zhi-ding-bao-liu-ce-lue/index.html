@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>ansible | Vic Notes</title>
+<title>指定保留策略 | Vic Notes</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,7 +18,10 @@
 
 
 
-    <meta name="description" content="温故而知新">
+    <meta name="description" content="配置恢复窗口保留策略：
+RMAN&gt; configure retention policy to recovery window of &lt;天数&gt; days;
+如果未使用恢复目录，要防止控制文件中旧的备份记录被覆盖，恢复窗口时..." />
+    <meta name="keywords" content="oracle" />
   </head>
   <body>
     <div id="app" class="main">
@@ -94,28 +97,44 @@
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
-          <h2 class="current-tag">标签: ansible</h2>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://mvicdu.github.io/post/linux-ansible-zi-dong-hua-yun-wei-pei-zhi/">
-                  <h2 class="post-title">linux Ansible 自动化运维配置</h2>
-                </a>
-                <div class="post-date">
-                  2018-09-05
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
+          <div class="post-detail">
+            <h2 class="post-title">指定保留策略</h2>
+            <div class="post-date">2019-08-20</div>
+            
+            <div class="post-content" v-pre>
+              <p>配置恢复窗口保留策略：<br>
+RMAN&gt; configure retention policy to recovery window of &lt;天数&gt; days;</p>
+<p>如果未使用恢复目录，要防止控制文件中旧的备份记录被覆盖，恢复窗口时段应小于等于控制文件参数CONTROL_FILE_RECORD_KEEP的值。如果正在使用恢复目录，则应确保CONTROL_FILE_RECORD_TIME大于目录重新同步的间隔。</p>
+<p>使用以下命令重新配置冗余保留策略：<br>
+RMAN&gt;configure retention policy to redundancy &lt;副本数&gt;；<br>
+副本数是满足策略所需的副本数量。</p>
+<p>禁用保留策略：<br>
+RMAN&gt; configure retention policy to none;</p>
 
-          <div class="pagination-container">
-  
-  
-</div>
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="tag">
+                    oracle
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://mvicdu.github.io/post/pei-zhi-gui-dang-ri-zhi-mu-biao-wei-zhi/">
+                  <h3 class="post-title">
+                    配置归档日志目标位置
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
 
         </div>
       </div>

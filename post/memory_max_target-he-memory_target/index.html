@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>linux Ansible 自动化运维配置 | Vic Notes</title>
+<title>修改Oracle的memory_max_target和memory_target | Vic Notes</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,11 +18,10 @@
 
 
 
-    <meta name="description" content="安装 :
-配置epel源：
-[root@ansible ~]# wget -O /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo  #源自己修改
-[r..." />
-    <meta name="keywords" content="ansible" />
+    <meta name="description" content="修改Oracle的memory_max_target和memory_target
+最初安装Orale11g时，采用默认自动内存管理，使用1/2Mem。后来想增大最大内存使用值。
+系统内存16G Mem，想修改为3/4Mem: 16*3/4=..." />
+    <meta name="keywords" content="oracle" />
   </head>
   <body>
     <div id="app" class="main">
@@ -99,63 +98,50 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">linux Ansible 自动化运维配置</h2>
-            <div class="post-date">2018-09-05</div>
+            <h2 class="post-title">修改Oracle的memory_max_target和memory_target</h2>
+            <div class="post-date">2019-08-14</div>
             
             <div class="post-content" v-pre>
-              <p>安装 :<br>
-配置epel源：<br>
-[root@ansible ~]# wget -O /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo  #源自己修改<br>
-[root@ansible ~]# yum clean all<br>
-[root@ansible ~]# yum makecache</p>
-<p>安装ansible：<br>
-[root@ansible ~]# yum -y install ansible</p>
-<p>Inventory中文文档：<br>
-Inventory文件通常用于定义要管理的主机的认证信息，如ssh登录用户名、密码以及key相关信息。<br>
-可以同时操作一个组的多台主机，组与主机组之间的关系都是通过inventory文件配置。<br>
-文件路径：/etc/ansible/hosts</p>
-<p>基于密码链接<br>
-配置方法：</p>
-<h1 id="方法一-主机端口密码">方法一 主机+端口+密码</h1>
-<p>例子：<br>
-下面四个被管理IP地址，分成web和DB两组<br>
-[web]<br>
-192.168.1.31 ansible_ssh_port=22 ansible_ssh_user=root ansible_ssh_pass=&quot;123456&quot;<br>
-192.168.1.32 ansible_ssh_port=22 ansible_ssh_user=root ansible_ssh_pass=&quot;123456&quot;<br>
-[DB]<br>
-192.168.1.33 ansible_ssh_port=22 ansible_ssh_user=root ansible_ssh_pass=&quot;123456&quot;<br>
-192.168.1.36 ansible_ssh_port=22 ansible_ssh_user=root ansible_ssh_pass=&quot;123456&quot;</p>
-<h1 id="方法二-主机端口密码">方法二 主机+端口+密码</h1>
-<p>[webserver]<br>
-192.168.1.3[1:3] ansible_ssh_port=22 ansible_ssh_user=root ansible_ssh_pass=&quot;123456&quot;</p>
-<p>基于秘钥链接</p>
-<p>[root@ansible ~]# ssh-keygen<br>
-[root@ansible ~]# for i in {1..6}; do ssh-copy-id -i 192.168.1.3$i ; done</p>
-<p>配置连接：</p>
-<p>[root@ansible ~]# vim /etc/ansible/hosts</p>
-<h1 id="方法一-主机端口">方法一 主机+端口</h1>
-<p>[web]<br>
-192.168.1.31:22<br>
-192.168.1.32<br>
-192.168.1.33<br>
-192.168.1.36</p>
-<h1 id="方法二-别名主机端口密钥">方法二 别名主机+端口+密钥</h1>
-<p>[web]<br>
-node1 ansible_ssh_host=192.168.1.31 ansible_ssh_port=22<br>
-node2 ansible_ssh_host=192.168.1.32 ansible_ssh_port=22<br>
-node3 ansible_ssh_host=192.168.1.33 ansible_ssh_port=22<br>
-node6 ansible_ssh_host=192.168.1.36 ansible_ssh_port=22</p>
+              <p>修改Oracle的memory_max_target和memory_target</p>
+<p>最初安装Orale11g时，采用默认自动内存管理，使用1/2Mem。后来想增大最大内存使用值。<br>
+系统内存16G Mem，想修改为3/4Mem: 16*3/4=12G=12288M。</p>
+<h1 id="vim-etcsysctlconf">vim /etc/sysctl.conf</h1>
+<p>kernel.shmmax = 12884901888</p>
+<h1 id="sysctl-p再修改oracle-参数">sysctl -p再修改ORACLE 参数</h1>
+<p>sql&gt; show parameter target;<br>
+sql&gt; alter system set memory_max_target=12288M scope=spfile;<br>
+sql&gt; alter system set memory_target=12288M scope=spfile;</p>
+<p>需要重启数据库才能生效。<br>
+sql&gt; startup 时报错：<br>
+ORA-00845: MEMORY_TARGET not supported on this system<br>
+oracle 11g中新增的内存自动管理的参数MEMORY_TARGET，它能自动调整SGA和PGA，<br>
+这个特性需要用到/dev/shm共享文件系统，而且要求/dev/shm必须大于MEMORY_TARGET，如果/dev/shm比MEMORY_TARGET小，就会报错。<br>
+解决方案：<br>
+1.初始化参数MEMORY_TARGET或MEMORY_MAX_TARGET不能大于共享内存(/dev/shm),为了解决这个问题，可以增大/dev/shm</p>
+<h1 id="mount-t-tmpfs-shmfs-o-size12288m-devshm">mount -t tmpfs shmfs -o size=12288M /dev/shm</h1>
+<p>但如果之前已经mount过了，则执行remount</p>
+<h1 id="mount-o-remountsize12288m-devshm2为了确保操作系统重启之后能生效需要修改etcfstab文件">mount -o remount,size=12288M /dev/shm2.为了确保操作系统重启之后能生效，需要修改/etc/fstab文件</h1>
+<p>tmpfs /dev/shm tmpfs  defaults,size=12288M      0 0</p>
 
             </div>
             
               <div class="tag-container">
                 
-                  <a href="https://mvicdu.github.io/tag/G5zU_6ag2/" class="tag">
-                    ansible
+                  <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="tag">
+                    oracle
                   </a>
                 
               </div>
             
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://mvicdu.github.io/post/cha-xun-zui-jin-oracle-geng-gai-de-shu-ju/">
+                  <h3 class="post-title">
+                    查询最近oracle更改的数据
+                  </h3>
+                </a>
+              </div>
             
 
             

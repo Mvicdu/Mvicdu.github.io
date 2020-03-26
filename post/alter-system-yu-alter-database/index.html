@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>ansible | Vic Notes</title>
+<title>alter system与alter database的区别 | Vic Notes</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,7 +18,11 @@
 
 
 
-    <meta name="description" content="温故而知新">
+    <meta name="description" content="alter database //改变数据库的属性，是物理的改变。可以看得见的
+alter system   //改变实例的属性，是逻辑性的改变，看不见的
+alter database mount 和alter database open
+..." />
+    <meta name="keywords" content="" />
   </head>
   <body>
     <div id="app" class="main">
@@ -94,28 +98,32 @@
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
-          <h2 class="current-tag">标签: ansible</h2>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://mvicdu.github.io/post/linux-ansible-zi-dong-hua-yun-wei-pei-zhi/">
-                  <h2 class="post-title">linux Ansible 自动化运维配置</h2>
-                </a>
-                <div class="post-date">
-                  2018-09-05
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
+          <div class="post-detail">
+            <h2 class="post-title">alter system与alter database的区别</h2>
+            <div class="post-date">2019-07-08</div>
+            
+            <div class="post-content" v-pre>
+              <p>alter database //<strong>改变数据库的属性</strong>，是物理的改变。可以看得见的<br>
+alter system   //<strong>改变实例的属性</strong>，是逻辑性的改变，看不见的<br>
+alter database mount 和alter database open<br>
+alter database mount //数据库已经加载了控制文件，但普通用户无法访问，只有在特权用户可以访问alter database open // 数据库一进打开，普通用户可以访问</p>
 
-          <div class="pagination-container">
-  
-  
-</div>
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://mvicdu.github.io/post/oracle-rong-zai-fang-an/">
+                  <h3 class="post-title">
+                    oracle容灾方案
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
 
         </div>
       </div>

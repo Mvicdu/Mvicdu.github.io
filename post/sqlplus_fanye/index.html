@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>ansible | Vic Notes</title>
+<title>sqlplus窗口下支持上下翻页 | Vic Notes</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,7 +18,13 @@
 
 
 
-    <meta name="description" content="温故而知新">
+    <meta name="description" content="1、安装rlwrap包，可以使用yum install进行安装：
+yum install -y rlwrap
+或者下载rlwrap上传安装
+例：
+如上传为rpm格式
+rpm -ivh rlwrap-0.42-1.el6.i686.rpm -..." />
+    <meta name="keywords" content="oracle" />
   </head>
   <body>
     <div id="app" class="main">
@@ -94,28 +100,49 @@
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
-          <h2 class="current-tag">标签: ansible</h2>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://mvicdu.github.io/post/linux-ansible-zi-dong-hua-yun-wei-pei-zhi/">
-                  <h2 class="post-title">linux Ansible 自动化运维配置</h2>
-                </a>
-                <div class="post-date">
-                  2018-09-05
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
+          <div class="post-detail">
+            <h2 class="post-title">sqlplus窗口下支持上下翻页</h2>
+            <div class="post-date">2019-05-15</div>
+            
+            <div class="post-content" v-pre>
+              <p>1、安装rlwrap包，可以使用yum install进行安装：<br>
+yum install -y rlwrap<br>
+或者下载rlwrap上传安装<br>
+例：<br>
+如上传为rpm格式<br>
+rpm -ivh rlwrap-0.42-1.el6.i686.rpm --nogpgcheck</p>
+<p>2、在.bash_profile中配置别名，方便后续登陆<br>
+.bash_profile 位置可以用find命令查找<br>
+find /home -name .bash_profile<br>
+文件位置一般在/home/oracle/.bash_profile<br>
+添加如下命令：</p>
+<p>alias sqlplus='rlwrap sqlplus'<br>
+alias rman='rlwrap rman'</p>
 
-          <div class="pagination-container">
-  
-  
-</div>
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="tag">
+                    oracle
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://mvicdu.github.io/post/zhi-shi-tu-cha-kan/">
+                  <h3 class="post-title">
+                    辅助管理之视图查看
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
 
         </div>
       </div>

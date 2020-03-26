@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>ansible | Vic Notes</title>
+<title>设置Oracle空闲超时 | Vic Notes</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,7 +18,9 @@
 
 
 
-    <meta name="description" content="温故而知新">
+    <meta name="description" content="一、执行：ALTER PROFILE DEFAULT LIMIT IDLE_TIME 10;  #按分钟算的
+查询修改后的超时时间：select resource_name,resource_type,limit from dba_prof..." />
+    <meta name="keywords" content="oracle" />
   </head>
   <body>
     <div id="app" class="main">
@@ -94,28 +96,45 @@
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
-          <h2 class="current-tag">标签: ansible</h2>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://mvicdu.github.io/post/linux-ansible-zi-dong-hua-yun-wei-pei-zhi/">
-                  <h2 class="post-title">linux Ansible 自动化运维配置</h2>
-                </a>
-                <div class="post-date">
-                  2018-09-05
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
+          <div class="post-detail">
+            <h2 class="post-title">设置Oracle空闲超时</h2>
+            <div class="post-date">2019-05-21</div>
+            
+            <div class="post-content" v-pre>
+              <p>一、执行：ALTER PROFILE DEFAULT LIMIT IDLE_TIME 10;  #按分钟算的<br>
+查询修改后的超时时间：select resource_name,resource_type,limit from dba_profiles where profile='DEFAULT' ;其中IDLE_TIME的值就是设置的空闲超时时间。</p>
+<p>或者</p>
+<p>找到%ORACLE_HOME%/network/admin/sqlnet.ora文件<br>
+最后一样 添加参数</p>
+<p>SQLNET.EXPIRE_TIME ＝ 2   #清除僵死连接</p>
+<p>值是分钟  默认不要设置的太大 容易引起 session过多<br>
+添加后重启oracle服务<br>
+说明：数据库连接的客户端异常断开后，其占有的相应并没有被释放，如从v$session视图中依旧可以看到对应的session处于inactive，且对应的服务器进程也没有释放，导致资源长时间地被占用，对于这种情形开该如何处理呢？SQLNET.EXPIRE_TIME对于这个问题我们提供了解决方案，专门用于清理那些异常断开的情形，如网络异常中断，客户端异常掉电，异常重启等</p>
 
-          <div class="pagination-container">
-  
-  
-</div>
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="tag">
+                    oracle
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://mvicdu.github.io/post/sqlplus_fanye/">
+                  <h3 class="post-title">
+                    sqlplus窗口下支持上下翻页
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
 
         </div>
       </div>

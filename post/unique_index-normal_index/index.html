@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>oracle唯一索引与普通索引的区别和联系以及using index用法 | Vic Notes</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585208850032">
+<link rel="stylesheet" href="https://mvicdu.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="oracle唯一索引与普通索引的区别和联系
+区别：唯一索引unique index和一般索引normal index最大的差异是在索引列上增加一层唯一约束。添加唯一索引的数据列可以为空，但是只要尊在数据值，就必须是唯一的。
+联系：1）uni..." />
+    <meta name="keywords" content="oracle" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://mvicdu.github.io">
+        <img src="https://mvicdu.github.io/images/avatar.png?v=1585208850032" class="site-logo">
+        <h1 class="site-title">Vic Notes</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+        
+          <a href="https://mvicdu.github.io/post/" class="site-nav">
+            Oracle
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      记录学习每一天 | <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">oracle唯一索引与普通索引的区别和联系以及using index用法</h2>
+            <div class="post-date">2019-04-29</div>
+            
+            <div class="post-content" v-pre>
+              <p>oracle唯一索引与普通索引的区别和联系<br>
+区别：唯一索引unique index和一般索引normal index最大的差异是在索引列上增加一层唯一约束。添加唯一索引的数据列可以为空，但是只要尊在数据值，就必须是唯一的。<br>
+联系：1）unique index就是额外添加唯一性的约束。该约束严格的保证索引列的取值是唯一的，这在一些数据列上的业务约束是很重要的功能。比如一个数据列，不能作为主键，而且允许为空，但是业务上要求唯一特性，这个时候用唯一性索引就是最好的旋转。2）性能上两者并无很大区别。<br>
+using index用法：<br>
+create primary key …. Using index ：创建主键的时候同时将其设为索引，名称与主键名称相同。<br>
+在9i之后，在创建一个PK的时候，会自动创建一个与之对应的唯一索引。（因为某个字段如果被设置为Unique便会自动被设为索引）。如果不特别指定，这个索引的表空间和表的表空间是一样的，但是不建议将两者放在一起。<br>
+一般语句格式:</p>
+<p>Create table test(name varchar(10));<br>
+Alter table test add primary key(name) tablespace tablespace1;</p>
+<p>以上的处理方式有两个不好的地方，第一是无法指定索引的名称，第二无法指定索引存放的表空间。为了避免这种错误，最后按照以下方式来定义表格与表空间。</p>
+<p>Create table test_uid(name varchar(10),<br>
+Constraint test_uid_pk primary key(name) using index (<br>
+create unique index uid_test_uid on test_uid(name) tablespace tablespace2);</p>
+<p>当然也可以部分处理：</p>
+<h2 id="create-table-testone-name-varchar10-char-tablespace1alter-table-testone-add-constraint-pk_testine1-primary-keyname-using-index-tablespace-tablespace2作为一个好习惯不要把索引和表格的数据放在同一个表空间-一般索引单独建一个表空间">Create table testone (name varchar(10 char)) tablespace1;<br>
+Alter table testone add constraint pk_testine1 primary key(name) using index tablespace tablespace2;<br>
+作为一个好习惯，不要把索引和表格的数据放在同一个表空间。<br>
+一般索引单独建一个表空间。</h2>
+<p>本系列为最近一段时间学习oracle的学习笔记，记录于此作为自身回顾，其中有的来源网络，有的来自书籍，但时间已久，记不清哪些是引用，如是转载但没标注出特意致歉。</p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="tag">
+                    oracle
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://mvicdu.github.io/post/lie-yue-shu-ji-biao-yue-shu/">
+                  <h3 class="post-title">
+                    列约束及表约束
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>
