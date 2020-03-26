@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>linux Ansible 自动化运维配置 | Vic Notes</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585191028758">
+<link rel="stylesheet" href="https://mvicdu.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="安装 :
+配置epel源：
+[root@ansible ~]# wget -O /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo  #源自己修改
+[r..." />
+    <meta name="keywords" content="ansible" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://mvicdu.github.io">
+        <img src="https://mvicdu.github.io/images/avatar.png?v=1585191028758" class="site-logo">
+        <h1 class="site-title">Vic Notes</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      记录学习每一天 | <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">linux Ansible 自动化运维配置</h2>
+            <div class="post-date">2018-09-05</div>
+            
+            <div class="post-content" v-pre>
+              <p>安装 :<br>
+配置epel源：<br>
+[root@ansible ~]# wget -O /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo  #源自己修改<br>
+[root@ansible ~]# yum clean all<br>
+[root@ansible ~]# yum makecache</p>
+<p>安装ansible：<br>
+[root@ansible ~]# yum -y install ansible</p>
+<p>Inventory中文文档：<br>
+Inventory文件通常用于定义要管理的主机的认证信息，如ssh登录用户名、密码以及key相关信息。<br>
+可以同时操作一个组的多台主机，组与主机组之间的关系都是通过inventory文件配置。<br>
+文件路径：/etc/ansible/hosts</p>
+<p>基于密码链接<br>
+配置方法：</p>
+<h1 id="方法一-主机端口密码">方法一 主机+端口+密码</h1>
+<p>例子：<br>
+下面四个被管理IP地址，分成web和DB两组<br>
+[web]<br>
+192.168.1.31 ansible_ssh_port=22 ansible_ssh_user=root ansible_ssh_pass=&quot;123456&quot;<br>
+192.168.1.32 ansible_ssh_port=22 ansible_ssh_user=root ansible_ssh_pass=&quot;123456&quot;<br>
+[DB]<br>
+192.168.1.33 ansible_ssh_port=22 ansible_ssh_user=root ansible_ssh_pass=&quot;123456&quot;<br>
+192.168.1.36 ansible_ssh_port=22 ansible_ssh_user=root ansible_ssh_pass=&quot;123456&quot;</p>
+<h1 id="方法二-主机端口密码">方法二 主机+端口+密码</h1>
+<p>[webserver]<br>
+192.168.1.3[1:3] ansible_ssh_port=22 ansible_ssh_user=root ansible_ssh_pass=&quot;123456&quot;</p>
+<p>基于秘钥链接</p>
+<p>[root@ansible ~]# ssh-keygen<br>
+[root@ansible ~]# for i in {1..6}; do ssh-copy-id -i 192.168.1.3$i ; done</p>
+<p>配置连接：</p>
+<p>[root@ansible ~]# vim /etc/ansible/hosts</p>
+<h1 id="方法一-主机端口">方法一 主机+端口</h1>
+<p>[web]<br>
+192.168.1.31:22<br>
+192.168.1.32<br>
+192.168.1.33<br>
+192.168.1.36</p>
+<h1 id="方法二-别名主机端口密钥">方法二 别名主机+端口+密钥</h1>
+<p>[web]<br>
+node1 ansible_ssh_host=192.168.1.31 ansible_ssh_port=22<br>
+node2 ansible_ssh_host=192.168.1.32 ansible_ssh_port=22<br>
+node3 ansible_ssh_host=192.168.1.33 ansible_ssh_port=22<br>
+node6 ansible_ssh_host=192.168.1.36 ansible_ssh_port=22</p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://mvicdu.github.io/tag/G5zU_6ag2/" class="tag">
+                    ansible
+                  </a>
+                
+              </div>
+            
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>
