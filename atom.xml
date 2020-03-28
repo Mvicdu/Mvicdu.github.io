@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://mvicdu.github.io</id>
     <title>Vic Notes</title>
-    <updated>2020-03-28T05:16:45.078Z</updated>
+    <updated>2020-03-28T05:25:44.010Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://mvicdu.github.io"/>
     <link rel="self" href="https://mvicdu.github.io/atom.xml"/>
@@ -11,32 +11,11 @@
     <icon>https://mvicdu.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Vic Notes</rights>
     <entry>
-        <title type="html"><![CDATA[linux 硬盘故障修复]]></title>
-        <id>https://mvicdu.github.io/post/linux-ying-pan-gu-zhang-xiu-fu/</id>
-        <link href="https://mvicdu.github.io/post/linux-ying-pan-gu-zhang-xiu-fu/">
-        </link>
-        <updated>2020-03-28T05:13:20.000Z</updated>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[zabbix agent 安装脚本]]></title>
-        <id>https://mvicdu.github.io/post/zabbix-agent-an-zhuang-jiao-ben/</id>
-        <link href="https://mvicdu.github.io/post/zabbix-agent-an-zhuang-jiao-ben/">
-        </link>
-        <updated>2020-03-28T05:12:33.000Z</updated>
-    </entry>
-    <entry>
         <title type="html"><![CDATA[联机重做日志]]></title>
         <id>https://mvicdu.github.io/post/lian-ji-chong-zuo-ri-zhi/</id>
         <link href="https://mvicdu.github.io/post/lian-ji-chong-zuo-ri-zhi/">
         </link>
         <updated>2020-03-28T04:53:47.000Z</updated>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[运维警示条例]]></title>
-        <id>https://mvicdu.github.io/post/yun-wei-jing-shi-tiao-li/</id>
-        <link href="https://mvicdu.github.io/post/yun-wei-jing-shi-tiao-li/">
-        </link>
-        <updated>2020-03-28T04:52:25.000Z</updated>
     </entry>
     <entry>
         <title type="html"><![CDATA[Oracle归档空间耗尽的处理方法]]></title>
@@ -60,11 +39,25 @@
         <updated>2019-12-28T05:07:55.000Z</updated>
     </entry>
     <entry>
+        <title type="html"><![CDATA[运维警示条例]]></title>
+        <id>https://mvicdu.github.io/post/yun-wei-jing-shi-tiao-li/</id>
+        <link href="https://mvicdu.github.io/post/yun-wei-jing-shi-tiao-li/">
+        </link>
+        <updated>2019-12-28T04:52:25.000Z</updated>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[python_备份文件]]></title>
         <id>https://mvicdu.github.io/post/python_-bei-fen-wen-jian/</id>
         <link href="https://mvicdu.github.io/post/python_-bei-fen-wen-jian/">
         </link>
         <updated>2019-12-12T04:56:56.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[linux 硬盘故障修复]]></title>
+        <id>https://mvicdu.github.io/post/linux-ying-pan-gu-zhang-xiu-fu/</id>
+        <link href="https://mvicdu.github.io/post/linux-ying-pan-gu-zhang-xiu-fu/">
+        </link>
+        <updated>2019-12-10T05:13:20.000Z</updated>
     </entry>
     <entry>
         <title type="html"><![CDATA[Zabbix分布式监控]]></title>
@@ -79,5 +72,12 @@
         <link href="https://mvicdu.github.io/post/zabbix-an-zhuang-lamp-huan-jing/">
         </link>
         <updated>2019-11-21T05:15:10.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[容灾方案的选择]]></title>
+        <id>https://mvicdu.github.io/post/rong-zai-fang-an-de-xuan-ze/</id>
+        <link href="https://mvicdu.github.io/post/rong-zai-fang-an-de-xuan-ze/">
+        </link>
+        <updated>2019-11-13T04:56:21.000Z</updated>
     </entry>
 </feed>
