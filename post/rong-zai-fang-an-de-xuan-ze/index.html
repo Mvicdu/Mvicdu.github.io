@@ -1,0 +1,181 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>容灾方案的选择 | Vic Notes</title>
+<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585372598298">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://mvicdu.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="容灾方案的选择 | Vic Notes - Atom Feed" href="https://mvicdu.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="磁盘阵列复制技术，主要由一些磁盘阵列厂商提供，如EMC SRDF、IBM PPRC 、HP BusinessCopy、HDS TrueCopy等
+存储卷复制技术，由一些卷管理软件厂商提供，如VERITAS VVR；
+数据库复制技术，由数据库..." />
+    <meta name="keywords" content="oracle" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://mvicdu.github.io">
+  <img class="avatar" src="https://mvicdu.github.io/images/avatar.png?v=1585372598298" alt="">
+  </a>
+  <h1 class="site-title">
+    Vic Notes
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              容灾方案的选择
+            </h2>
+            <div class="post-info">
+              <span>
+                2019-11-13
+              </span>
+              <span>
+                3 min read
+              </span>
+              
+                <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="post-tag">
+                  # oracle
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>磁盘阵列复制技术，主要由一些磁盘阵列厂商提供，如EMC SRDF、IBM PPRC 、HP BusinessCopy、HDS TrueCopy等<br>
+存储卷复制技术，由一些卷管理软件厂商提供，如VERITAS VVR；<br>
+数据库复制技术，由数据库厂商以及一些第三方厂商提供，如DSG RealSync，Quest SharePlex等；<br>
+应用层复制技术，由各系统的应用厂商自己提供。</p>
+<p>----磁盘阵列复制技术主要适用于数据中心级的海量数据复制<br>
+----存储卷复制技术主要适用于工作组级的数据复制，它对CPU资源占用高<br>
+----而应用层复制技术只适合那些在应用中提供了该技术的应用，由于它的非标准化、开发和维护工作量大，使得其应用不成熟也不普遍。关键行业对数据的可靠性要求又非常之高，使得关键行业用户也不敢冒然选择此种复制技术。<br>
+----DSG RealSync属于数据库复制技术，它适用于从工作组级、企业级到数据中心级的复制需求，无论系统采用什么样的服务器平台、什么样的存储平台，只要是ORACLE系统之间的复制即可适用。采用DSG RealSync复制技术，其目标端数据库在复制过程中处于可用状态，帮助关键行业用户实现生产系统与查询统计报表系统的分离；其源端系统和目标端系统可以采用异构的操作系统平台、存储平台；支持选择性复制，即支持只复制指定的user、指定的Table、指定的行和列，从而节省存储空间，提高应用灵活性；支持1对多，多对1的复制结构，即：能够将多个数据库中的数据复制到一个数据库中，能够将一个数据库中的不同数据分发到不同的数据库中；也节约带宽和网络资源，其所需带宽一般在几Mbps,几十Mbps</p>
+<p>Oracle公司目前的容灾产品有我们常见的DataGuard和属于中间件部门的Oracle GoldenGate(以下简称OGG)产品，</p>
+<p>在Oracle到Oracle的容灾方面，DataGuard在维护及预算支持上都优于Oracle GoldenGate</p>
+<p>Oracle的Extended RAC 容灾高可用，Extended RAC就是将传统的RAC两个节点从同一个机房改成分别放在两个不同的机房来实现单点容灾。RAC两个节点不能放置的距离太远(随着网络延迟的增加，RAC的性能成几何倍的衰弱，这就是为什么Exadata为什么将RAC所有节点放在同一个机柜的原因)，而距离太近又不能实现真正的灾备，如电网，台风，水灾，地震等等。</p>
+
+              </div>
+              <div class="toc-container">
+                
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://mvicdu.github.io/post/chong-jian-kong-zhi-wen-jian-shi-resetlogs-yu-noresetlogs-de-shi-yong-qing-kuang/">
+              <h3 class="post-title">
+                重建控制文件时resetlogs与noresetlogs的使用情况
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  记录学习每一天
+  <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

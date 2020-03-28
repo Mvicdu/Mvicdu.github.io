@@ -1,0 +1,199 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Oracle归档空间耗尽的处理方法 | Vic Notes</title>
+<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585372598298">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://mvicdu.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Oracle归档空间耗尽的处理方法 | Vic Notes - Atom Feed" href="https://mvicdu.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="如果归档日志填满了规定的空间，不能通过手工删除归档日志，Oracle是不认可这种空间释放的，必须通过Oracle手段来解决。
+如果设置了 db_recovery_file_dest的目录这它的大小由db_recovery_file_dest..." />
+    <meta name="keywords" content="实用,oracle" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://mvicdu.github.io">
+  <img class="avatar" src="https://mvicdu.github.io/images/avatar.png?v=1585372598298" alt="">
+  </a>
+  <h1 class="site-title">
+    Vic Notes
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              Oracle归档空间耗尽的处理方法
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-03-28
+              </span>
+              <span>
+                2 min read
+              </span>
+              
+                <a href="https://mvicdu.github.io/tag/6quAwd7jn/" class="post-tag">
+                  # 实用
+                </a>
+              
+                <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="post-tag">
+                  # oracle
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>如果归档日志填满了规定的空间，<strong>不能通过手工删除归档日志</strong>，Oracle是不认可这种空间释放的，<strong>必须通过Oracle手段来解决。</strong><br>
+如果设置了 db_recovery_file_dest的目录这它的大小由db_recovery_file_dest_size指定的数值决定。<br>
+如果没有设置db_recovery_file_dest目录则  可能是设置了log_archive_dest参数该参数可以跟可以创建10个目录。创建命令和修改命令如下：<br>
+alter system set log_archive_dest_n(1..10) = '目录' scope=spfile;    ##  其中目录可以指定远程或者本地；远程的话，设置目录为‘server=xxx’本地为的话设置为‘LOCATION=/xxxx’</p>
+<p>查看归档使用那种目录的命令：<br>
+SQL&gt; archive log list;<br>
+示例：<br>
+<img src="https://mvicdu.github.io/post-images/1585371060694.png" alt="" loading="lazy"><br>
+ps：可以看出示例中使用了闪回恢复区作为归档目录<br>
+另<br>
+方法一（推荐）：<br>
+如果磁盘有多余空间直接扩充：<br>
+命令如下：<br>
+SQL&gt;alter system set db_recovery_file_dest_size=xxG scope=both;   ##xx为数字</p>
+<p>示例：<br>
+查看归档信息命令：<br>
+SQL&gt; show parameter recov<br>
+<img src="https://mvicdu.github.io/post-images/1585371088077.png" alt="" loading="lazy"><br>
+扩容：<br>
+SQL&gt;alter system set db_recovery_file_dest_size=4200M scope=both;   ##both的话要重启数据库<br>
+<img src="https://mvicdu.github.io/post-images/1585371107629.png" alt="" loading="lazy"><br>
+方法二：<br>
+<strong>删除过期的归档</strong>：</p>
+<p>1.检测所有归档   RMAN&gt; crosscheck archivelog all;<br>
+2.列出所有无效的归档      RMAN&gt; list expired archivelog all;<br>
+3.删除过期的归档      RMAN&gt; delete noprompt expired archivelog all;</p>
+
+              </div>
+              <div class="toc-container">
+                
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://mvicdu.github.io/post/jiang-biao-nei-rong-zhuan-chu-dao-wen-jian/">
+              <h3 class="post-title">
+                将表内容转储到文件
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  记录学习每一天
+  <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,263 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>联机重做日志 | Vic Notes</title>
+<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585372598298">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://mvicdu.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="联机重做日志 | Vic Notes - Atom Feed" href="https://mvicdu.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="联机重做日志组
+由一个或多个相同的联机日志文件组成一个联机重做日志组
+至少两个日志组，每组一个成员(建议每组两个成员，分散放开到不同的磁盘)
+由LGWR后台进程同时将日志内容写入到一个组的所有成员
+LGWR的触发条件
+在事务提交的时候(CO..." />
+    <meta name="keywords" content="oracle" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://mvicdu.github.io">
+  <img class="avatar" src="https://mvicdu.github.io/images/avatar.png?v=1585372598298" alt="">
+  </a>
+  <h1 class="site-title">
+    Vic Notes
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              联机重做日志
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-03-28
+              </span>
+              <span>
+                5 min read
+              </span>
+              
+                <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="post-tag">
+                  # oracle
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>联机重做日志组<br>
+由一个或多个相同的联机日志文件组成一个联机重做日志组<br>
+至少两个日志组，每组一个成员(建议每组两个成员，分散放开到不同的磁盘)<br>
+由LGWR后台进程同时将日志内容写入到一个组的所有成员<br>
+LGWR的触发条件<br>
+在事务提交的时候(COMMIT)<br>
+Redo Log Buffer 三分之一满<br>
+Redo Log Buffer 多于一兆的变化记录<br>
+在DBWn写入数据文件之前<br>
+联机重做日志成员<br>
+重做日志组内的每一个联机日志文件称为一个成员<br>
+一个组内的每一个成员具有相同的日志序列号(log sequence number),且成员的大小相同<br>
+每次日志切换时，Oracle服务器分配一个新的LSN号给即将写入日志的日志文件组<br>
+LSN号用于唯一区分每一个联机日志组和归档日志<br>
+处于归档模式的联机日志，LSN号在归档时也被写入到归档日志之中<br>
+日志文件的工作方式<br>
+日志文件采用按顺序循环写的方式<br>
+当一组联机日志组写满，LGWR则将日志写入到下一组，当最后一组写满则从第一组开始写入<br>
+写入下一组的过程称为日志切换<br>
+切换时发生检查点过程<br>
+检查点的信息同时写入到控制文件<br>
+联机日志文件的规划<br>
+总原则<br>
+分散放开，多路复用<br>
+日志所在的磁盘应当具有较高的I/O<br>
+一般日志组大小应满足自动切换间隔至少15-20分钟左右业务需求<br>
+建议使用rdo结尾的日志文件名，避免误删日志文件。如redo1.rdo,redo2.rdo<br>
+规划样例<br>
+Redo Log Group1     Redo Log Group2     Redo Log Group3</p>
+<pre><code>        Member1             Member1              Member1            --&gt;Physical Disk 1
+       
+        Member2             Member2              Member2            --&gt;Physical Disk 2
+       
+        Member3             Member3              Member3            --&gt;Physical Disk 3
+</code></pre>
+<p>日志切换和检查点切换<br>
+ALTER SYSTEM SWITCH LOGFILE;   --强制手动切换</p>
+<pre><code>    ALTER SYSTEM CHECKPOINT
+</code></pre>
+<p>强制设置检查点间隔<br>
+ALTER SYSTEM SET FAST_START_MTTR_TARGET = n</p>
+<p>添加日志文件组<br>
+ALTER DATABASE ADD LOGFILE [GROUP n]<br>
+('<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mi>R</mi><mi>A</mi><mi>C</mi><mi>L</mi><msub><mi>E</mi><mi>B</mi></msub><mi>A</mi><mi>S</mi><mi>E</mi><mi mathvariant="normal">/</mi><mi>o</mi><mi>r</mi><mi>a</mi><mi>d</mi><mi>a</mi><mi>t</mi><mi>a</mi><mi mathvariant="normal">/</mi><mi>u</mi><mn>01</mn><mi mathvariant="normal">/</mi><mi>l</mi><mi>o</mi><mi>g</mi><mi>n</mi><mn>1.</mn><mi>r</mi><mi>d</mi><msup><mi>o</mi><mo mathvariant="normal">′</mo></msup><msup><mo separator="true">,</mo><mo mathvariant="normal">′</mo></msup></mrow><annotation encoding="application/x-tex">ORACLE_BASE/oradata/u01/logn1.rdo&#x27;,
+             &#x27;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.001892em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mord mathdefault">A</span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span><span class="mord mathdefault">L</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.05764em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.05017em;">B</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">A</span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mord">/</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">a</span><span class="mord mathdefault">d</span><span class="mord mathdefault">a</span><span class="mord mathdefault">t</span><span class="mord mathdefault">a</span><span class="mord">/</span><span class="mord mathdefault">u</span><span class="mord">0</span><span class="mord">1</span><span class="mord">/</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">n</span><span class="mord">1</span><span class="mord">.</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">d</span><span class="mord"><span class="mord mathdefault">o</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.751892em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mpunct"><span class="mpunct">,</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.751892em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span>ORACLE_BASE/oradata/u01/logn2.rdo')<br>
+SIZE mM;<br>
+添加日志成员<br>
+ALTER DATABASE ADD LOGFILE MEMBER<br>
+'<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mi>R</mi><mi>A</mi><mi>C</mi><mi>L</mi><msub><mi>E</mi><mi>B</mi></msub><mi>A</mi><mi>S</mi><mi>E</mi><mi mathvariant="normal">/</mi><mi>o</mi><mi>r</mi><mi>a</mi><mi>d</mi><mi>a</mi><mi>t</mi><mi>a</mi><mi mathvariant="normal">/</mi><mi>u</mi><mn>01</mn><mi mathvariant="normal">/</mi><mi>l</mi><mi>o</mi><mi>g</mi><mi>n</mi><mn>1.</mn><mi>r</mi><mi>d</mi><msup><mi>o</mi><mo mathvariant="normal">′</mo></msup><mi>T</mi><mi>O</mi><mi>G</mi><mi>R</mi><mi>O</mi><mi>U</mi><mi>P</mi><mn>1</mn><msup><mo separator="true">,</mo><mo mathvariant="normal">′</mo></msup></mrow><annotation encoding="application/x-tex">ORACLE_BASE/oradata/u01/logn1.rdo&#x27; TO GROUP 1,
+        &#x27;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.001892em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mord mathdefault">A</span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span><span class="mord mathdefault">L</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.05764em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.05017em;">B</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">A</span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mord">/</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">a</span><span class="mord mathdefault">d</span><span class="mord mathdefault">a</span><span class="mord mathdefault">t</span><span class="mord mathdefault">a</span><span class="mord">/</span><span class="mord mathdefault">u</span><span class="mord">0</span><span class="mord">1</span><span class="mord">/</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">n</span><span class="mord">1</span><span class="mord">.</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">d</span><span class="mord"><span class="mord mathdefault">o</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.751892em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mord mathdefault">G</span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mord mathdefault" style="margin-right:0.10903em;">U</span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord">1</span><span class="mpunct"><span class="mpunct">,</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.751892em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span>ORACLE_BASE/oradata/u01/logn2.rdo' TO GROUP 2;</p>
+<p>删除日志成员<br>
+不能删除组内的唯一一个成员<br>
+不能删除处于active 和current 状态组内的成员<br>
+删除处于active 和current 状态组内的成员，应使用日志切换使其处于INACTIVE状态后再删除<br>
+对于组内如果一个成员为NULL 值，一个为INVALID，且组处入INACTIVE，仅能删除INVALID状态成员<br>
+删除日志成员，物理文件并没有真正删除，需要手动删除（建议用mv代替删除，在观察数据库无异常后再删除）<br>
+删除日志文件后，控制文件被更新<br>
+对于处于归档模式下的数据库，删除成员时确保日志已被归档，查看v<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mi>o</mi><mi>g</mi><mi mathvariant="normal">视</mi><mi mathvariant="normal">图</mi><mi mathvariant="normal">获</mi><mi mathvariant="normal">得</mi><mi mathvariant="normal">归</mi><mi mathvariant="normal">档</mi><mi mathvariant="normal">信</mi><mi mathvariant="normal">息</mi><mi>A</mi><mi>L</mi><mi>T</mi><mi>E</mi><mi>R</mi><mi>D</mi><mi>A</mi><mi>T</mi><mi>A</mi><mi>B</mi><mi>A</mi><mi>S</mi><mi>E</mi><mi>D</mi><mi>R</mi><mi>O</mi><mi>P</mi><mi>L</mi><mi>O</mi><mi>G</mi><mi>F</mi><mi>I</mi><mi>L</mi><mi>E</mi><mi>M</mi><mi>E</mi><mi>M</mi><mi>B</mi><mi>E</mi><msup><mi>R</mi><mo mathvariant="normal">′</mo></msup></mrow><annotation encoding="application/x-tex">log视图获得归档信息
+        ALTER DATABASE DROP LOGFILE MEMBER &#x27;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.946332em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord cjk_fallback">视</span><span class="mord cjk_fallback">图</span><span class="mord cjk_fallback">获</span><span class="mord cjk_fallback">得</span><span class="mord cjk_fallback">归</span><span class="mord cjk_fallback">档</span><span class="mord cjk_fallback">信</span><span class="mord cjk_fallback">息</span><span class="mord mathdefault">A</span><span class="mord mathdefault">L</span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mord mathdefault" style="margin-right:0.02778em;">D</span><span class="mord mathdefault">A</span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mord mathdefault">A</span><span class="mord mathdefault" style="margin-right:0.05017em;">B</span><span class="mord mathdefault">A</span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mord mathdefault" style="margin-right:0.02778em;">D</span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord mathdefault">L</span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mord mathdefault">G</span><span class="mord mathdefault" style="margin-right:0.13889em;">F</span><span class="mord mathdefault" style="margin-right:0.07847em;">I</span><span class="mord mathdefault">L</span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mord mathdefault" style="margin-right:0.10903em;">M</span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mord mathdefault" style="margin-right:0.10903em;">M</span><span class="mord mathdefault" style="margin-right:0.05017em;">B</span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.751892em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span>ORACLE_BASE/oradata/u01/logn1.rdo'</p>
+<p>删除日志组<br>
+一个实例至少需要两个联机日志文件组<br>
+活动或当前的日志组不能被删除<br>
+组内成员状态有NULL 值或INVALID状态并存，组不可删除<br>
+日志组被删除后，物理文件需要手动删除(对于非OMF)<br>
+ALTER DATABASE DROP LOGFILE GROUP n</p>
+<p>日志的重定位及重命名<br>
+所需权限<br>
+ALTER DATABASE 系统权限<br>
+复制文件到目的位置操作系统权限(写权限)<br>
+CURRENT状态组内的成员不能被重命名<br>
+建议该行为之前备份数据库<br>
+重命名或重定位之后建议立即备份控制文件<br>
+重定位及重命名的两种方法<br>
+添加一个新成员到日志组，然后删除一个旧的成员<br>
+使用ALTER DATABASE RENAME FILE 命令(不区分归档与非归档模式)<br>
+复制联机日志文件到新路径:ho cp <oldfile> <newfile><br>
+执行ALTER DATABASE RENAME FILE '<oldfile>' TO '<newfile>'<br>
+对于处于CURRENT状态的需要改名且不切换的情况下<br>
+办法是切换到MOUNT状态下再执行上述操作<br>
+清空日志文件组<br>
+ALTER DATABASE CLEAR LOGIFLE GROUP n<br>
+ALTER DATABASE CLEAR UNARCHIVED LOGFILE GROUP n --使用unarchived 避免归档</p>
+<p>日志的监视<br>
+查看日志视图中的物理日志文件是否存在、位置、大小等<br>
+SELECT 'ho cp '||member FROM v$logfile;<br>
+查看日志文件所处的磁盘空间是否足够<br>
+SQL&gt; ho df -h;<br>
+查看组内是否存在多个成员，如为单一成员应考虑增加日志成员<br>
+日志切换的间隔时间，应满足15-20分钟业务需求，如果切换间隔很短，应当增加日志文件的大小<br>
+增加方法，先删除日志组，再重建该组(对于current和active的需要切换再做处理)</p>
+
+              </div>
+              <div class="toc-container">
+                
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://mvicdu.github.io/post/yun-wei-jing-shi-tiao-li/">
+              <h3 class="post-title">
+                运维警示条例
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  记录学习每一天
+  <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

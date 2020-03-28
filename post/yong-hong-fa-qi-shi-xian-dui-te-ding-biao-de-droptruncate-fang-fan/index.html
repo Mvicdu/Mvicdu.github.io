@@ -1,0 +1,249 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>用触发器实现对特定表的DROP、TRUNCATE防范 | Vic Notes</title>
+<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585372598298">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://mvicdu.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="用触发器实现对特定表的DROP、TRUNCATE防范 | Vic Notes - Atom Feed" href="https://mvicdu.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="下面的触发器实现了对特定表的DROP、TRUNCATE防范
+CREATE OR REPLACE TRIGGER trg_deny
+BEFORE DROP OR TRUNCATE ON DATABASE
+BEGIN
+IF LOWER  (or..." />
+    <meta name="keywords" content="实用,oracle" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://mvicdu.github.io">
+  <img class="avatar" src="https://mvicdu.github.io/images/avatar.png?v=1585372598298" alt="">
+  </a>
+  <h1 class="site-title">
+    Vic Notes
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              用触发器实现对特定表的DROP、TRUNCATE防范
+            </h2>
+            <div class="post-info">
+              <span>
+                2019-10-16
+              </span>
+              <span>
+                3 min read
+              </span>
+              
+                <a href="https://mvicdu.github.io/tag/6quAwd7jn/" class="post-tag">
+                  # 实用
+                </a>
+              
+                <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="post-tag">
+                  # oracle
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>下面的触发器实现了对特定表的DROP、TRUNCATE防范</p>
+<p>CREATE OR REPLACE TRIGGER trg_deny<br>
+BEFORE DROP OR TRUNCATE ON DATABASE<br>
+BEGIN<br>
+IF LOWER  (ora_dict_obj_name () ) = 'test'<br>
+THEN<br>
+raise_application_error (num          =&gt; -20000,<br>
+msg          =&gt;  'You Can not Drop/Truncate  Table'<br>
+|| ora_dict_obj_name ()<br>
+|| ' check you plan'</p>
+<pre><code>                                           );
+END IF;
+</code></pre>
+<p>END;<br>
+/</p>
+<p>下面的触发器可以实现全库级别的DDL防范:</p>
+<p>create or replace trigger ddl_deny<br>
+before create or alter or drop or truncate on database<br>
+declare<br>
+l_errmsg varchar2(100) := 'You have no permission to this operation';<br>
+begin<br>
+if ora_sysevent = 'CREATE' then<br>
+raise_application_error(-20001,ora_dict_obj_owner || '.' || ora_dict_obj_name || ' ' || l_errmsg);<br>
+elsif ora_sysevent = 'ALTER' then<br>
+raise_application_error(-20001,ora_dict_obj_owner || '.' || ora_dict_obj_name || ' ' || l_errmsg);<br>
+elsif ora_sysevent = 'DROP' then<br>
+raise_application_error(-20001,ora_dict_obj_owner || '.' || ora_dict_obj_name || ' ' || l_errmsg);<br>
+elsif ora_sysevent = 'TRUNCATE' then<br>
+raise_application_error(-20001,ora_dict_obj_owner || '.' || ora_dict_obj_name || ' ' || l_errmsg);<br>
+end if;<br>
+exception<br>
+when no_data_found then<br>
+null;<br>
+end;<br>
+/</p>
+<p>对于某些数据库环境，也可以限定DDL操作只能在数据库服务器本地执行，对于远程执行则予以禁止。类似的触发器可以参考如下代码（下面的代码基于Schema模式建立，需要对于v<span class='katex-error' title='ParseError: KaTeX parse error: Expected group after &#039;_&#039; at position 82: …ant select on v_̲'>session的访问进行授权，自定义的记录信息被写入告警日志文件中）。
+SQL&gt;connect / as sysdba
+SQL&gt;grant select on v_</span>session to eygle;<br>
+SQL&gt;grant execute on dbms_system to eygle;<br>
+create or replace trigger ddl_trigger<br>
+before ddl on eygle.schema<br>
+declare<br>
+n                  number;<br>
+str_stmt       varchar2(4000);<br>
+l_trace         number;<br>
+str_session   v$session%rowtype;<br>
+begin<br>
+select count(*) into l_trace from dual<br>
+where utl_inaddr.GET_HOST_ADDRESS is not null<br>
+and sys_context('userenv','ip_address') is not null<br>
+and sys_context('userenv','ip_address') &lt;&gt; utl_inaddr.GET_HOST_ADDRESS;</p>
+<p>if l_trace&gt;0 then<br>
+n := ora_sql_txt(sql_text);<br>
+for i in 1..n loop<br>
+str_stmt := substr(str_stmt || sql_text(i),1,3000);<br>
+end loop;</p>
+<p>select * into str_session from v$session where audsid=userenv('sessionid');</p>
+<p>sys.dbms_system.ksdwrt(2,<br>
+to_char(sysdate,'yyyymmdd hh24:mi:ss') ||<br>
+' ORA-20001 user: ' || user || ' program: ' ||<br>
+str_session.program || ' IP: ' ||<br>
+sys_context('userenv','ip_address') ||<br>
+' object: ' || ora_dict_obj_name || ' DDL: ' ||<br>
+str_stmt);</p>
+<p>raise_application_error(-20001,<br>
+'DDL is deny from remote connection.');</p>
+<p>end if ;</p>
+<p>END;<br>
+/</p>
+<p>上面是一些示范，仅供参考，若在系统中采用则需要经过测试和改进。</p>
+<p>由于DDL的重要性，在Oracle 11g中，DDL日志机制被引入，可以通过enable_ddl_logging参数进行设置。如果启用该日志，DDL操作的信息都将被记录到告警日志中。<br>
+ALTER SYSTEM SET     enable_ddl_logging= TRUE SCOPE=BOTH;</p>
+<p>在Oracle 12c中，为了防止DDL日志对告警日志的干扰，DDL日志被进一步独立出来，有了一个独立的DDL日志。</p>
+
+              </div>
+              <div class="toc-container">
+                
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://mvicdu.github.io/post/ri-zhi-wen-jian-zhuan-chu/">
+              <h3 class="post-title">
+                日志文件转储
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  记录学习每一天
+  <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

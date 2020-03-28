@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://mvicdu.github.io</id>
     <title>Vic Notes</title>
-    <updated>2020-03-27T08:25:41.941Z</updated>
+    <updated>2020-03-28T05:16:45.078Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://mvicdu.github.io"/>
     <link rel="self" href="https://mvicdu.github.io/atom.xml"/>
@@ -11,73 +11,73 @@
     <icon>https://mvicdu.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Vic Notes</rights>
     <entry>
-        <title type="html"><![CDATA[RESETLOGS 和 NORESETLOGS 区别及使用说明]]></title>
-        <id>https://mvicdu.github.io/post/RESETLOGS&amp;NORESETLOGS/</id>
-        <link href="https://mvicdu.github.io/post/RESETLOGS&amp;NORESETLOGS/">
+        <title type="html"><![CDATA[linux 硬盘故障修复]]></title>
+        <id>https://mvicdu.github.io/post/linux-ying-pan-gu-zhang-xiu-fu/</id>
+        <link href="https://mvicdu.github.io/post/linux-ying-pan-gu-zhang-xiu-fu/">
         </link>
-        <updated>2019-08-27T05:33:32.000Z</updated>
+        <updated>2020-03-28T05:13:20.000Z</updated>
     </entry>
     <entry>
-        <title type="html"><![CDATA[联机备份（online database backup）]]></title>
-        <id>https://mvicdu.github.io/post/online-database-backup/</id>
-        <link href="https://mvicdu.github.io/post/online-database-backup/">
+        <title type="html"><![CDATA[zabbix agent 安装脚本]]></title>
+        <id>https://mvicdu.github.io/post/zabbix-agent-an-zhuang-jiao-ben/</id>
+        <link href="https://mvicdu.github.io/post/zabbix-agent-an-zhuang-jiao-ben/">
         </link>
-        <updated>2019-08-26T05:26:03.000Z</updated>
+        <updated>2020-03-28T05:12:33.000Z</updated>
     </entry>
     <entry>
-        <title type="html"><![CDATA[配置闪回数据库（FRA，快速恢复区）]]></title>
-        <id>https://mvicdu.github.io/post/pei-zhi-shan-hui-shu-ju-ku-frakuai-su-hui-fu-qu/</id>
-        <link href="https://mvicdu.github.io/post/pei-zhi-shan-hui-shu-ju-ku-frakuai-su-hui-fu-qu/">
+        <title type="html"><![CDATA[联机重做日志]]></title>
+        <id>https://mvicdu.github.io/post/lian-ji-chong-zuo-ri-zhi/</id>
+        <link href="https://mvicdu.github.io/post/lian-ji-chong-zuo-ri-zhi/">
         </link>
-        <updated>2019-08-25T05:30:03.000Z</updated>
+        <updated>2020-03-28T04:53:47.000Z</updated>
     </entry>
     <entry>
-        <title type="html"><![CDATA[闪回归档]]></title>
-        <id>https://mvicdu.github.io/post/shan-hui-gui-dang/</id>
-        <link href="https://mvicdu.github.io/post/shan-hui-gui-dang/">
+        <title type="html"><![CDATA[运维警示条例]]></title>
+        <id>https://mvicdu.github.io/post/yun-wei-jing-shi-tiao-li/</id>
+        <link href="https://mvicdu.github.io/post/yun-wei-jing-shi-tiao-li/">
         </link>
-        <updated>2019-08-25T05:21:36.000Z</updated>
+        <updated>2020-03-28T04:52:25.000Z</updated>
     </entry>
     <entry>
-        <title type="html"><![CDATA[RMAN恢复备份]]></title>
-        <id>https://mvicdu.github.io/post/rman-hui-fu-bei-fen/</id>
-        <link href="https://mvicdu.github.io/post/rman-hui-fu-bei-fen/">
+        <title type="html"><![CDATA[Oracle归档空间耗尽的处理方法]]></title>
+        <id>https://mvicdu.github.io/post/oracle-gui-dang-kong-jian-hao-jin-de-chu-li-fang-fa/</id>
+        <link href="https://mvicdu.github.io/post/oracle-gui-dang-kong-jian-hao-jin-de-chu-li-fang-fa/">
         </link>
-        <updated>2019-08-25T05:18:39.000Z</updated>
+        <updated>2020-03-28T04:50:04.000Z</updated>
     </entry>
     <entry>
-        <title type="html"><![CDATA[LGWR输入/输出(I/O)由于永久性介质故障而崩溃，导致重做日志丢失]]></title>
-        <id>https://mvicdu.github.io/post/huifuchongzuorizhi/</id>
-        <link href="https://mvicdu.github.io/post/huifuchongzuorizhi/">
+        <title type="html"><![CDATA[将表内容转储到文件]]></title>
+        <id>https://mvicdu.github.io/post/jiang-biao-nei-rong-zhuan-chu-dao-wen-jian/</id>
+        <link href="https://mvicdu.github.io/post/jiang-biao-nei-rong-zhuan-chu-dao-wen-jian/">
         </link>
-        <updated>2019-08-24T05:24:26.000Z</updated>
+        <updated>2020-03-28T04:47:28.000Z</updated>
     </entry>
     <entry>
-        <title type="html"><![CDATA[LGWR输入/输出(I/O)由于永久性介质故障而崩溃，导致重做日志丢失]]></title>
-        <id>https://mvicdu.github.io/post/lgwr-shu-ru-shu-chu-ioyou-yu-yong-jiu-xing-jie-zhi-gu-zhang-er-beng-kui-dao-zhi-chong-zuo-ri-zhi-diu-shi/</id>
-        <link href="https://mvicdu.github.io/post/lgwr-shu-ru-shu-chu-ioyou-yu-yong-jiu-xing-jie-zhi-gu-zhang-er-beng-kui-dao-zhi-chong-zuo-ri-zhi-diu-shi/">
+        <title type="html"><![CDATA[Ansible 自动化运维模块实战]]></title>
+        <id>https://mvicdu.github.io/post/mo-kuai-shi-zhan/</id>
+        <link href="https://mvicdu.github.io/post/mo-kuai-shi-zhan/">
         </link>
-        <updated>2019-08-24T05:24:26.000Z</updated>
+        <updated>2019-12-28T05:07:55.000Z</updated>
     </entry>
     <entry>
-        <title type="html"><![CDATA[自动共享内存管理]]></title>
-        <id>https://mvicdu.github.io/post/zi-dong-gong-xiang-nei-cun-guan-li/</id>
-        <link href="https://mvicdu.github.io/post/zi-dong-gong-xiang-nei-cun-guan-li/">
+        <title type="html"><![CDATA[python_备份文件]]></title>
+        <id>https://mvicdu.github.io/post/python_-bei-fen-wen-jian/</id>
+        <link href="https://mvicdu.github.io/post/python_-bei-fen-wen-jian/">
         </link>
-        <updated>2019-08-24T05:22:23.000Z</updated>
+        <updated>2019-12-12T04:56:56.000Z</updated>
     </entry>
     <entry>
-        <title type="html"><![CDATA[监视RMAN作业进度]]></title>
-        <id>https://mvicdu.github.io/post/jian-shi-rman-zuo-ye-jin-du/</id>
-        <link href="https://mvicdu.github.io/post/jian-shi-rman-zuo-ye-jin-du/">
+        <title type="html"><![CDATA[Zabbix分布式监控]]></title>
+        <id>https://mvicdu.github.io/post/zabbix-fen-bu-shi-jian-kong/</id>
+        <link href="https://mvicdu.github.io/post/zabbix-fen-bu-shi-jian-kong/">
         </link>
-        <updated>2019-08-21T05:20:13.000Z</updated>
+        <updated>2019-11-27T05:09:38.000Z</updated>
     </entry>
     <entry>
-        <title type="html"><![CDATA[數據庫備份]]></title>
-        <id>https://mvicdu.github.io/post/shu-ju-ku-bei-fen/</id>
-        <link href="https://mvicdu.github.io/post/shu-ju-ku-bei-fen/">
+        <title type="html"><![CDATA[zabbix安装(LAMP环境)]]></title>
+        <id>https://mvicdu.github.io/post/zabbix-an-zhuang-lamp-huan-jing/</id>
+        <link href="https://mvicdu.github.io/post/zabbix-an-zhuang-lamp-huan-jing/">
         </link>
-        <updated>2019-08-21T05:15:56.000Z</updated>
+        <updated>2019-11-21T05:15:10.000Z</updated>
     </entry>
 </feed>

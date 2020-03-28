@@ -1,0 +1,290 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>利用shadowsocks 搭建SS（创建自己的VPN） | Vic Notes</title>
+<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585372598298">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://mvicdu.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="利用shadowsocks 搭建SS（创建自己的VPN） | Vic Notes - Atom Feed" href="https://mvicdu.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="安装 pip
+pip是 python 的包管理工具。在本文中将使用 python 版本的 shadowsocks，此版本的 shadowsocks 已发布到 pip 上，因此我们需要通过 pip 命令来安装。
+在控制台执行以下命令安装 pi..." />
+    <meta name="keywords" content="Linux,实用" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://mvicdu.github.io">
+  <img class="avatar" src="https://mvicdu.github.io/images/avatar.png?v=1585372598298" alt="">
+  </a>
+  <h1 class="site-title">
+    Vic Notes
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              利用shadowsocks 搭建SS（创建自己的VPN）
+            </h2>
+            <div class="post-info">
+              <span>
+                2019-08-22
+              </span>
+              <span>
+                4 min read
+              </span>
+              
+                <a href="https://mvicdu.github.io/tag/lKYi1T7d8/" class="post-tag">
+                  # Linux
+                </a>
+              
+                <a href="https://mvicdu.github.io/tag/6quAwd7jn/" class="post-tag">
+                  # 实用
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>安装 pip<br>
+pip是 python 的包管理工具。在本文中将使用 python 版本的 shadowsocks，此版本的 shadowsocks 已发布到 pip 上，因此我们需要通过 pip 命令来安装。<br>
+在控制台执行以下命令安装 pip：<br>
+[root@server ~]# curl &quot;https://bootstrap.pypa.io/get-pip.py&quot; -o &quot;get-pip.py&quot;<br>
+#centos7 一般都有安装pip<br>
+[root@server ~]# python get-pip.py<br>
+安装配置 shadowsocks<br>
+在控制台执行以下命令安装 shadowsocks：<br>
+[root@server ~]# pip install --upgrade pip<br>
+[root@server ~]# pip install shadowsocks<br>
+安装完成后，需要创建shadowsocks的配置文件/etc/shadowsocks.json，编辑内容如下：<br>
+[root@server ~]# vim /etc/shadowsocks.json<br>
+{<br>
+&quot;server&quot;: &quot;0.0.0.0&quot;,<br>
+&quot;local_address&quot;: &quot;127.0.0.1&quot;,<br>
+&quot;local_port&quot;: 1080,<br>
+&quot;port_password&quot;: {<br>
+&quot;8080&quot;: &quot;填写密码&quot;,<br>
+&quot;8081&quot;: &quot;填写密码&quot;<br>
+},<br>
+&quot;timeout&quot;: 600,<br>
+&quot;method&quot;: &quot;aes-256-cfb&quot;<br>
+}<br>
+说明：<br>
+•	method为加密方法，可选aes-128-cfb, aes-192-cfb, aes-256-cfb, bf-cfb, cast5-cfb, des-cfb, rc4-md5, chacha20, salsa20, rc4, table<br>
+•	port_password为端口对应的密码，可使用密码生成工具生成一个随机密码<br>
+以上两项信息在配置 shadowsocks 客户端时需要配置一致，具体说明可查看 shadowsocks 的帮助文档。<br>
+如果你不需要配置多个端口的话，仅配置单个端口，则可以使用以下配置：<br>
+{<br>
+&quot;server&quot;: &quot;0.0.0.0&quot;,<br>
+&quot;server_port&quot;: 8080,<br>
+&quot;password&quot;: &quot;填写密码&quot;,<br>
+&quot;method&quot;: &quot;aes-256-cfb&quot;<br>
+}<br>
+说明：<br>
+•	server_port为服务监听端口<br>
+•	password为密码<br>
+同样的以上两项信息在配置 shadowsocks 客户端时需要配置一致。<br>
+配置自启动<br>
+编辑shadowsocks 服务的启动脚本文件，内容如下：<br>
+[root@server ~]# vim /etc/systemd/system/shadowsocks.service<br>
+[Unit]<br>
+Description=Shadowsocks<br>
+[Service]<br>
+TimeoutStartSec=0<br>
+ExecStart=/usr/bin/ssserver -c /etc/shadowsocks.json<br>
+[Install]<br>
+WantedBy=multi-user.target<br>
+执行以下命令启动 shadowsocks 服务：<br>
+ssserver -c /etc/shadowsocks.json -d start<br>
+#有其他文章用systemctl start sserver.service 命令来启动，但我安装的时候是用的上一条命令才生效的.</p>
+<p>附脚本：</p>
+<p>#!/bin/bash</p>
+<h1 id="install-shadowsocks-on-centos-7">Install Shadowsocks on CentOS 7</h1>
+<p>echo &quot;Installing Shadowsocks...&quot;</p>
+<p>random-string()<br>
+{<br>
+cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w ${1:-32} | head -n 1<br>
+}</p>
+<p>CONFIG_FILE=/etc/shadowsocks.json<br>
+SERVICE_FILE=/etc/systemd/system/shadowsocks.service<br>
+SS_PASSWORD=$(random-string 32)<br>
+SS_PORT=8078<br>
+SS_METHOD=aes-256-cfb<br>
+SS_IP=<code>ip route get 1 | awk '{print $NF;exit}'</code><br>
+GET_PIP_FILE=/tmp/get-pip.py</p>
+<h1 id="install-pip">install pip</h1>
+<p>curl &quot;https://bootstrap.pypa.io/get-pip.py&quot; -o &quot;${GET_PIP_FILE}&quot;<br>
+python ${GET_PIP_FILE}</p>
+<h1 id="install-shadowsocks">install shadowsocks</h1>
+<p>pip install --upgrade pip<br>
+pip install shadowsocks</p>
+<h1 id="create-shadowsocls-config">create shadowsocls config</h1>
+<p>cat &lt;&lt;EOF | sudo tee ${CONFIG_FILE}<br>
+{<br>
+&quot;server&quot;: &quot;0.0.0.0&quot;,<br>
+&quot;server_port&quot;: <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mrow><mi>S</mi><msub><mi>S</mi><mi>P</mi></msub><mi>O</mi><mi>R</mi><mi>T</mi></mrow><mo separator="true">,</mo><mi mathvariant="normal">&quot;</mi><mi>p</mi><mi>a</mi><mi>s</mi><mi>s</mi><mi>w</mi><mi>o</mi><mi>r</mi><mi>d</mi><mi mathvariant="normal">&quot;</mi><mo>:</mo><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex">{SS_PORT},
+  &quot;password&quot;: &quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.05764em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.13889em;">P</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">&quot;</span><span class="mord mathdefault">p</span><span class="mord mathdefault">a</span><span class="mord mathdefault">s</span><span class="mord mathdefault">s</span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">d</span><span class="mord">&quot;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord">&quot;</span></span></span></span>{SS_PASSWORD}&quot;,<br>
+&quot;method&quot;: &quot;${SS_METHOD}&quot;<br>
+}<br>
+EOF</p>
+<h1 id="create-service">create service</h1>
+<p>cat &lt;&lt;EOF | sudo tee ${SERVICE_FILE}<br>
+[Unit]<br>
+Description=Shadowsocks</p>
+<p>[Service]<br>
+TimeoutStartSec=0<br>
+ExecStart=/usr/bin/ssserver -c ${CONFIG_FILE}</p>
+<p>[Install]<br>
+WantedBy=multi-user.target<br>
+EOF</p>
+<h1 id="start-service">start service</h1>
+<p>systemctl enable shadowsocks<br>
+systemctl start shadowsocks</p>
+<h1 id="view-service-status">view service status</h1>
+<p>sleep 5<br>
+systemctl status shadowsocks -l</p>
+<p>echo &quot;================================&quot;<br>
+echo &quot;&quot;<br>
+echo &quot;Congratulations! Shadowsocks has been installed on your system.&quot;<br>
+echo &quot;You shadowsocks connection info:&quot;<br>
+echo &quot;--------------------------------&quot;<br>
+echo &quot;server:      ${SS_IP}&quot;<br>
+echo &quot;server_port: ${SS_PORT}&quot;<br>
+echo &quot;password:    ${SS_PASSWORD}&quot;<br>
+echo &quot;method:      ${SS_METHOD}&quot;<br>
+echo &quot;--------------------------------&quot;</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#install-shadowsocks-on-centos-7">Install Shadowsocks on CentOS 7</a></li>
+<li><a href="#install-pip">install pip</a></li>
+<li><a href="#install-shadowsocks">install shadowsocks</a></li>
+<li><a href="#create-shadowsocls-config">create shadowsocls config</a></li>
+<li><a href="#create-service">create service</a></li>
+<li><a href="#start-service">start service</a></li>
+<li><a href="#view-service-status">view service status</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://mvicdu.github.io/post/beifenyanzheng/">
+              <h3 class="post-title">
+                用validate验证备份有效性(备份后必须验证)
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  记录学习每一天
+  <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

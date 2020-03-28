@@ -1,0 +1,219 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>python_备份文件 | Vic Notes</title>
+<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585372598298">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://mvicdu.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="python_备份文件 | Vic Notes - Atom Feed" href="https://mvicdu.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="!/usr/bin/python3
+coding=gbk
+import os,time,zipfile
+def createZip(filePath,savePath,note):
+'''
+将文件夹下的文件保存到zip文件中。
+:param..." />
+    <meta name="keywords" content="python" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://mvicdu.github.io">
+  <img class="avatar" src="https://mvicdu.github.io/images/avatar.png?v=1585372598298" alt="">
+  </a>
+  <h1 class="site-title">
+    Vic Notes
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              python_备份文件
+            </h2>
+            <div class="post-info">
+              <span>
+                2019-12-12
+              </span>
+              <span>
+                2 min read
+              </span>
+              
+                <a href="https://mvicdu.github.io/tag/IbTdfBZqp/" class="post-tag">
+                  # python
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h1 id="usrbinpython3">!/usr/bin/python3</h1>
+<h1 id="codinggbk">coding=gbk</h1>
+<p>import os,time,zipfile<br>
+def createZip(filePath,savePath,note):<br>
+'''<br>
+将文件夹下的文件保存到zip文件中。<br>
+:param filePath: 待备份文件<br>
+:param savePath: 备份路径<br>
+:param note: 备份文件说明<br>
+:return:<br>
+'''<br>
+today = time.strftime('%Y%m%d')<br>
+now = time.strftime('%H%M%S')<br>
+fileList=[]<br>
+if not os.path.exists(today):<br>
+os.mkdir(today)<br>
+print('mkdir successful')<br>
+if len(note) == 0:<br>
+target = savePath + os.sep + today + os.sep + now + '.zip'<br>
+else:<br>
+target = savePath + os.sep + today + os.sep + now + '_' + note + '.zip'<br>
+newZip = zipfile.ZipFile(target,'w')<br>
+for dirpath,dirnames,filenames in os.walk(filePath):<br>
+for filename in filenames:<br>
+fileList.append(os.path.join(dirpath,filename))<br>
+for tar in fileList:<br>
+newZip.write(tar,tar[len(filePath):])#tar为写入的文件，tar[len(filePath)]为保存的文件名<br>
+newZip.close()<br>
+print('backup to',target)</p>
+<p>#解压<br>
+def unZip(filePath,unzipPath):<br>
+''' 解压zip文件到指定路径<br>
+:param filePath: 待解压文件<br>
+:param unzipPath: 解压路径<br>
+:return:<br>
+'''<br>
+file = zipfile.ZipFile(filePath)<br>
+file.extractall(unzipPath)<br>
+print('unzip successfully to',unzipPath)<br>
+#调用函数<br>
+createZip(r'D:\swa\notes',r'D:\swa\notes\backup',input('Enter a comment--&gt;'))</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#usrbinpython3">!/usr/bin/python3</a></li>
+<li><a href="#codinggbk">coding=gbk</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://mvicdu.github.io/post/zabbix-fen-bu-shi-jian-kong/">
+              <h3 class="post-title">
+                Zabbix分布式监控
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  记录学习每一天
+  <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

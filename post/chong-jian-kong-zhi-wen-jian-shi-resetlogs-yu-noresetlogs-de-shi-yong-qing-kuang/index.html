@@ -1,0 +1,674 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>重建控制文件时resetlogs与noresetlogs的使用情况 | Vic Notes</title>
+<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585372598298">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://mvicdu.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="重建控制文件时resetlogs与noresetlogs的使用情况 | Vic Notes - Atom Feed" href="https://mvicdu.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="重建控制文件时resetlogs与noresetlogs的使用情况
+控制文件中记录着数据库的数据文件,日志文件,备份数据等信息,更为重要的,控制文件中还记录了数据库的检查点
+和scn信息,这些信息在数据恢复的过程中将起到关键性作用.
+一个正..." />
+    <meta name="keywords" content="oracle" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://mvicdu.github.io">
+  <img class="avatar" src="https://mvicdu.github.io/images/avatar.png?v=1585372598298" alt="">
+  </a>
+  <h1 class="site-title">
+    Vic Notes
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              重建控制文件时resetlogs与noresetlogs的使用情况
+            </h2>
+            <div class="post-info">
+              <span>
+                2019-10-30
+              </span>
+              <span>
+                27 min read
+              </span>
+              
+                <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="post-tag">
+                  # oracle
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>重建控制文件时resetlogs与noresetlogs的使用情况<br>
+控制文件中记录着数据库的数据文件,日志文件,备份数据等信息,更为重要的,控制文件中还记录了数据库的检查点<br>
+和scn信息,这些信息在数据恢复的过程中将起到关键性作用.</p>
+<p>一个正常运行的数据库,通常控制文件都存在多份镜像,这些镜像的内容是完全相同的,oracle缺省就创建多份控制<br>
+文件更说明了控制文件的重要:<br>
+SQL&gt; select name from v$controlfile;</p>
+<h2 id="name">NAME</h2>
+<p>/u01/app/oracle/product/11.2.0/oradata/jingyong/control01.ctl<br>
+/u01/app/oracle/product/11.2.0/oradata/jingyong/control02.ctl</p>
+<p>可以通过如下一条命令将控制文件的创建语句备份到跟踪文件中:<br>
+SQL&gt; alter database backup controlfile to trace;</p>
+<p>Database altered.</p>
+<p>SQL&gt; oradebug setmypid<br>
+Statement processed.<br>
+SQL&gt; oradebug tracefile_name<br>
+/u01/app/oracle/diag/rdbms/jingyong/jingyong/trace/jingyong_ora_18818.trc</p>
+<p>SQL&gt; host sz /u01/app/oracle/diag/rdbms/jingyong/jingyong/trace/jingyong_ora_18818.trc<br>
+rz<br>
+Starting zmodem transfer.  Press Ctrl+C to cancel.<br>
+100%       8 KB    8 KB/s 00:00:01       0 Errors</p>
+<p>此跟踪文件中会记录控制文件的创建脚本,脚本包含两个主要的段落,其中一段如下所示:<br>
+STARTUP NOMOUNT<br>
+CREATE CONTROLFILE REUSE DATABASE &quot;JINGYONG&quot; RESETLOGS  ARCHIVELOG<br>
+MAXLOGFILES 16<br>
+MAXLOGMEMBERS 3<br>
+MAXDATAFILES 100<br>
+MAXINSTANCES 8<br>
+MAXLOGHISTORY 292<br>
+LOGFILE<br>
+GROUP 1 '/u01/app/oracle/product/11.2.0/oradata/jingyong/redo01.log'  SIZE 50M BLOCKSIZE 512,<br>
+GROUP 2 '/u01/app/oracle/product/11.2.0/oradata/jingyong/redo02.log'  SIZE 50M BLOCKSIZE 512,<br>
+GROUP 3 '/u01/app/oracle/product/11.2.0/oradata/jingyong/redo03.log'  SIZE 50M BLOCKSIZE 512<br>
+-- STANDBY LOGFILE<br>
+DATAFILE<br>
+'/u01/app/oracle/product/11.2.0/oradata/jingyong/system01.dbf',<br>
+'/u01/app/oracle/product/11.2.0/oradata/jingyong/sysaux01.dbf',<br>
+'/u01/app/oracle/product/11.2.0/oradata/jingyong/undotbs01.dbf',<br>
+'/u01/app/oracle/product/11.2.0/oradata/jingyong/users01.dbf',<br>
+'/u01/app/oracle/product/11.2.0/oradata/jingyong/example01.dbf',<br>
+'/u01/app/oracle/product/11.2.0/oradata/jingyong/jy01.dbf'<br>
+CHARACTER SET ZHS16GBK<br>
+;</p>
+<p>当数据库处于nomount状态下时,可以通过运行这段脚本创建控制文件,控制文件会自动创建到参数文件中<br>
+记录控制文件的位置(原来的控制文件在创建过程会被覆盖).这里需要理解的一个主要选项是:<br>
+noresetlogs/resetlogs.在跟踪文件中包含如下注释,详细解释了这两个选项的含义:<br>
+-- Below are two sets of SQL statements, each of which creates a new<br>
+-- control file and uses it to open the database. The first set opens<br>
+-- the database with the NORESETLOGS option and should be used only if<br>
+-- the current versions of all online logs are available. The second<br>
+-- set opens the database with the RESETLOGS option and should be used<br>
+-- if online logs are unavailable.<br>
+-- The appropriate set of statements can be copied from the trace into<br>
+-- a script. file, edited as necessary, and executed when there is a<br>
+-- need to re-create the control file.</p>
+<p>当数据库当前的redo log都可用时,可以通过noresetlogs参数重建控制文件,此时oracle能够从日志文件中<br>
+读取redo信息,记录到控制文件中,由于redo中记录的信息足以重演所有提交成功的事务,所以最终能够实现<br>
+完全恢复,成功打开数据库,这时的数据库就如同进行了一次断电之后的实例恢复,数据没有损失,重做日志<br>
+可以继续向前写入:</p>
+<p>下面测试来看一下以noresetlogs重建控制文件进行数据库恢复的过程<br>
+先在数据库正常运行状态下对控制文件执行一次转储:<br>
+SQL&gt; alter session set events 'immediate trace name controlf level 12';</p>
+<p>Session altered.</p>
+<p>SQL&gt; oradebug setmypid<br>
+Statement processed.<br>
+SQL&gt; oradebug tracefile_name<br>
+/u01/app/oracle/diag/rdbms/jingyong/jingyong/trace/jingyong_ora_19350.trc</p>
+<p>这个转储文件中将包含数据库的检查点,redo thread信息,数据文件等信息,看一下<br>
+log file records内容:</p>
+<hr>
+<p>LOG FILE RECORDS</p>
+<hr>
+<p>(size = 72, compat size = 72, section max = 16, section in-use = 3,<br>
+last-recid= 3, old-recno = 0, last-recno = 0)<br>
+(extent = 1, blkno = 10, numrecs = 16)<br>
+LOG FILE #1:<br>
+name #3: /u01/app/oracle/product/11.2.0/oradata/jingyong/redo01.log<br>
+Thread 1 redo log links: forward: 2 backward: 0<br>
+siz: 0x19000 seq: 0x00000010 hws: 0x2 bsz: 512 nab: 0x1e flg: 0x1 dup: 1<br>
+Archive links: fwrd: 0 back: 0 Prev scn: 0x0000.000ea466<br>
+Low scn: 0x0000.000ea474 05/02/2013 11:40:58<br>
+Next scn: 0x0000.000ea4db 05/02/2013 11:44:07<br>
+LOG FILE #2:<br>
+name #2: /u01/app/oracle/product/11.2.0/oradata/jingyong/redo02.log<br>
+Thread 1 redo log links: forward: 3 backward: 1<br>
+siz: 0x19000 seq: 0x00000011 hws: 0x1 bsz: 512 nab: 0xffffffff flg: 0x8 dup: 1<br>
+Archive links: fwrd: 0 back: 0 Prev scn: 0x0000.000ea474<br>
+Low scn: 0x0000.000ea4db 05/02/2013 11:44:07<br>
+Next scn: 0xffff.ffffffff 01/01/1988 00:00:00<br>
+LOG FILE #3:<br>
+name #1: /u01/app/oracle/product/11.2.0/oradata/jingyong/redo03.log<br>
+Thread 1 redo log links: forward: 0 backward: 2<br>
+siz: 0x19000 seq: 0x0000000f hws: 0x2 bsz: 512 nab: 0x2 flg: 0x1 dup: 1<br>
+Archive links: fwrd: 0 back: 0 Prev scn: 0x0000.000e8ed8<br>
+Low scn: 0x0000.000ea466 05/02/2013 11:40:52<br>
+Next scn: 0x0000.000ea474 05/02/2013 11:40:58</p>
+<p>从记录信息中我们可以看到redo02.log文件的next scn:0xffff.ffffffff,所以redo02.log文件是当前的<br>
+日志文件,我们可以从v<span class='katex-error' title='ParseError: KaTeX parse error: Expected &#039;EOF&#039;, got &#039;#&#039; at position 35: …L&gt; select group#̲,status from v'>log视图中查看当前的重做日志组
+SQL&gt; select group#,status from v</span>log;</p>
+<pre><code>GROUP# STATUS
+</code></pre>
+<hr>
+<pre><code>     1 INACTIVE
+     2 CURRENT
+     3 INACTIVE
+</code></pre>
+<p>接下来通过shutdown abort模拟一次数据库故障:<br>
+SQL&gt; shutdown abort;<br>
+ORACLE instance shut down.</p>
+<p>启动数据库到nomount状态,再来使用noresetlogs参数来重建控制文件:<br>
+SQL&gt; startup nomount;<br>
+ORACLE instance started.</p>
+<p>Total System Global Area  238530560 bytes<br>
+Fixed Size                  1335724 bytes<br>
+Variable Size             150998612 bytes<br>
+Database Buffers           83886080 bytes<br>
+Redo Buffers                2310144 bytes<br>
+SQL&gt; CREATE CONTROLFILE REUSE DATABASE &quot;JINGYONG&quot; NORESETLOGS  ARCHIVELOG<br>
+2      MAXLOGFILES 16<br>
+3      MAXLOGMEMBERS 3<br>
+4      MAXDATAFILES 100<br>
+5      MAXINSTANCES 8<br>
+6      MAXLOGHISTORY 292<br>
+7  LOGFILE<br>
+8    GROUP 1 '/u01/app/oracle/product/11.2.0/oradata/jingyong/redo01.log'  SIZE 50M BLOCKSIZE 512,<br>
+9    GROUP 2 '/u01/app/oracle/product/11.2.0/oradata/jingyong/redo02.log'  SIZE 50M BLOCKSIZE 512,<br>
+10    GROUP 3 '/u01/app/oracle/product/11.2.0/oradata/jingyong/redo03.log'  SIZE 50M BLOCKSIZE 512<br>
+11  -- STANDBY LOGFILE<br>
+12  DATAFILE<br>
+13    '/u01/app/oracle/product/11.2.0/oradata/jingyong/system01.dbf',<br>
+14    '/u01/app/oracle/product/11.2.0/oradata/jingyong/sysaux01.dbf',<br>
+15    '/u01/app/oracle/product/11.2.0/oradata/jingyong/undotbs01.dbf',<br>
+16    '/u01/app/oracle/product/11.2.0/oradata/jingyong/users01.dbf',<br>
+17    '/u01/app/oracle/product/11.2.0/oradata/jingyong/example01.dbf',<br>
+18    '/u01/app/oracle/product/11.2.0/oradata/jingyong/jy01.dbf'<br>
+19  CHARACTER SET ZHS16GBK<br>
+20  ;</p>
+<p>Control file created.</p>
+<p>此时再来对控制文件进行一次转储,检查log file records部分:<br>
+SQL&gt; alter session set events 'immediate trace name controlf level 12';</p>
+<p>Session altered.</p>
+<p>SQL&gt; oradebug setmypid<br>
+Statement processed.<br>
+SQL&gt; oradebug tracefile_name<br>
+/u01/app/oracle/diag/rdbms/jingyong/jingyong/trace/jingyong_ora_19438.trc</p>
+<hr>
+<p>LOG FILE RECORDS</p>
+<hr>
+<p>(size = 72, compat size = 72, section max = 16, section in-use = 3,<br>
+last-recid= 0, old-recno = 0, last-recno = 0)<br>
+(extent = 1, blkno = 10, numrecs = 16)<br>
+LOG FILE #1:<br>
+name #2: /u01/app/oracle/product/11.2.0/oradata/jingyong/redo01.log<br>
+Thread 1 redo log links: forward: 2 backward: 0<br>
+siz: 0x19000 seq: 0x00000010 hws: 0x2 bsz: 512 nab: 0x1e flg: 0x0 dup: 1<br>
+Archive links: fwrd: 2 back: 3 Prev scn: 0x0000.000ea466<br>
+Low scn: 0x0000.000ea474 05/02/2013 11:40:58<br>
+Next scn: 0x0000.000ea4db 05/02/2013 11:44:07<br>
+LOG FILE #2:<br>
+name #1: /u01/app/oracle/product/11.2.0/oradata/jingyong/redo02.log<br>
+Thread 1 redo log links: forward: 3 backward: 1<br>
+siz: 0x19000 seq: 0x00000011 hws: 0x1 bsz: 512 nab: 0xffffffff flg: 0xa dup: 1<br>
+Archive links: fwrd: 0 back: 1 Prev scn: 0x0000.000ea474<br>
+Low scn: 0x0000.000ea4db 05/02/2013 11:44:07<br>
+Next scn: 0xffff.ffffffff 01/01/1988 00:00:00<br>
+LOG FILE #3:<br>
+name #3: /u01/app/oracle/product/11.2.0/oradata/jingyong/redo03.log<br>
+Thread 1 redo log links: forward: 0 backward: 2<br>
+siz: 0x19000 seq: 0x0000000f hws: 0x2 bsz: 512 nab: 0x2 flg: 0x0 dup: 1<br>
+Archive links: fwrd: 1 back: 0 Prev scn: 0x0000.00000000<br>
+Low scn: 0x0000.000ea466 05/02/2013 11:40:52<br>
+Next scn: 0x0000.000ea474 05/02/2013 11:40:58</p>
+<p>从上面的记录我们可以看到重建的控文件能够从当前的日志文件获得正确的SCN及时间点等信息.同样地,控制<br>
+文件也能够从数据文件中获得详细的检查点信息:</p>
+<hr>
+<p>DATA FILE RECORDS</p>
+<hr>
+<p>(size = 520, compat size = 520, section max = 100, section in-use = 6,<br>
+last-recid= 0, old-recno = 0, last-recno = 0)<br>
+(extent = 1, blkno = 11, numrecs = 100)<br>
+DATA FILE #1:<br>
+name #9: /u01/app/oracle/product/11.2.0/oradata/jingyong/system01.dbf<br>
+creation size=0 block size=8192 status=0x12 head=9 tail=9 dup=1<br>
+tablespace 0, index=1 krfil=1 prev_file=0<br>
+unrecoverable scn: 0x0000.00000000 01/01/1988 00:00:00<br>
+Checkpoint cnt:119 scn: 0x0000.000ea4db 05/02/2013 11:44:07<br>
+Stop scn: 0xffff.ffffffff 05/02/2013 12:44:28<br>
+Creation Checkpointed at scn:  0x0000.00000007 08/13/2009 23:00:53<br>
+thread:0 rba:(0x0.0.0)<br>
+.....<br>
+DATA FILE #2:<br>
+name #8: /u01/app/oracle/product/11.2.0/oradata/jingyong/sysaux01.dbf<br>
+creation size=0 block size=8192 status=0x12 head=8 tail=8 dup=1<br>
+tablespace 1, index=2 krfil=2 prev_file=0<br>
+unrecoverable scn: 0x0000.00000000 01/01/1988 00:00:00<br>
+Checkpoint cnt:119 scn: 0x0000.000ea4db 05/02/2013 11:44:07<br>
+Stop scn: 0xffff.ffffffff 05/02/2013 12:44:28<br>
+Creation Checkpointed at scn:  0x0000.00000874 08/13/2009 23:00:57<br>
+thread:0 rba:(0x0.0.0)<br>
+.....<br>
+DATA FILE #3:<br>
+name #7: /u01/app/oracle/product/11.2.0/oradata/jingyong/undotbs01.dbf<br>
+creation size=0 block size=8192 status=0x12 head=7 tail=7 dup=1<br>
+tablespace 2, index=3 krfil=3 prev_file=0<br>
+unrecoverable scn: 0x0000.00000000 01/01/1988 00:00:00<br>
+Checkpoint cnt:47 scn: 0x0000.000ea4db 05/02/2013 11:44:07<br>
+Stop scn: 0xffff.ffffffff 05/02/2013 12:44:28<br>
+Creation Checkpointed at scn:  0x0000.000b7982 08/13/2009 23:56:54<br>
+thread:0 rba:(0x0.0.0)<br>
+.....<br>
+DATA FILE #4:<br>
+name #6: /u01/app/oracle/product/11.2.0/oradata/jingyong/users01.dbf<br>
+creation size=0 block size=8192 status=0x12 head=6 tail=6 dup=1<br>
+tablespace 4, index=4 krfil=4 prev_file=0<br>
+unrecoverable scn: 0x0000.00000000 01/01/1988 00:00:00<br>
+Checkpoint cnt:118 scn: 0x0000.000ea4db 05/02/2013 11:44:07<br>
+Stop scn: 0xffff.ffffffff 05/02/2013 12:44:28<br>
+Creation Checkpointed at scn:  0x0000.00004743 08/13/2009 23:01:06<br>
+thread:0 rba:(0x0.0.0)<br>
+....<br>
+DATA FILE #5:<br>
+name #5: /u01/app/oracle/product/11.2.0/oradata/jingyong/example01.dbf<br>
+creation size=0 block size=8192 status=0x12 head=5 tail=5 dup=1<br>
+tablespace 6, index=5 krfil=5 prev_file=0<br>
+unrecoverable scn: 0x0000.00000000 01/01/1988 00:00:00<br>
+Checkpoint cnt:43 scn: 0x0000.000ea4db 05/02/2013 11:44:07<br>
+Stop scn: 0xffff.ffffffff 05/02/2013 12:44:28<br>
+Creation Checkpointed at scn:  0x0000.000bf3fe 04/25/2013 14:05:52<br>
+thread:0 rba:(0x0.0.0)<br>
+....<br>
+DATA FILE #6:<br>
+name #4: /u01/app/oracle/product/11.2.0/oradata/jingyong/jy01.dbf<br>
+creation size=0 block size=8192 status=0x12 head=4 tail=4 dup=1<br>
+tablespace 7, index=6 krfil=6 prev_file=0<br>
+unrecoverable scn: 0x0000.00000000 01/01/1988 00:00:00<br>
+Checkpoint cnt:11 scn: 0x0000.000ea96d 05/02/2013 12:00:47<br>
+Stop scn: 0xffff.ffffffff 05/02/2013 12:44:28<br>
+Creation Checkpointed at scn:  0x0000.000e9b4f 05/02/2013 08:43:22<br>
+thread:0 rba:(0x0.0.0)<br>
+.....</p>
+<p>从上面的信息可以知道由于数据库是异常关闭的,所以数据文件的Stop scn:为无穷大:<br>
+Stop scn: 0xffff.ffffffff,接下来对数据库执行恢复,当恢复完成后再对控制文件进行转储:<br>
+SQL&gt; recover database;<br>
+Media recovery complete.</p>
+<p>SQL&gt; alter session set events 'immediate trace name controlf level 12';</p>
+<p>Session altered.</p>
+<p>SQL&gt; oradebug setmypid<br>
+Statement processed.<br>
+SQL&gt; oradebug tracefile_name<br>
+/u01/app/oracle/diag/rdbms/jingyong/jingyong/trace/jingyong_ora_19450.trc</p>
+<p>来观察此跟踪文件中的数据文件信息:</p>
+<hr>
+<p>DATA FILE RECORDS</p>
+<hr>
+<p>(size = 520, compat size = 520, section max = 100, section in-use = 6,<br>
+last-recid= 0, old-recno = 0, last-recno = 0)<br>
+(extent = 1, blkno = 11, numrecs = 100)<br>
+DATA FILE #1:<br>
+name #9: /u01/app/oracle/product/11.2.0/oradata/jingyong/system01.dbf<br>
+creation size=0 block size=8192 status=0x2 head=9 tail=9 dup=1<br>
+tablespace 0, index=1 krfil=1 prev_file=0<br>
+unrecoverable scn: 0x0000.00000000 01/01/1988 00:00:00<br>
+Checkpoint cnt:120 scn: 0x0000.000efd7d 05/02/2013 12:43:16<br>
+Stop scn: 0x0000.000efd7d 05/02/2013 12:43:16<br>
+Creation Checkpointed at scn:  0x0000.00000007 08/13/2009 23:00:53<br>
+thread:0 rba:(0x0.0.0)<br>
+....<br>
+DATA FILE #2:<br>
+name #8: /u01/app/oracle/product/11.2.0/oradata/jingyong/sysaux01.dbf<br>
+creation size=0 block size=8192 status=0x2 head=8 tail=8 dup=1<br>
+tablespace 1, index=2 krfil=2 prev_file=0<br>
+unrecoverable scn: 0x0000.00000000 01/01/1988 00:00:00<br>
+Checkpoint cnt:120 scn: 0x0000.000efd7d 05/02/2013 12:43:16<br>
+Stop scn: 0x0000.000efd7d 05/02/2013 12:43:16<br>
+Creation Checkpointed at scn:  0x0000.00000874 08/13/2009 23:00:57<br>
+thread:0 rba:(0x0.0.0)<br>
+....<br>
+DATA FILE #3:<br>
+name #7: /u01/app/oracle/product/11.2.0/oradata/jingyong/undotbs01.dbf<br>
+creation size=0 block size=8192 status=0x2 head=7 tail=7 dup=1<br>
+tablespace 2, index=3 krfil=3 prev_file=0<br>
+unrecoverable scn: 0x0000.00000000 01/01/1988 00:00:00<br>
+Checkpoint cnt:48 scn: 0x0000.000efd7d 05/02/2013 12:43:16<br>
+Stop scn: 0x0000.000efd7d 05/02/2013 12:43:16<br>
+Creation Checkpointed at scn:  0x0000.000b7982 08/13/2009 23:56:54<br>
+thread:0 rba:(0x0.0.0)<br>
+....<br>
+DATA FILE #4:<br>
+name #6: /u01/app/oracle/product/11.2.0/oradata/jingyong/users01.dbf<br>
+creation size=0 block size=8192 status=0x2 head=6 tail=6 dup=1<br>
+tablespace 4, index=4 krfil=4 prev_file=0<br>
+unrecoverable scn: 0x0000.00000000 01/01/1988 00:00:00<br>
+Checkpoint cnt:119 scn: 0x0000.000efd7d 05/02/2013 12:43:16<br>
+Stop scn: 0x0000.000efd7d 05/02/2013 12:43:16<br>
+Creation Checkpointed at scn:  0x0000.00004743 08/13/2009 23:01:06<br>
+thread:0 rba:(0x0.0.0)<br>
+....<br>
+DATA FILE #5:<br>
+name #5: /u01/app/oracle/product/11.2.0/oradata/jingyong/example01.dbf<br>
+creation size=0 block size=8192 status=0x2 head=5 tail=5 dup=1<br>
+tablespace 6, index=5 krfil=5 prev_file=0<br>
+unrecoverable scn: 0x0000.00000000 01/01/1988 00:00:00<br>
+Checkpoint cnt:44 scn: 0x0000.000efd7d 05/02/2013 12:43:16<br>
+Stop scn: 0x0000.000efd7d 05/02/2013 12:43:16<br>
+Creation Checkpointed at scn:  0x0000.000bf3fe 04/25/2013 14:05:52<br>
+thread:0 rba:(0x0.0.0)<br>
+....<br>
+DATA FILE #6:<br>
+name #4: /u01/app/oracle/product/11.2.0/oradata/jingyong/jy01.dbf<br>
+creation size=0 block size=8192 status=0x2 head=4 tail=4 dup=1<br>
+tablespace 7, index=6 krfil=6 prev_file=0<br>
+unrecoverable scn: 0x0000.00000000 01/01/1988 00:00:00<br>
+Checkpoint cnt:12 scn: 0x0000.000efd7d 05/02/2013 12:43:16<br>
+Stop scn: 0x0000.000efd7d 05/02/2013 12:43:16<br>
+Creation Checkpointed at scn:  0x0000.000e9b4f 05/02/2013 08:43:22<br>
+thread:0 rba:(0x0.0.0)<br>
+....<br>
+经过恢复之后,数据文件达到了一致状态,checkpoint scn(0x0000.000efd7d)和Stop scn(0x0000.000efd7d)<br>
+达到了一致,此时数据库就完成了恢复,数据库可以顺利启动:</p>
+<p>SQL&gt; ALTER SYSTEM ARCHIVE LOG ALL;</p>
+<p>System altered.</p>
+<p>SQL&gt; ALTER DATABASE OPEN;</p>
+<p>Database altered.</p>
+<p>SQL&gt; ALTER TABLESPACE TEMP ADD TEMPFILE '/u01/app/oracle/product/11.2.0/oradata/jingyong/temp01.dbf'<br>
+2       SIZE 30M  REUSE AUTOEXTEND ON NEXT 655360  MAXSIZE 40M;</p>
+<p>Tablespace altered.</p>
+<p>现在我们来实验使用resetlogs方式来重建控制文件:<br>
+模拟数据库故障<br>
+SQL&gt; shutdown abort;<br>
+ORACLE instance shut down.</p>
+<p>以resetlogs来重建控制文件<br>
+SQL&gt; startup nomount<br>
+ORACLE instance started.</p>
+<p>Total System Global Area  238530560 bytes<br>
+Fixed Size                  1335724 bytes<br>
+Variable Size             150998612 bytes<br>
+Database Buffers           83886080 bytes<br>
+Redo Buffers                2310144 bytes<br>
+SQL&gt; CREATE CONTROLFILE REUSE DATABASE &quot;JINGYONG&quot; RESETLOGS  ARCHIVELOG<br>
+2      MAXLOGFILES 16<br>
+3      MAXLOGMEMBERS 3<br>
+4      MAXDATAFILES 100<br>
+5      MAXINSTANCES 8<br>
+6      MAXLOGHISTORY 292<br>
+7  LOGFILE<br>
+8    GROUP 1 '/u01/app/oracle/product/11.2.0/oradata/jingyong/redo01.log'  SIZE 50M BLOCKSIZE 512,<br>
+9    GROUP 2 '/u01/app/oracle/product/11.2.0/oradata/jingyong/redo02.log'  SIZE 50M BLOCKSIZE 512,<br>
+10    GROUP 3 '/u01/app/oracle/product/11.2.0/oradata/jingyong/redo03.log'  SIZE 50M BLOCKSIZE 512<br>
+11  -- STANDBY LOGFILE<br>
+12  DATAFILE<br>
+13    '/u01/app/oracle/product/11.2.0/oradata/jingyong/system01.dbf',<br>
+14    '/u01/app/oracle/product/11.2.0/oradata/jingyong/sysaux01.dbf',<br>
+15    '/u01/app/oracle/product/11.2.0/oradata/jingyong/undotbs01.dbf',<br>
+16    '/u01/app/oracle/product/11.2.0/oradata/jingyong/users01.dbf',<br>
+17    '/u01/app/oracle/product/11.2.0/oradata/jingyong/example01.dbf',<br>
+18    '/u01/app/oracle/product/11.2.0/oradata/jingyong/jy01.dbf'<br>
+19  CHARACTER SET ZHS16GBK<br>
+20  ;</p>
+<p>Control file created.</p>
+<p>此时对控制文件进行一次转储<br>
+SQL&gt; alter session set events 'immediate trace name controlf level 12';</p>
+<p>Session altered.</p>
+<p>SQL&gt; oradebug setmypid<br>
+Statement processed.<br>
+SQL&gt; oradebug tracefile_name<br>
+/u01/app/oracle/diag/rdbms/jingyong/jingyong/trace/jingyong_ora_19598.trc</p>
+<p>观察转储的跟踪文件中的log file record的信息:</p>
+<hr>
+<p>LOG FILE RECORDS</p>
+<hr>
+<p>(size = 72, compat size = 72, section max = 16, section in-use = 3,<br>
+last-recid= 0, old-recno = 0, last-recno = 0)<br>
+(extent = 1, blkno = 10, numrecs = 16)<br>
+LOG FILE #1:<br>
+name #3: /u01/app/oracle/product/11.2.0/oradata/jingyong/redo01.log<br>
+Thread 1 redo log links: forward: 2 backward: 0<br>
+siz: 0x19000 seq: 0x00000000 hws: 0x0 bsz: 512 nab: 0x0 flg: 0x1 dup: 1<br>
+Archive links: fwrd: 0 back: 0 Prev scn: 0x0000.00000000<br>
+Low scn: 0x0000.00000000 01/01/1988 00:00:00<br>
+Next scn: 0x0000.00000000 01/01/1988 00:00:00<br>
+LOG FILE #2:<br>
+name #2: /u01/app/oracle/product/11.2.0/oradata/jingyong/redo02.log<br>
+Thread 1 redo log links: forward: 3 backward: 1<br>
+siz: 0x19000 seq: 0x00000000 hws: 0x0 bsz: 512 nab: 0x0 flg: 0x1 dup: 1<br>
+Archive links: fwrd: 0 back: 0 Prev scn: 0x0000.00000000<br>
+Low scn: 0x0000.00000000 01/01/1988 00:00:00<br>
+Next scn: 0x0000.00000000 01/01/1988 00:00:00<br>
+LOG FILE #3:<br>
+name #1: /u01/app/oracle/product/11.2.0/oradata/jingyong/redo03.log<br>
+Thread 1 redo log links: forward: 0 backward: 2<br>
+siz: 0x19000 seq: 0x00000000 hws: 0x0 bsz: 512 nab: 0x2 flg: 0xb dup: 1<br>
+Archive links: fwrd: 0 back: 0 Prev scn: 0x0000.00000000<br>
+Low scn: 0x0000.00000000 01/01/1988 00:00:00<br>
+Next scn: 0x0000.00000000 01/01/1988 00:00:00</p>
+<p>从上面的信息可以看到此时控制文件中的日志信息都是空的,oracle认为resetlogs方式下,当前的日志文件<br>
+已经损坏,那么就意味着oracle可能会丢失提交成功的数据,恢复将是一次不完全的介质恢复.</p>
+<p>此时的数据文件信息如下:</p>
+<hr>
+<p>DATA FILE RECORDS</p>
+<hr>
+<p>(size = 520, compat size = 520, section max = 100, section in-use = 6,<br>
+last-recid= 0, old-recno = 0, last-recno = 0)<br>
+(extent = 1, blkno = 11, numrecs = 100)<br>
+DATA FILE #1:<br>
+name #9: /u01/app/oracle/product/11.2.0/oradata/jingyong/system01.dbf<br>
+creation size=0 block size=8192 status=0x12 head=9 tail=9 dup=1<br>
+tablespace 0, index=1 krfil=1 prev_file=0<br>
+unrecoverable scn: 0x0000.00000000 01/01/1988 00:00:00<br>
+Checkpoint cnt:123 scn: 0x0000.000efd80 05/02/2013 12:53:11<br>
+Stop scn: 0xffff.ffffffff 05/02/2013 13:01:12<br>
+Creation Checkpointed at scn:  0x0000.00000007 08/13/2009 23:00:53<br>
+thread:0 rba:(0x0.0.0)<br>
+....<br>
+DATA FILE #2:<br>
+name #8: /u01/app/oracle/product/11.2.0/oradata/jingyong/sysaux01.dbf<br>
+creation size=0 block size=8192 status=0x12 head=8 tail=8 dup=1<br>
+tablespace 1, index=2 krfil=2 prev_file=0<br>
+unrecoverable scn: 0x0000.00000000 01/01/1988 00:00:00<br>
+Checkpoint cnt:123 scn: 0x0000.000efd80 05/02/2013 12:53:11<br>
+Stop scn: 0xffff.ffffffff 05/02/2013 13:01:12<br>
+Creation Checkpointed at scn:  0x0000.00000874 08/13/2009 23:00:57<br>
+thread:0 rba:(0x0.0.0)<br>
+....<br>
+DATA FILE #3:<br>
+name #7: /u01/app/oracle/product/11.2.0/oradata/jingyong/undotbs01.dbf<br>
+creation size=0 block size=8192 status=0x12 head=7 tail=7 dup=1<br>
+tablespace 2, index=3 krfil=3 prev_file=0<br>
+unrecoverable scn: 0x0000.00000000 01/01/1988 00:00:00<br>
+Checkpoint cnt:51 scn: 0x0000.000efd80 05/02/2013 12:53:11<br>
+Stop scn: 0xffff.ffffffff 05/02/2013 13:01:12<br>
+Creation Checkpointed at scn:  0x0000.000b7982 08/13/2009 23:56:54<br>
+thread:0 rba:(0x0.0.0)<br>
+....<br>
+DATA FILE #4:<br>
+name #6: /u01/app/oracle/product/11.2.0/oradata/jingyong/users01.dbf<br>
+creation size=0 block size=8192 status=0x12 head=6 tail=6 dup=1<br>
+tablespace 4, index=4 krfil=4 prev_file=0<br>
+unrecoverable scn: 0x0000.00000000 01/01/1988 00:00:00<br>
+Checkpoint cnt:122 scn: 0x0000.000efd80 05/02/2013 12:53:11<br>
+Stop scn: 0xffff.ffffffff 05/02/2013 13:01:12<br>
+Creation Checkpointed at scn:  0x0000.00004743 08/13/2009 23:01:06<br>
+thread:0 rba:(0x0.0.0)<br>
+....<br>
+DATA FILE #5:<br>
+name #5: /u01/app/oracle/product/11.2.0/oradata/jingyong/example01.dbf<br>
+creation size=0 block size=8192 status=0x12 head=5 tail=5 dup=1<br>
+tablespace 6, index=5 krfil=5 prev_file=0<br>
+unrecoverable scn: 0x0000.00000000 01/01/1988 00:00:00<br>
+Checkpoint cnt:47 scn: 0x0000.000efd80 05/02/2013 12:53:11<br>
+Stop scn: 0xffff.ffffffff 05/02/2013 13:01:12<br>
+Creation Checkpointed at scn:  0x0000.000bf3fe 04/25/2013 14:05:52<br>
+thread:0 rba:(0x0.0.0)<br>
+....<br>
+DATA FILE #6:<br>
+name #4: /u01/app/oracle/product/11.2.0/oradata/jingyong/jy01.dbf<br>
+creation size=0 block size=8192 status=0x12 head=4 tail=4 dup=1<br>
+tablespace 7, index=6 krfil=6 prev_file=0<br>
+unrecoverable scn: 0x0000.00000000 01/01/1988 00:00:00<br>
+Checkpoint cnt:15 scn: 0x0000.000efd80 05/02/2013 12:53:11<br>
+Stop scn: 0xffff.ffffffff 05/02/2013 13:01:12<br>
+Creation Checkpointed at scn:  0x0000.000e9b4f 05/02/2013 08:43:22<br>
+thread:0 rba:(0x0.0.0)<br>
+....<br>
+从上面的信息可以知道由于数据库是异常关闭的,所以数据文件的Stop scn:为无穷大:<br>
+Stop scn: 0xffff.ffffffff</p>
+<p>不完全恢复最终要求数据库通过resetlogs方式打开,resetlogs将会强制清空或重建联机重做日志文件.<br>
+此时执行恢复必须使用backup controlfile选项,否则将会报错:<br>
+SQL&gt; recover database;<br>
+ORA-00283: recovery session canceled due to errors<br>
+ORA-01610: recovery using the BACKUP CONTROLFILE option must be done</p>
+<p>SQL&gt; recover database using backup controlfile;<br>
+ORA-00279: change 982400 generated at 05/02/2013 12:53:11 needed for thread 1<br>
+ORA-00289: suggestion :<br>
+/u01/app/oracle/product/11.2.0/flash_recovery_area/JINGYONG/archivelog/2013_05_0<br>
+2/o1_mf_1_18_%u_.arc<br>
+ORA-00280: change 982400 for thread 1 is in sequence #18</p>
+<p>Specify log: {<RET>=suggested | filename | AUTO | CANCEL}<br>
+cancel<br>
+Media recovery cancelled.</p>
+<p>如果在线日志操坏,那么恢复到最后,oracle提示的最后一个归档日志将是不存在的(如果在线日志没有<br>
+损坏,则可以指定在线日志文件执行恢复),此时可以输入cancel取消恢复,然后可以强制打开数据库:<br>
+alter database open resetlogs;</p>
+<p>SQL&gt; recover database using backup controlfile;<br>
+ORA-00279: change 1003572 generated at 05/02/2013 13:20:06 needed for thread 1<br>
+ORA-00289: suggestion :<br>
+/u01/app/oracle/product/11.2.0/flash_recovery_area/JINGYONG/archivelog/2013_05_0<br>
+2/o1_mf_1_19_%u_.arc<br>
+ORA-00280: change 1003572 for thread 1 is in sequence #19</p>
+<p>Specify log: {<RET>=suggested | filename | AUTO | CANCEL}<br>
+/u01/app/oracle/product/11.2.0/oradata/jingyong/redo01.log<br>
+Log applied.<br>
+Media recovery complete.<br>
+SQL&gt; alter database open resetlogs;</p>
+<p>Database altered.</p>
+<p>SQL&gt; ALTER TABLESPACE TEMP ADD TEMPFILE '/u01/app/oracle/product/11.2.0/oradata/jingyong/temp01.dbf'<br>
+2       SIZE 30M  REUSE AUTOEXTEND ON NEXT 655360  MAXSIZE 40M;</p>
+<p>Tablespace altered.</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#name">NAME</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://mvicdu.github.io/post/oracle-chong-jian-kong-zhi-wen-jian/">
+              <h3 class="post-title">
+                Oracle 重建控制文件
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  记录学习每一天
+  <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

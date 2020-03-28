@@ -1,0 +1,261 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>quota 空间配额 | Vic Notes</title>
+<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585372598298">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://mvicdu.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="quota 空间配额 | Vic Notes - Atom Feed" href="https://mvicdu.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="quota命令
+文件系统管理
+quota命令用于显示用户或者工作组的磁盘配额信息。输出信息包括磁盘使用和配额限制。
+语法
+quota(选项)(参数)
+选项
+-g：列出群组的磁盘空间限制；
+-q：简明列表，只列出超过限制的部分；
+-u：列出用..." />
+    <meta name="keywords" content="Linux" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://mvicdu.github.io">
+  <img class="avatar" src="https://mvicdu.github.io/images/avatar.png?v=1585372598298" alt="">
+  </a>
+  <h1 class="site-title">
+    Vic Notes
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              quota 空间配额
+            </h2>
+            <div class="post-info">
+              <span>
+                2019-07-24
+              </span>
+              <span>
+                6 min read
+              </span>
+              
+                <a href="https://mvicdu.github.io/tag/lKYi1T7d8/" class="post-tag">
+                  # Linux
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>quota命令<br>
+文件系统管理<br>
+quota命令用于显示用户或者工作组的磁盘配额信息。输出信息包括磁盘使用和配额限制。<br>
+语法<br>
+quota(选项)(参数)<br>
+选项<br>
+-g：列出群组的磁盘空间限制；<br>
+-q：简明列表，只列出超过限制的部分；<br>
+-u：列出用户的磁盘空间限制；<br>
+-v：显示该用户或群组，在所有挂入系统的存储设备的空间限制；<br>
+-V：显示版本信息。<br>
+参数<br>
+用户或者工作组：指定要显示的用户或者工作组。<br>
+实例<br>
+我们可以限制某一群组所能使用的最大磁盘配额，而且可以再限制某一使用者的最大磁盘配额 ，好比做一个收费的应用，vip可以得到空间更大一些。另外，以 Link 的方式，来使邮件可以作为限制的配额（更改/var/spool/mail 这个路径），不2，需要重新再规划一个硬盘！直接使用 Link 的方式指向 /home （或者其它已经做好的 quota 磁盘）就可以！这通常是用在原本规划不好，但是却又不想要更动原有主机架构的情况中！<br>
+要求：Linux 主机里面主要针对 quser1 及 quser2 两个使用者来进行磁盘配额， 且这两个使用者都是挂在 qgroup 组里面的。每个使用者总共有 50MB 的磁盘空间 (不考虑 inode) 限制！并且 soft limit 为 45 MB；而宽限时间设定为 1 天， 但是在一天之内必须要将多余的文件删除掉，否则将无法使用剩下的空间 ；gquota 这个组考虑最大限额，所以设定为 90 MB！（注意，这样设置的好处是富有弹性，好比现在的邮件服务，那么多用户，承诺给用户每人最大空间为数GB，然而人们不可能每人都会使用那么大的空间，所以邮件服务的总空间，实际上肯定不是注册客户数乘以数GB，否则这样得多大啊。）</p>
+<p>[root@localhost ~]# groupadd qgroup<br>
+[root@localhost ~]# useradd -m -g qgroup quser1<br>
+[root@localhost ~]# useradd -m -g qgroup quser2<br>
+[root@localhost ~]# passwd quser1<br>
+[root@localhost ~]# passwd quser2<br>
+[root@localhost ~]# df     ===&gt;  自己找一个合适的分区来做实验，这里用/disk2<br>
+Filesystem             1K-blocks        Used      Available   Use% Mounted on<br>
+/dev/hda1              5952252   3193292     2451720     57%     /<br>
+/dev/hdb1            28267608       77904   26730604       1%     /disk2<br>
+/dev/hda5              9492644     227252     8775412       3%     /disk1</p>
+<p>[root@localhost ~]# vi /etc/fstab<br>
+LABEL=/             /                ext3      defaults                                     1 1<br>
+LABEL=/disk1    /disk1        ext3      defaults                                      1 2<br>
+LABEL=/disk2    /disk2        ext3      defaults,usrquota,grpquota       1 2<br>
+/dev/hda3         swap         swap     defaults                                     0 0</p>
+<p>注意多了usrquota,grpquota，在defaults,usrquota,grpquota之间都没有空格，务必正确书写。这样就算加入了 quota 的磁盘格式了！不过，由于真正的 quota 在读取的时候是读取/etc/mtab这个文件的，而该文件需要重新开机之后才能够以/etc/fstab 的新数据进行改写！所以这个时候可以选择：重新开机 (reboot)。<br>
+重新remount filesystem来驱动设定值。</p>
+<p>[root@localhost ~]# umount /dev/hdb1<br>
+[root@localhost ~]# mount -a<br>
+[root@localhost ~]# grep '/disk2' /etc/mtab<br>
+/dev/hdb1 /disk2 ext3 rw,usrquota,grpquota 0 0</p>
+<p>事实上，也可以利用 mount 的 remount 功能。<br>
+[root@localhost ~]# mount -o remount /disk2<br>
+这样就已经成功的将 filesystem 的 quota 功能加入。</p>
+<p>扫瞄磁盘的使用者使用状况，并产生重要的 aquota.group 与 aquota.user：<br>
+[root@localhost ~]# quotacheck -avug<br>
+quotacheck: Scanning /dev/hdb1 [/disk2] done<br>
+quotacheck: Checked 3 directories and 4 files</p>
+<p>[root@localhost ~]# ll /disk2<br>
+-rw-------  1 root root  6144 Sep  6 11:44 aquota.group<br>
+-rw-------  1 root root  6144 Sep  6 11:44 aquota.user<br>
+使用 quotacheck 就可以轻易的将所需要的数据给他输出了！但奇怪的是，在某些 Linux 版本中，不能够以 aquota.user(group) 来启动quota ，可能是因为旧版 quota 的关系， 所以就另外做了一个 link 文件按来欺骗 quota，这个动作非必要。（主要是学习这个思维很重要）</p>
+<p>[root@localhost ~]# cd /disk2<br>
+[root@localhost ~]# ln -s aquota.user quota.user<br>
+[root@localhost ~]# ln -s aquota.group quota.group</p>
+<p>启动 quota 的限额：</p>
+<p>[root@localhost ~]# quotaon -avug<br>
+/dev/hdb1 [/disk2]: group quotas turned on<br>
+/dev/hdb1 [/disk2]: user quotas turned on    ===&gt;  看到turned on，才是真的成功！<br>
+编辑使用者的可使用空间：</p>
+<p>[root@localhost ~]# edquota -u quser1<br>
+Disk quotas for user quser1 (uid 502):<br>
+Filesystem    blocks    soft    hard   inodes   soft   hard<br>
+/dev/hdb1           0     45000    50000         0      0      0<br>
+[root@localhost ~]# edquota -p quser1 quser2      ===&gt;  直接复制给quser2<br>
+接下来要来设定宽限时间，还是使用 edquota</p>
+<p>[root@localhost ~]# edquota -t<br>
+Grace period before enforcing soft limits for users:<br>
+time units may be: days, hours, minutes, or seconds<br>
+Filesystem             Block grace period     Inode grace period<br>
+/dev/hdb1                     1days                  7days</p>
+<p>使用quota -v来查询：</p>
+<p>[root@localhost ~]# quota -vu quser1 quser2<br>
+Disk quotas for user quser1 (uid 502):<br>
+Filesystem  blocks   quota      limit   grace   files   quota   limit   grace<br>
+/dev/hdb1         0    45000    50000                   0       0       0<br>
+Disk quotas for user quser2 (uid 503):<br>
+Filesystem  blocks   quota      limit   grace   files   quota   limit   grace<br>
+/dev/hdb1         0    45000    50000                   0       0       0<br>
+注意，由于使用者尚未超过45 MB，所以 grace ( 宽限时间 ) 就不会出现。<br>
+编辑群组可使用的空间：</p>
+<p>[root@localhost ~]# edquota -g qgroup<br>
+Disk quotas for group qgroup (gid 502):<br>
+Filesystem     blocks       soft       hard    inodes   soft   hard<br>
+/dev/hdb1            0      80000   90000           0      0      0</p>
+<p>[root@localhost ~]# quota -vg qgroup<br>
+Disk quotas for group qgroup (gid 502):<br>
+Filesystem   blocks    quota      limit      grace    files   quota   limit   grace<br>
+/dev/hdb1         0     80000   90000                       0        0        0</p>
+
+              </div>
+              <div class="toc-container">
+                
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://mvicdu.github.io/post/yan-chi-fen-pei/">
+              <h3 class="post-title">
+                oracle 表空间的延迟分配
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  记录学习每一天
+  <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

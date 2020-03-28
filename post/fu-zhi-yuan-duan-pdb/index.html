@@ -1,0 +1,203 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>复制远端PDB | Vic Notes</title>
+<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585372598298">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://mvicdu.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="复制远端PDB | Vic Notes - Atom Feed" href="https://mvicdu.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="如果复制的是远端的PDB，则必须使用DBlink来复制，并且DBlink是存在于本地CDB中的，而不是存在于远端CDB中的
+1.复制远端PDB的必要条件
+（1）当前操作用户必须具有CREATE PLUGGABLE DATABASE的系统权限..." />
+    <meta name="keywords" content="oracle" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://mvicdu.github.io">
+  <img class="avatar" src="https://mvicdu.github.io/images/avatar.png?v=1585372598298" alt="">
+  </a>
+  <h1 class="site-title">
+    Vic Notes
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              复制远端PDB
+            </h2>
+            <div class="post-info">
+              <span>
+                2019-09-11
+              </span>
+              <span>
+                3 min read
+              </span>
+              
+                <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="post-tag">
+                  # oracle
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>如果复制的是远端的PDB，则必须使用DBlink来复制，并且DBlink是存在于本地CDB中的，而不是存在于远端CDB中的</p>
+<p>1.复制远端PDB的必要条件<br>
+（1）当前操作用户必须具有CREATE PLUGGABLE DATABASE的系统权限。<br>
+（2）源端和目标端平台必须满足：　同样的字节存储顺序（Endian）；　源端平台上安装的数据库组件必须和目标端平台上安装的数据库组件是一样的，或者是其子集。<br>
+（3）如果是复制Non-CDB，则必须满足以下条件：　CDB和Non-CDB必须运行在Oracle 12.1.0.2及以上版本上；　Blocksize（块大小）必须一致。<br>
+（4）如果创建一个应用程序PDB，则源PDB的应用程序名称和版本必须与目标应用程序容器的应用程序名称和版本相匹配。</p>
+<p>2.字符集的要求　<br>
+如果复制PDB的CDB的字符集不是AL32UTF8，则源和目标必须具有兼容的字符集和国家字符集；如果复制PDB的CDB的字符集是AL32UTF8，则没有这个限制。</p>
+<p>3.源PDB或Non-CDB的模式要求　<br>
+源PDB必须处于Open状态。　<br>
+在复制PDB时，如果远端CDB不是本地UNDO模式，则源PDB必须处于只读模式；<br>
+如果远端CDB是本地UNDO模式，则没有此限制。　<br>
+如果远端CDB或Non-CDB是非归档模式，则源PDB或Non-CDB必须是只读模式。　<br>
+如果创建的是可刷新的PDB，则源PDB必须是归档模式，并且是本地UNDO模式。</p>
+<p>4.操作示例<br>
+（1）在主库、备库的CDB中执行如下命令，创建相同的共有用户及密码：               ##创建的用户名前面要加C##或者c##</p>
+<p><img src="https://mvicdu.github.io/post-images/1585368965035.png" alt="" loading="lazy"><br>
+如果源端不是本地UNDO模式需要以只读模式打开，更改为只读模式：<br>
+<img src="https://mvicdu.github.io/post-images/1585369020337.png" alt="" loading="lazy"><br>
+更改为只读模式，代码如下：<br>
+<img src="https://mvicdu.github.io/post-images/1585369041747.png" alt="" loading="lazy"><br>
+（3）在目标端创建DBlink。<br>
+创建目标CDB到源CDB之间的DBlink，首先在tnsnames.ora 文件中添加如下内容：<br>
+<img src="https://mvicdu.github.io/post-images/1585369060842.png" alt="" loading="lazy"><br>
+接着测试Service name，代码如下：<br>
+<img src="https://mvicdu.github.io/post-images/1585369089120.png" alt="" loading="lazy"></p>
+<p>然后创建DBlink，代码如下：<br>
+<img src="https://mvicdu.github.io/post-images/1585369113086.png" alt="" loading="lazy"><br>
+<img src="https://mvicdu.github.io/post-images/1585369141851.png" alt="" loading="lazy"><br>
+最后测试DBlink，代码如下：<br>
+<img src="https://mvicdu.github.io/post-images/1585369162167.png" alt="" loading="lazy"><br>
+（4）执行复制PDB的语句，代码如下：<br>
+<img src="https://mvicdu.github.io/post-images/1585369186380.png" alt="" loading="lazy"></p>
+
+              </div>
+              <div class="toc-container">
+                
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://mvicdu.github.io/post/cha-kan-cdb-shu-ju-wen-jian-mu-lu/">
+              <h3 class="post-title">
+                查看CDB数据文件目录
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  记录学习每一天
+  <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

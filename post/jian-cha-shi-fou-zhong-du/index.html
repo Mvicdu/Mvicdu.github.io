@@ -1,0 +1,319 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>检查是否中毒 | Vic Notes</title>
+<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585372598298">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://mvicdu.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="检查是否中毒 | Vic Notes - Atom Feed" href="https://mvicdu.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="一、是否入侵检查
+1）检查系统日志
+检查系统错误登陆日志，统计IP重试次数（last命令是查看系统登陆日志，比如系统被reboot或登陆情况）
+[root@bastion-IDC ~]# last
+2）检查系统用户
+查看是否有异常的系统用户..." />
+    <meta name="keywords" content="Linux" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://mvicdu.github.io">
+  <img class="avatar" src="https://mvicdu.github.io/images/avatar.png?v=1585372598298" alt="">
+  </a>
+  <h1 class="site-title">
+    Vic Notes
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              检查是否中毒
+            </h2>
+            <div class="post-info">
+              <span>
+                2017-03-16
+              </span>
+              <span>
+                9 min read
+              </span>
+              
+                <a href="https://mvicdu.github.io/tag/lKYi1T7d8/" class="post-tag">
+                  # Linux
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>一、是否入侵检查<br>
+1）检查系统日志</p>
+<p>检查系统错误登陆日志，统计IP重试次数（last命令是查看系统登陆日志，比如系统被reboot或登陆情况）<br>
+[root@bastion-IDC ~]# last</p>
+<p>2）检查系统用户<br>
+查看是否有异常的系统用户<br>
+[root@bastion-IDC ~]# cat /etc/passwd<br>
+查看是否产生了新用户，UID和GID为0的用户<br>
+[root@bastion-IDC ~]# grep &quot;0&quot; /etc/passwd<br>
+查看passwd的修改时间，判断是否在不知的情况下添加用户<br>
+[root@bastion-IDC ~]# ls -l /etc/passwd<br>
+查看是否存在特权用户<br>
+[root@bastion-IDC ~]# awk -F: '$3==0 {print $1}' /etc/passwd<br>
+查看是否存在空口令帐户<br>
+[root@bastion-IDC ~]# awk -F: 'length($2)==0 {print $1}' /etc/shadow</p>
+<p>3）检查异常进程<br>
+注意UID为0的进程<br>
+使用ps -ef命令查看进程<br>
+察看该进程所打开的端口和文件<br>
+[root@bastion-IDC ~]# lsof -p pid命令查看<br>
+检查隐藏进程<br>
+[root@bastion-IDC ~]# ps -ef | awk '{print }' | sort -n | uniq &gt;1<br>
+[root@bastion-IDC ~]# ls /porc |sort -n|uniq &gt;2<br>
+[root@bastion-IDC ~]# diff 1 2</p>
+<p>4）检查异常系统文件<br>
+[root@bastion-IDC ~]# find / -uid 0 –perm -4000 –print<br>
+[root@bastion-IDC ~]# find / -size +10000k –print<br>
+[root@bastion-IDC ~]# find / -name &quot;…&quot; –print<br>
+[root@bastion-IDC ~]# find / -name &quot;..&quot; –print<br>
+[root@bastion-IDC ~]# find / -name &quot;.&quot; –print<br>
+[root@bastion-IDC ~]# find / -name &quot; &quot; –print</p>
+<p>5）检查系统文件完整性<br>
+[root@bastion-IDC ~]# rpm –qf /bin/ls<br>
+[root@bastion-IDC ~]# rpm -qf /bin/login<br>
+[root@bastion-IDC ~]# md5sum –b 文件名<br>
+[root@bastion-IDC ~]# md5sum –t 文件名<br>
+6）检查RPM的完整性<br>
+[root@bastion-IDC ~]# rpm -Va #注意相关的/sbin,/bin,/usr/sbin,/usr/bin<br>
+输出格式说明：<br>
+S – File size differs<br>
+M – Mode differs (permissions)<br>
+5 – MD5 sum differs<br>
+D – Device number mismatch<br>
+L – readLink path mismatch<br>
+U – user ownership differs<br>
+G – group ownership differs<br>
+T – modification time differs<br>
+7）检查网络<br>
+[root@bastion-IDC ~]# ip link | grep PROMISC（正常网卡不该在promisc模式，可能存在sniffer）<br>
+[root@bastion-IDC ~]# lsof –i<br>
+[root@bastion-IDC ~]# netstat –nap（察看不正常打开的TCP/UDP端口)<br>
+[root@bastion-IDC ~]# arp –a<br>
+8）检查系统计划任务<br>
+[root@bastion-IDC ~]# crontab –u root –l<br>
+[root@bastion-IDC ~]# cat /etc/crontab<br>
+[root@bastion-IDC ~]# ls /etc/cron.*<br>
+9）检查系统后门<br>
+[root@bastion-IDC ~]# cat /etc/crontab<br>
+[root@bastion-IDC ~]# ls /var/spool/cron/<br>
+[root@bastion-IDC ~]# cat /etc/rc.d/rc.local<br>
+[root@bastion-IDC ~]# ls /etc/rc.d<br>
+[root@bastion-IDC ~]# ls /etc/rc3.d<br>
+10）检查系统服务<br>
+[root@bastion-IDC ~]# chkconfig —list<br>
+[root@bastion-IDC ~]# rpcinfo -p（查看RPC服务）<br>
+11）检查rootkit<br>
+[root@bastion-IDC ~]# rkhunter -c<br>
+[root@bastion-IDC ~]# chkrootkit -q<br>
+二、linux系统被入侵/中毒的表象<br>
+比较常见的中毒表现在以下三个方面：<br>
+1）服务器出去的带宽会跑高这个是中毒的一个特征。<br>
+因为服务器中毒之后被别人拿去利用，常见的就是拿去当肉鸡攻击别人；再者就是拿你的数据之类的。<br>
+所以服务器带宽方面需要特别注意下，如果服务器出去的带宽跑很高，那肯定有些异常，需要及时检查一下！<br>
+2）系统里会产生多余的不明的用户<br>
+中毒或者被入侵之后会导致系统里产生一些不明用户或者登陆日志，所以这方面的检查也是可以看出一些异常的。<br>
+3）开机是否启动一些不明服务和crond任务里是否有一些来历不明的任务？<br>
+因为中毒会随系统的启动而启动的，所以一般会开机启动，检查一下启动的服务或者文件是否有异常，一般会在/etc/rc.local和crondtab -l 显示出来。<br>
+三、顺便说下一次Linux系统被入侵/中毒的解决过程<br>
+在工作中碰到系统经常卡，而且有时候远程连接不上，从本地以及远程检查一下这个系统，发现有不明的系统进程。<br>
+初步判断就是可能中毒了！！！<br>
+解决过程：<br>
+1）在监控里检查一下这台服务器的带宽，发现服务器出去的带宽跑很高，所以才会导致远程连接卡甚至连接不上，这是一个原因。<br>
+为什么服务器出去的带宽这么高且超出了开通的带宽值？这个原因只能进入服务器系统里检查了。<br>
+2）远程进入系统里检查了下， ps -aux查到不明进程 ，立刻关闭它。<br>
+3）检查一下开机启动项：<br>
+#chkconfig --list | grep 3:on<br>
+服务器启动级别是3的，我检查一下了开机启动项，没有特别明显的服务。<br>
+然后检查了一下开机启动的一个文件<br>
+#more /etc/rc.local<br>
+看到这个文件里被添加了很多未知项，注释了它。<br>
+4）然后在远程连接这台服务器的时候，还是有些卡。<br>
+检查了一下系统的计划任务crond，使用crondtab -l 命令进行查看，看到很多注释行。<br>
+这些注释行与/etc/rc.local的内容差不多。最后备份下/var/spool/cron/root文件（也就是root下的crontab计划任务内容），就删除了crontab内容，然后停止crond任务，并chkconfig crond off 禁用它开机启动。<br>
+5）为了彻底清除危害，我检查了一下系统的登陆日志（last命令查看），看到除了root用户之外还有其它的用户登陆过。<br>
+检查了一下/etc/passwd ，看到有不明的用户，立刻用usermod -L XXX 禁用这些用户。<br>
+然后更新了下系统的复杂密码。</p>
+<p>禁用/锁定用户登录系统的方法</p>
+<ol>
+<li>usermod -L username 锁定用户<br>
+usermod -U username 解锁</li>
+<li>passwd -l username 锁定用户<br>
+passwd -u username 解锁<br>
+3.修改用户的shell类型为/sbin/nologin（/etc/passwd文件里修改）<br>
+4.在/etc/下创建空文件nologin，这样就锁定了除root之外的全部用户</li>
+</ol>
+<p>四、怎样确保linux系统安全<br>
+1）从以往碰到的实例来分析，密码太简单是一个错<br>
+用户名默认，密码太简单是最容易被入侵的对象，所以切忌不要使用太过于简单的密码，先前碰到的那位客户就是使用了太简单的且规则的密码 1q2w3e4r5t， 这种密码在扫描的软件里是通用的，所以很容易被别人扫描出来的。<br>
+2）不要使用默认的远程端口，避免被扫描到<br>
+扫描的人都是根据端口扫描，然后再进行密码扫描，默认的端口往往就是扫描器的对象，他们扫描一个大的IP 段，哪些开放22端口且认为是ssh服务的linux系统，所以才会猜这机器的密码。更改远程端口也是安全的一个措施！<br>
+3）使用一些安全策略进行保护系统开放的端口<br>
+使用iptables或者配置/etc/hosts.deny 和/etc/hosts.allow进行白名单设置<br>
+可以对/etc/passwd、/etc/group、/etc/sudoers、/etc/shadow等用户信息文件进行锁定（chattr +ai）<br>
+4）禁ping设置</p>
+<h1 id="echo-1-procsysnetipv4icmp_echo_ignore_all">echo 1 &gt; /proc/sys/net/ipv4/icmp_echo_ignore_all</h1>
+<hr>
+<h2 id="发现一次服务器被getshell渗透的解决办法1使用top命令发现一个python程序占用了95的cpu2使用ps-efgrep-python发现下面程序python-c-import-ptyptyspamnbinsh这个程序命令表示通过webshell反弹shell回来之后获取真正的ttyshell进行渗透到服务器里-kill掉这个进程3发现在varspoolcron下面设置了一个nobody的定时执行上面获取getshell的渗透命令果断删除这个任务4ss-a发现一个可疑ip以及它的进程果断在iptables里禁止这个ip的所有请求-i-input-s-180125131192-j-drop">发现一次服务器被getshell渗透的解决办法：<br>
+1）使用top命令发现一个python程序占用了95%的cpu<br>
+2）使用ps -ef|grep python发现下面程序：<br>
+python -c import pty;pty.spamn(&quot;/bin/sh&quot;)<br>
+这个程序命令表示通过webshell反弹shell回来之后获取真正的ttyshell进行渗透到服务器里。kill掉这个进程！<br>
+3）发现在/var/spool/cron下面设置了一个nobody的定时执行上面获取getshell的渗透命令！果断删除这个任务！<br>
+4）ss -a发现一个可疑ip以及它的进程，果断在iptables里禁止这个ip的所有请求：<br>
+-I INPUT -s 180.125.131.192 -j DROP</h2>
+<p>比如：<br>
+在一台服务器上，已经启动了80端口的nginx进程，但是执行“lsof －i:80”或者&quot;ps -ef&quot;命令后，没有任何信息输出！这是为什么？<br>
+怀疑机器上的ps命令被人黑了！执行：</p>
+<p>[root@locahost ~]# which ps<br>
+/bin/ps<br>
+[root@locahost ~]# ls -l /bin/ps<br>
+-rwxr-xr-x. 1 root root 85304 5月  11 2016 /bin/ps<br>
+[root@locahost ~]# stat /bin/ps<br>
+File: &quot;/bin/ps&quot;<br>
+Size: 85304       Blocks: 168        IO Block: 4096   普通文件<br>
+Device: fc02h/64514d    Inode: 13549       Links: 1<br>
+Access: (0755/-rwxr-xr-x)  Uid: (    0/    root)   Gid: (    0/    root)<br>
+Access: 2017-05-07 17:14:37.862999884 +0800<br>
+Modify: 2016-05-11 07:23:09.000000000 +0800<br>
+Change: 2017-05-07 17:14:37.146999967 +0800<br>
+发现ps命令的二进制文件果然在近期被改动过。<br>
+解决办法：可以拷贝别的机器上的/bin/ps二进制文件覆盖本机的这个文件。</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#echo-1-procsysnetipv4icmp_echo_ignore_all">echo 1 &gt; /proc/sys/net/ipv4/icmp_echo_ignore_all</a>
+<ul>
+<li><a href="#%E5%8F%91%E7%8E%B0%E4%B8%80%E6%AC%A1%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A2%ABgetshell%E6%B8%97%E9%80%8F%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%951%E4%BD%BF%E7%94%A8top%E5%91%BD%E4%BB%A4%E5%8F%91%E7%8E%B0%E4%B8%80%E4%B8%AApython%E7%A8%8B%E5%BA%8F%E5%8D%A0%E7%94%A8%E4%BA%8695%E7%9A%84cpu2%E4%BD%BF%E7%94%A8ps-efgrep-python%E5%8F%91%E7%8E%B0%E4%B8%8B%E9%9D%A2%E7%A8%8B%E5%BA%8Fpython-c-import-ptyptyspamnbinsh%E8%BF%99%E4%B8%AA%E7%A8%8B%E5%BA%8F%E5%91%BD%E4%BB%A4%E8%A1%A8%E7%A4%BA%E9%80%9A%E8%BF%87webshell%E5%8F%8D%E5%BC%B9shell%E5%9B%9E%E6%9D%A5%E4%B9%8B%E5%90%8E%E8%8E%B7%E5%8F%96%E7%9C%9F%E6%AD%A3%E7%9A%84ttyshell%E8%BF%9B%E8%A1%8C%E6%B8%97%E9%80%8F%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%87%8C-kill%E6%8E%89%E8%BF%99%E4%B8%AA%E8%BF%9B%E7%A8%8B3%E5%8F%91%E7%8E%B0%E5%9C%A8varspoolcron%E4%B8%8B%E9%9D%A2%E8%AE%BE%E7%BD%AE%E4%BA%86%E4%B8%80%E4%B8%AAnobody%E7%9A%84%E5%AE%9A%E6%97%B6%E6%89%A7%E8%A1%8C%E4%B8%8A%E9%9D%A2%E8%8E%B7%E5%8F%96getshell%E7%9A%84%E6%B8%97%E9%80%8F%E5%91%BD%E4%BB%A4%E6%9E%9C%E6%96%AD%E5%88%A0%E9%99%A4%E8%BF%99%E4%B8%AA%E4%BB%BB%E5%8A%A14ss-a%E5%8F%91%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%8F%AF%E7%96%91ip%E4%BB%A5%E5%8F%8A%E5%AE%83%E7%9A%84%E8%BF%9B%E7%A8%8B%E6%9E%9C%E6%96%AD%E5%9C%A8iptables%E9%87%8C%E7%A6%81%E6%AD%A2%E8%BF%99%E4%B8%AAip%E7%9A%84%E6%89%80%E6%9C%89%E8%AF%B7%E6%B1%82-i-input-s-180125131192-j-drop">发现一次服务器被getshell渗透的解决办法：<br>
+1）使用top命令发现一个python程序占用了95%的cpu<br>
+2）使用ps -ef|grep python发现下面程序：<br>
+python -c import pty;pty.spamn(&quot;/bin/sh&quot;)<br>
+这个程序命令表示通过webshell反弹shell回来之后获取真正的ttyshell进行渗透到服务器里。kill掉这个进程！<br>
+3）发现在/var/spool/cron下面设置了一个nobody的定时执行上面获取getshell的渗透命令！果断删除这个任务！<br>
+4）ss -a发现一个可疑ip以及它的进程，果断在iptables里禁止这个ip的所有请求：<br>
+-I INPUT -s 180.125.131.192 -j DROP</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+
+        
+
+        <div class="site-footer">
+  记录学习每一天
+  <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

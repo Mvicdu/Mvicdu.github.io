@@ -1,0 +1,291 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Zabbix分布式监控 | Vic Notes</title>
+<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585372598298">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://mvicdu.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Zabbix分布式监控 | Vic Notes - Atom Feed" href="https://mvicdu.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="环境准备
+OS：CentOS 7
+安装步骤
+一，关闭selinux和iptables
+[root@localhost ~]# systemctl stop firewalld.service
+[root@localhost ~]# sete..." />
+    <meta name="keywords" content="zabbix,Linux" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://mvicdu.github.io">
+  <img class="avatar" src="https://mvicdu.github.io/images/avatar.png?v=1585372598298" alt="">
+  </a>
+  <h1 class="site-title">
+    Vic Notes
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              Zabbix分布式监控
+            </h2>
+            <div class="post-info">
+              <span>
+                2019-11-27
+              </span>
+              <span>
+                6 min read
+              </span>
+              
+                <a href="https://mvicdu.github.io/tag/oniUCbBXF/" class="post-tag">
+                  # zabbix
+                </a>
+              
+                <a href="https://mvicdu.github.io/tag/lKYi1T7d8/" class="post-tag">
+                  # Linux
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>环境准备<br>
+OS：CentOS 7<br>
+安装步骤<br>
+一，关闭selinux和iptables<br>
+[root@localhost ~]# systemctl stop firewalld.service<br>
+[root@localhost ~]# setenforce 0</p>
+<p>二，安装Zabbix rpm包仓库<br>
+[root@localhost ~]# rpm -vhi http://repo.zabbix.com/zabbix/3.0/rhel/7/x86_64/zabbix-release-3.0-1.el7.noarch.rpm</p>
+<p>三，安装zabbix-server-mysql和zabbix-web-mysql<br>
+[root@localhost ~]# yum install -y zabbix-server-mysql zabbix-web-mysql</p>
+<p>四，安装并且启动mysql5.6及初始化数据库信息<br>
+[root@localhost ~]# rpm -ivh http://repo.mysql.com/yum/mysql-5.6-community/el/6/x86_64/mysql-community-release-el6-5.noarch.rpm<br>
+[root@localhost ~]# yum install -y mysql-community-server<br>
+[root@localhost ~]# systemctl start mysqld<br>
+[root@localhost ~]# /sbin/chkconfig mysqld on   #开机启动<br>
+[root@localhost ~]# mysql_secure_installation    #初始化数据库信息<br>
+NOTE: RUNNING ALL PARTS OF THIS SCRIPT IS RECOMMENDED FOR ALL MySQL<br>
+SERVERS IN PRODUCTION USE!  PLEASE READ EACH STEP CAREFULLY!<br>
+In order to log into MySQL to secure it, we’ll need the current<br>
+password for the root user.  If you’ve just installed MySQL, and<br>
+you haven’t set the root password yet, the password will be blank,<br>
+so you should just press enter here.<br>
+Enter current password for root (enter for none):<br>
+Setting the root password ensures that nobody can log into the MySQL<br>
+root user without the proper authorisation.<br>
+Set root password? [Y/n] y<br>
+New password:<br>
+Re-enter new password:<br>
+Sorry, passwords do not match.<br>
+New password:<br>
+Re-enter new password:<br>
+Password updated successfully!<br>
+Reloading privilege tables…<br>
+… Success!<br>
+By default, a MySQL installation has an anonymous user, allowing anyone<br>
+to log into MySQL without having to have a user account created for<br>
+them.  This is intended only for testing, and to make the installation<br>
+go a bit smoother.  You should remove them before moving into a<br>
+production environment.<br>
+Remove anonymous users? [Y/n] y<br>
+… Success!<br>
+Normally, root should only be allowed to connect from ‘localhost’.  This<br>
+ensures that someone cannot guess at the root password from the network.<br>
+Disallow root login remotely? [Y/n] y<br>
+… Success!<br>
+By default, MySQL comes with a database named ‘test’ that anyone can<br>
+access.  This is also intended only for testing, and should be removed<br>
+before moving into a production environment.<br>
+Remove test database and access to it? [Y/n] y</p>
+<p>Dropping test database…<br>
+ERROR 1008 (HY000) at line 1: Can’t drop database ‘test’; database doesn’t exist<br>
+… Failed!  Not critical, keep moving…<br>
+Removing privileges on test database…<br>
+… Success!<br>
+Reloading the privilege tables will ensure that all changes made so far<br>
+will take effect immediately.<br>
+Reload privilege tables now? [Y/n] y<br>
+… Success!<br>
+All done!  If you’ve completed all of the above steps, your MySQL<br>
+installation should now be secure.<br>
+Thanks for using MySQL!</p>
+<p>五，创建zabbix数据库，创建zabbix账号<br>
+[root@localhost ~]# mysql -uroot -p</p>
+<p>mysql&gt;  create database zabbix character set utf8 collate utf8_bin;<br>
+Query OK, 1 row affected (0.00 sec)<br>
+mysql&gt; grant all privileges on zabbix.* to ‘zabbix’@‘localhost’ identified by ‘zabbix’;      #注意后面密码带引号<br>
+Query OK, 0 rows affected (0.00 sec)<br>
+mysql&gt; flush privileges;<br>
+Query OK, 0 rows affected (0.00 sec)<br>
+mysql&gt; Ctrl-C – exit!</p>
+<p>六，导入默认的zabbix数据库信息<br>
+[root@localhost ~]# cd /usr/share/doc/zabbix-server-mysql-3.0.24/<br>
+[root@localhost zabbix-server-mysql-3.0.24]# zcat /usr/share/doc/zabbix-server-mysql-3.0.24/create.sql.gz | mysql zabbix -uzabbix -pzabbix</p>
+<p>七，修改zabbix_server.conf的配置文件<br>
+[root@localhost ~]# vi /etc/zabbix/zabbix_server.conf<br>
+DBHost=localhost<br>
+DBName=zabbix<br>
+DBUser=zabbix<br>
+DBPassword=zabbix</p>
+<p>八，修改配置文件/etc/httpd/conf.d/zabbix.conf，时区改成 Asia/Shanghai<br>
+[root@localhost ~]# vi /etc/httpd/conf.d/zabbix.conf<br>
+php_value max_execution_time 300<br>
+php_value memory_limit 128M<br>
+php_value post_max_size 16M<br>
+php_value upload_max_filesize 2M<br>
+php_value max_input_time 300<br>
+php_value always_populate_raw_post_data -1<br>
+php_value date.timezone Asia/Shanghai</p>
+<p>九，启动apache/zabbix-server服务并设置为开机启动<br>
+[root@localhost ~]# systemctl start httpd<br>
+[root@localhost ~]# systemctl enable httpd<br>
+[root@localhost ~]# systemctl start zabbix-server<br>
+[root@localhost ~]# systemctl enable zabbix-server</p>
+<p>十，访问网站，例如：http://本机IP/zabbix，如下图所示：<br>
+<img src="https://mvicdu.github.io/post-images/1585372219091.png" alt="" loading="lazy"></p>
+<p><img src="https://mvicdu.github.io/post-images/1585372236758.png" alt="" loading="lazy"><br>
+上图为配置交换机宏</p>
+<p>十一：解决图形乱码问题<br>
+<img src="https://mvicdu.github.io/post-images/1585372258106.png" alt="" loading="lazy"></p>
+<p>解决方法<br>
+1.从windows下控制面板-&gt;字体-&gt;选择一种中文字库例如“楷体” 【复制-粘贴出来，然后拷贝到zabbix服务器上】</p>
+<p>将这个文件拷贝到zabbix的数据目录的fonts目录下</p>
+<p>[root@localhost ~]# cd /usr/share/zabbix/fonts/<br>
+[root@localhost fonts]# ll<br>
+total 12440<br>
+lrwxrwxrwx. 1 root root       33 Jan 22 22:49 graphfont.ttf -&gt; /etc/alternatives/zabbix-web-font  #发现默认的字体链接到 /etc/alternatives/zabbix-web-font</p>
+<p>[root@localhost fonts]# cd /etc/alternatives/<br>
+[root@localhost alternatives]# ll</p>
+<p>……<br>
+<img src="https://mvicdu.github.io/post-images/1585372292112.png" alt="" loading="lazy"><br>
+……<br>
+[root@localhost dejavu]# rm -y DejaVuSans.ttf                     #删除默认字体<br>
+[root@localhost dejavu]# mv STKAITI.TTF DejaVuSans.ttf     #将上传的字体文件名更改为之前的默认字体文件名<br>
+<img src="https://mvicdu.github.io/post-images/1585372307913.png" alt="" loading="lazy"></p>
+
+              </div>
+              <div class="toc-container">
+                
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://mvicdu.github.io/post/zabbix-an-zhuang-lamp-huan-jing/">
+              <h3 class="post-title">
+                zabbix安装(LAMP环境)
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  记录学习每一天
+  <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

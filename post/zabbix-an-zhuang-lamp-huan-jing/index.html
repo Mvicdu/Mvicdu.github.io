@@ -1,0 +1,246 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>zabbix安装(LAMP环境) | Vic Notes</title>
+<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585372598298">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://mvicdu.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="zabbix安装(LAMP环境) | Vic Notes - Atom Feed" href="https://mvicdu.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="安装一套LAMP环境yum -y install zlib-devel mysql-devel glibc-devel curl-devel gcc automake mysql libidn-devel openssl-devel net..." />
+    <meta name="keywords" content="zabbix,Linux" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://mvicdu.github.io">
+  <img class="avatar" src="https://mvicdu.github.io/images/avatar.png?v=1585372598298" alt="">
+  </a>
+  <h1 class="site-title">
+    Vic Notes
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              zabbix安装(LAMP环境)
+            </h2>
+            <div class="post-info">
+              <span>
+                2019-11-21
+              </span>
+              <span>
+                7 min read
+              </span>
+              
+                <a href="https://mvicdu.github.io/tag/oniUCbBXF/" class="post-tag">
+                  # zabbix
+                </a>
+              
+                <a href="https://mvicdu.github.io/tag/lKYi1T7d8/" class="post-tag">
+                  # Linux
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>安装一套LAMP环境yum -y install zlib-devel mysql-devel glibc-devel curl-devel gcc automake mysql libidn-devel openssl-devel net-snmp-devel rpm-devel OpenIPMI-devel httpd mysql-server php-gd php-mysql php-bcmath php-mbstring php-xml perl-DBI php<br>
+提示：以上相关软件直接可以通过centos自带的yum源安装，这个过程依据各自带宽而定。很慢~！ 虽然版本偏低，但是对于部署来说足够了。<br>
+Ps:mysql默认安装可能没有可以用mairadb安装EPEL源<br>
+我们可以直接访问 http://download.fedoraproject.org/pub/epel/6/i386/repoview/epel-release.html 找到epel的安装包，右键复制地址，直接装就可以了。<br>
+rpm -ivh http://mirrors.zju.edu.cn/epel/6/i386/epel-release-6-8.noarch.rpm<br>
+提示：这里对epel里的zbx资源简单介绍一下，epel里zbx资源分为三个版本，1.8、2.0、2.2。官网目前最新版本是2.4，1.8建议你不要考虑了，我曾经在别人的机器上用过一下，trigger还不能手动编写，反正我是用不惯，2.0目前是我正在使用的版本，2.2让我感觉比较high的亮点功能就是对虚拟机的监控。在我眼里2.0、2.2 、2.4这三个版本其实在使用上没啥太大的区别，安装方式也是一样的。安装ZABBIX<br>
+　　这里先为大家显示一下，一个Zabbix Server所需要的安装包<br>
+$yum search zabbix22 | awk -F&quot;:&quot; '/zabbix22/&amp;&amp;!/pgsql|Matched|sqlite|proxy/{print <span class='katex-error' title='ParseError: KaTeX parse error: Expected &#039;EOF&#039;, got &#039;}&#039; at position 2: 1}̲&#039;
+zabbix22.x86_…'>1}&#039;
+zabbix22.x86_64
+zabbix22-agent.x86_64
+zabbix22-dbfiles-mysql.noarch
+zabbix22-server.noarch
+zabbix22-server-mysql.x86_64
+zabbix22-web.noarch
+zabbix22-web-mysql.noarch
+很多文档直接就装了，也不说这玩意都是什么东西，所以今天就说点废话，主要是针对新手向，老手可以绕行。以下只是简单的介绍，具体包里都包含什么文件，有兴趣的话，可以自己rpm -ql翻看，反正偶是没兴趣。
+zabbix22.x86_64 #zabbix主程序
+zabbix22-agent.x86_64 #zabbix客户端程序
+zabbix22-dbfiles-mysql.noarch #zabbix22 mysql数据库文件
+zabbix22-server.noarch #Server服务端程序
+zabbix22-server-mysql.x86_64 #Server连接mysql程序
+zabbix22-web.noarch #web前端php程序
+zabbix22-web-mysql.noarch #web前端php连接mysql数据库
+（非常重要的ps:上面的七个软件为必要组件，不要乱装其他的，实验的时候偷懒search到的软件全部安装后，一直提示zabbix server is not running 查看日志发现一直提示不能连接database，网上搜了一大堆，主要解决方案为将/etc/zabbix/web/zabbix.conf.php 文件中的</span>DB['SERVER'] 和 $ZBX_SERVER 项不要用localhost改为IP 。实际实验中我将/etc/zabbix_server.conf文件配置如下：<br>
+LogFile=/var/log/zabbixsrv/zabbix_server.log<br>
+LogFileSize=0<br>
+PidFile=/run/zabbixsrv/zabbix_server.pid<br>
+DBHost=192.168.1.226<br>
+DBName=zabbix<br>
+DBUser=zabbix<br>
+DBPassword=123456<br>
+DBSocket=/var/lib/mysql/mysql.sock<br>
+DBPort=3306<br>
+ListenIP=0.0.0.0<br>
+Timeout=4<br>
+ExternalScripts=/var/lib/zabbixsrv/externalscripts<br>
+LogSlowQueries=3000<br>
+TmpDir=/var/lib/zabbixsrv/tmp<br>
+更之后发现还是不行但日志提示变了，变为：received invalid response to SSL negotiation: R。搜索一番才发现是软件装错了。删除后restart服务。恢复正常！万岁！）<br>
+复制粘贴回车你懂的<br>
+yum -y install $(yum search zabbix22 | awk -F&quot;:&quot; '/zabbix22/&amp;&amp;!/pgsql|Matched|sqlite|proxy/{print <span class='katex-error' title='ParseError: KaTeX parse error: Expected &#039;EOF&#039;, got &#039;}&#039; at position 2: 1}̲&#039;)
+　　这里说一下我理解的 …'>1}&#039;)
+　　这里说一下我理解的 zabbix 的结构，zabbix 分为 Server 端和 Agent 端(大家都知道的，不用你废话。**-_-!!**)，Agent 负责采集监控数据传送到 Server 端，Server 端负责将采集的数据保存到数据库中，还有一个很多时候大家都忽略的部分，就是 zabbix 通过前端 WEB 页面调用 php，将监控数据值从数据库中提取出来并进行前端展示。所以有时候排查故障的一定要先确定故障点是在前端，还是在后端。学会缩小范围按步骤排查故障。
+　　以上安装我过滤掉了 zabbix 使用pgsql数据库的程序, sqlite 数据库程序和 proxy 程序。帮朋友排查 zabbix 问题的时候，发现好多都是装的 mysql 数据库，zabbix 装的是 pgsql 数据库连接程序，导致 zabbix 数据库怎么也连不上。所以在这里给大家提个醒，注意自己装的程序是否符合自己的环境。
+　　以上步骤完后所有需要创建的系统账号比如 mysql，zabbix服务的启动脚本，包括 httpd 关于 zabbix 访问的配置文件，都已经为你配置好了。你可以通过查看/etc/httpd/conf.d/zabbix.conf 文件找到前端页面访问的具体位置。(这就是偶稀饭yum的原因！！)启动数据库
+service mysqld start创建数据库
+mysql &lt;&lt; EOF
+create database zabbix character set utf8;
+grant all on zabbix.* to zabbix@localhost identified by &#039;123456&#039;;
+quit
+EOF
+提示：这里数据库一定要指定字符集，要不在前端历史操作是乱码，因为历史操作是保存在数据库里的。导入数据库
+mysql -uzabbix -p123456 zabbix &lt; /usr/share/zabbix-mysql/schema.sql
+mysql -uzabbix -p123456 zabbix &lt; /usr/share/zabbix-mysql/images.sql
+mysql -uzabbix -p123456 zabbix &lt; /usr/share/zabbix-mysql/data.sql
+提示：以上数据库一定要按照顺序导入配置zabbix_server访问数据库的账号和密码
+sed -i &#039;/^DBName/s/=.*</span>/=zabbix/' /etc/zabbix_server.conf<br>
+sed -i '/^# DBPassword/s/.*$/DBPassword=123456/' /etc/zabbix_server.conf修改php.ini<br>
+sed -i 's/post_max_size = 8M/post_max_size = 32M/g' /etc/php.ini<br>
+sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 50M/g' /etc/php.ini<br>
+sed -i 's/;date.timezone =/date.timezone = Asia/Shanghai/' /etc/php.ini<br>
+sed -i 's/max_execution_time = 30/max_execution_time = 600/g' /etc/php.ini<br>
+sed -i 's/max_input_time = 60/max_input_time = 600/g' /etc/php.ini<br>
+sed -i 's/memory_limit = 128M/memory_limit = 256M/g' /etc/php.ini<br>
+提示:我这里只是修改了 zabbix 初始化php配置时需要检测默认配置参数，大家可以根据自己实际情况调整 php.ini 参数简单的配置服务<br>
+chkconfig --level 345 zabbix-server on<br>
+chkconfig --level 345 zabbix-agent on<br>
+setenforce 0<br>
+service zabbix-server start<br>
+service zabbix-agent start<br>
+提示： selinux我都关掉了。<br>
+登录<br>
+　　现在可以通过http://ip/zabbix 来访问了，第一次会初始化一些配置，主要还是配置 php.ini 的参数和php访问数据库的账号和密码。基本上一路Next就ok了。</p>
+
+              </div>
+              <div class="toc-container">
+                
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://mvicdu.github.io/post/rong-zai-fang-an-de-xuan-ze/">
+              <h3 class="post-title">
+                容灾方案的选择
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  记录学习每一天
+  <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

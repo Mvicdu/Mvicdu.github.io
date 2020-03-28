@@ -1,0 +1,204 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>利用文件描述符恢复删除的数据库文件 | Vic Notes</title>
+<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585372598298">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://mvicdu.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="利用文件描述符恢复删除的数据库文件 | Vic Notes - Atom Feed" href="https://mvicdu.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="一旦发生了误删除动作，切忌三点：心态冷静、断开应用、维护现场不关库。
+实验：
+注意：在生产环境下，绝对不能进行这样的实验。进行试验的时候，也需要完备的备份。
+
+
+ps：用文件描述符进行恢复的时候不一定会100%成功如果文件描述符被删除则无法..." />
+    <meta name="keywords" content="oracle" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://mvicdu.github.io">
+  <img class="avatar" src="https://mvicdu.github.io/images/avatar.png?v=1585372598298" alt="">
+  </a>
+  <h1 class="site-title">
+    Vic Notes
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              利用文件描述符恢复删除的数据库文件
+            </h2>
+            <div class="post-info">
+              <span>
+                2019-09-15
+              </span>
+              <span>
+                2 min read
+              </span>
+              
+                <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="post-tag">
+                  # oracle
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>一旦发生了误删除动作，切忌三点：<strong>心态冷静、断开应用、维护现场不关库。</strong><br>
+实验：<br>
+<strong>注意：<strong>在生产环境下，绝对不能进行这样的实验。进行试验的时候，也需要完备的备份。<br>
+<img src="https://mvicdu.github.io/post-images/1585369372763.png" alt="" loading="lazy"><br>
+<img src="https://mvicdu.github.io/post-images/1585369385712.png" alt="" loading="lazy"><br>
+ps：用文件描述符进行恢复的时候不一定会100%成功如果文件描述符被删除则无法用文件描述符进行恢复。所以再次推</strong>荐用mv代替rm</strong>。<br>
+<strong>运维生产环境中，我们的原则永远是稳定</strong>。危险<strong>不确定的事情场景，一定要避免。哪怕不做、不修、不优化</strong>，也不要让业务系统的可用性去冒险。<br>
+PS：使用文件描述符进行数据恢复，并不是100%有效。如果时间很长，或者进行过很多特殊操作，这个微弱的文件描述符是会消失的！<br>
+删除数据文件：<br>
+<img src="https://mvicdu.github.io/post-images/1585369500896.png" alt="" loading="lazy"><br>
+<img src="https://mvicdu.github.io/post-images/1585369515856.png" alt="" loading="lazy"><br>
+注意：此时虽然删除了数据文件但此时借助文件描述符还是能在oracle中查询该文件数据的<br>
+<img src="https://mvicdu.github.io/post-images/1585369535649.png" alt="" loading="lazy"><br>
+使用lsof –p确定文件描述符信息<br>
+<img src="https://mvicdu.github.io/post-images/1585369554154.png" alt="" loading="lazy"><br>
+<img src="https://mvicdu.github.io/post-images/1585369574381.png" alt="" loading="lazy"><br>
+ps：中间还有些其他信息，省略掉了。lsof是描述文件描述符最好的工具，其中包括FD列。<br>
+<strong>我们从dbwr的连接中，找到了rmdtest01.dbf的信息行。其中FD=36uw。这个36就表示了连接文件的名称</strong>。</p>
+<p>联合dbwr的进程编号9405，我们在目录/proc/9405/fd中找到所有的文件符。<br>
+<img src="https://mvicdu.github.io/post-images/1585369616972.png" alt="" loading="lazy"><br>
+或者用ls -l 命令：<br>
+<img src="https://mvicdu.github.io/post-images/1585369644450.png" alt="" loading="lazy"><br>
+这个36对应的文件还存在，就是已经被删除的那个rmdtest01.dbf文件。进行拷贝出来。<br>
+<img src="https://mvicdu.github.io/post-images/1585369669020.png" alt="" loading="lazy"><br>
+拷贝出来之后，最好进行一定转换。先将其offline，之后进行控制文件中的rename动作，最后recover和online操作<br>
+**注意注意注意：**刚才拷贝的时候用的是root权限，所以复制出来的文件是root用户和组的需要进行chown更改权限，不然在rename的时候会提示‘命名出错，无法打开文件’<br>
+<img src="https://mvicdu.github.io/post-images/1585369702054.png" alt="" loading="lazy"><br>
+进行rename和recover操作：<br>
+<img src="https://mvicdu.github.io/post-images/1585369720707.png" alt="" loading="lazy"><br>
+使用rman中的recovery advisor工具，来判断错误是否存在<br>
+<img src="https://mvicdu.github.io/post-images/1585369748490.png" alt="" loading="lazy"></p>
+
+              </div>
+              <div class="toc-container">
+                
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://mvicdu.github.io/post/fu-zhi-yuan-duan-pdb/">
+              <h3 class="post-title">
+                复制远端PDB
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  记录学习每一天
+  <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
