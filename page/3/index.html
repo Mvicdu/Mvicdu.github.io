@@ -1,365 +1,463 @@
-<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" >
-
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Vic Notes</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585373421020">
+<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585373563210">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://mvicdu.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Vic Notes - Atom Feed" href="https://mvicdu.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-
-
-
-    <meta name="description" content="温故而知新">
-    
+    <meta name="description" content="温故而知新" />
   </head>
   <body>
-    <div id="app" class="main">
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://mvicdu.github.io">
+  <img class="avatar" src="https://mvicdu.github.io/images/avatar.png?v=1585373563210" alt="">
+  </a>
+  <h1 class="site-title">
+    Vic Notes
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
 
-      <div class="sidebar" :class="{ 'full-height': menuVisible }">
-  <div class="top-container" data-aos="fade-right">
-    <div class="top-header-container">
-      <a class="site-title-container" href="https://mvicdu.github.io">
-        <img src="https://mvicdu.github.io/images/avatar.png?v=1585373421020" class="site-logo">
-        <h1 class="site-title">Vic Notes</h1>
+    
+        <div class="post-container">
+  
+    <article class="post">
+      <a href="https://mvicdu.github.io/post/yan-chi-fen-pei/">
+        <h2 class="post-title">oracle 表空间的延迟分配</h2>
       </a>
-      <div class="menu-btn" @click="menuVisible = !menuVisible">
-        <div class="line"></div>
+      <div class="post-info">
+        <span>
+          2019-07-11
+        </span>
+        <span>
+          2 min read
+        </span>
+        
+          <a href="https://mvicdu.github.io/tag/zjku8WmMb/" class="post-tag">
+            # 表空间
+          </a>
+        
+          <a href="https://mvicdu.github.io/tag/95k4ekV9_5/" class="post-tag">
+            # 延迟分配
+          </a>
+        
       </div>
-    </div>
-    <div>
       
+      <div class="post-abstract">
         
-          <a href="/" class="site-nav">
-            首页
+      </div>
+    </article>
+  
+    <article class="post">
+      <a href="https://mvicdu.github.io/post/alter-system-yu-alter-database/">
+        <h2 class="post-title">alter system与alter database的区别</h2>
+      </a>
+      <div class="post-info">
+        <span>
+          2019-07-08
+        </span>
+        <span>
+          1 min read
+        </span>
+        
+      </div>
+      
+      <div class="post-abstract">
+        
+      </div>
+    </article>
+  
+    <article class="post">
+      <a href="https://mvicdu.github.io/post/chuang-jian-huan-yuan-dian-shi-li/">
+        <h2 class="post-title">创建还原点示例</h2>
+      </a>
+      <div class="post-info">
+        <span>
+          2019-06-15
+        </span>
+        <span>
+          5 min read
+        </span>
+        
+          <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="post-tag">
+            # oracle
           </a>
         
+      </div>
       
+      <div class="post-abstract">
         
-          <a href="/archives" class="site-nav">
-            归档
+      </div>
+    </article>
+  
+    <article class="post">
+      <a href="https://mvicdu.github.io/post/oracle-rong-zai-fang-an/">
+        <h2 class="post-title">oracle容灾方案</h2>
+      </a>
+      <div class="post-info">
+        <span>
+          2019-06-12
+        </span>
+        <span>
+          3 min read
+        </span>
+        
+          <a href="https://mvicdu.github.io/tag/ssj3lGz5l/" class="post-tag">
+            # 容灾
           </a>
         
+      </div>
       
+      <div class="post-abstract">
         
-          <a href="/tags" class="site-nav">
-            标签
+      </div>
+    </article>
+  
+    <article class="post">
+      <a href="https://mvicdu.github.io/post/flashback-shan-hui/">
+        <h2 class="post-title">flashback 闪回</h2>
+      </a>
+      <div class="post-info">
+        <span>
+          2019-06-03
+        </span>
+        <span>
+          1 min read
+        </span>
+        
+          <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="post-tag">
+            # oracle
           </a>
         
+      </div>
       
+      <div class="post-abstract">
         
-          <a href="/post/about" class="site-nav">
-            关于
+      </div>
+    </article>
+  
+    <article class="post">
+      <a href="https://mvicdu.github.io/post/qiantao-chaxun/">
+        <h2 class="post-title">嵌套子查询和关联子查询</h2>
+      </a>
+      <div class="post-info">
+        <span>
+          2019-05-29
+        </span>
+        <span>
+          2 min read
+        </span>
+        
+          <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="post-tag">
+            # oracle
           </a>
         
+      </div>
       
-    </div>
-  </div>
-  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
-    <div class="social-container">
-      
+      <div class="post-abstract">
         
-      
+      </div>
+    </article>
+  
+    <article class="post">
+      <a href="https://mvicdu.github.io/post/oracle-kong-xian-chao-shi/">
+        <h2 class="post-title">设置Oracle空闲超时</h2>
+      </a>
+      <div class="post-info">
+        <span>
+          2019-05-21
+        </span>
+        <span>
+          1 min read
+        </span>
         
-      
+          <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="post-tag">
+            # oracle
+          </a>
         
+      </div>
       
+      <div class="post-abstract">
         
-      
+      </div>
+    </article>
+  
+    <article class="post">
+      <a href="https://mvicdu.github.io/post/firewalld-de-shi-yong/">
+        <h2 class="post-title">firewalld的使用</h2>
+      </a>
+      <div class="post-info">
+        <span>
+          2019-05-21
+        </span>
+        <span>
+          2 min read
+        </span>
         
+          <a href="https://mvicdu.github.io/tag/lKYi1T7d8/" class="post-tag">
+            # Linux
+          </a>
+        
+      </div>
       
-    </div>
-    <div class="site-description">
-      温故而知新
-    </div>
-    <div class="site-footer">
-      记录学习每一天 | <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">RSS</a>
-    </div>
-  </div>
+      <div class="post-abstract">
+        
+      </div>
+    </article>
+  
+    <article class="post">
+      <a href="https://mvicdu.github.io/post/sqlplus_fanye/">
+        <h2 class="post-title">sqlplus窗口下支持上下翻页</h2>
+      </a>
+      <div class="post-info">
+        <span>
+          2019-05-15
+        </span>
+        <span>
+          1 min read
+        </span>
+        
+          <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="post-tag">
+            # oracle
+          </a>
+        
+      </div>
+      
+      <div class="post-abstract">
+        
+      </div>
+    </article>
+  
+    <article class="post">
+      <a href="https://mvicdu.github.io/post/zhi-shi-tu-cha-kan/">
+        <h2 class="post-title">辅助管理之视图查看</h2>
+      </a>
+      <div class="post-info">
+        <span>
+          2019-05-06
+        </span>
+        <span>
+          2 min read
+        </span>
+        
+          <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="post-tag">
+            # oracle
+          </a>
+        
+      </div>
+      
+      <div class="post-abstract">
+        
+      </div>
+    </article>
+  
+    <article class="post">
+      <a href="https://mvicdu.github.io/post/unique_index-normal_index/">
+        <h2 class="post-title">oracle唯一索引与普通索引的区别和联系以及using index用法</h2>
+      </a>
+      <div class="post-info">
+        <span>
+          2019-04-29
+        </span>
+        <span>
+          3 min read
+        </span>
+        
+          <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="post-tag">
+            # oracle
+          </a>
+        
+      </div>
+      
+      <div class="post-abstract">
+        
+      </div>
+    </article>
+  
+    <article class="post">
+      <a href="https://mvicdu.github.io/post/qiangzhibuneng/">
+        <h2 class="post-title">linux下kill -9 pid 强制不能杀掉进程</h2>
+      </a>
+      <div class="post-info">
+        <span>
+          2019-04-22
+        </span>
+        <span>
+          1 min read
+        </span>
+        
+          <a href="https://mvicdu.github.io/tag/lKYi1T7d8/" class="post-tag">
+            # Linux
+          </a>
+        
+      </div>
+      
+      <div class="post-abstract">
+        
+      </div>
+    </article>
+  
+    <article class="post">
+      <a href="https://mvicdu.github.io/post/lie-yue-shu-ji-biao-yue-shu/">
+        <h2 class="post-title">列约束及表约束</h2>
+      </a>
+      <div class="post-info">
+        <span>
+          2019-04-22
+        </span>
+        <span>
+          2 min read
+        </span>
+        
+          <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="post-tag">
+            # oracle
+          </a>
+        
+      </div>
+      
+      <div class="post-abstract">
+        
+      </div>
+    </article>
+  
+    <article class="post">
+      <a href="https://mvicdu.github.io/post/mariadb-mi-ma-hou-xiu-gai/">
+        <h2 class="post-title">Mariadb忘记密码后修改密码</h2>
+      </a>
+      <div class="post-info">
+        <span>
+          2019-04-17
+        </span>
+        <span>
+          1 min read
+        </span>
+        
+          <a href="https://mvicdu.github.io/tag/lKYi1T7d8/" class="post-tag">
+            # Linux
+          </a>
+        
+      </div>
+      
+      <div class="post-abstract">
+        
+      </div>
+    </article>
+  
+    <article class="post">
+      <a href="https://mvicdu.github.io/post/linux-ansible-zi-dong-hua-yun-wei-pei-zhi/">
+        <h2 class="post-title">linux Ansible 自动化运维配置</h2>
+      </a>
+      <div class="post-info">
+        <span>
+          2018-09-05
+        </span>
+        <span>
+          2 min read
+        </span>
+        
+          <a href="https://mvicdu.github.io/tag/G5zU_6ag2/" class="post-tag">
+            # ansible
+          </a>
+        
+      </div>
+      
+      <div class="post-abstract">
+        
+      </div>
+    </article>
+  
+    <article class="post">
+      <a href="https://mvicdu.github.io/post/jian-cha-shi-fou-zhong-du/">
+        <h2 class="post-title">检查是否中毒</h2>
+      </a>
+      <div class="post-info">
+        <span>
+          2017-03-16
+        </span>
+        <span>
+          9 min read
+        </span>
+        
+          <a href="https://mvicdu.github.io/tag/lKYi1T7d8/" class="post-tag">
+            # Linux
+          </a>
+        
+      </div>
+      
+      <div class="post-abstract">
+        
+      </div>
+    </article>
+  
 </div>
 
-
-      <div class="main-container">
-        <div class="content-container" data-aos="fade-up">
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://mvicdu.github.io/post/yan-chi-fen-pei/">
-                  <h2 class="post-title">oracle 表空间的延迟分配</h2>
-                </a>
-                <div class="post-date">
-                  2019-07-11
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://mvicdu.github.io/post/alter-system-yu-alter-database/">
-                  <h2 class="post-title">alter system与alter database的区别</h2>
-                </a>
-                <div class="post-date">
-                  2019-07-08
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://mvicdu.github.io/post/chuang-jian-huan-yuan-dian-shi-li/">
-                  <h2 class="post-title">创建还原点示例</h2>
-                </a>
-                <div class="post-date">
-                  2019-06-15
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://mvicdu.github.io/post/oracle-rong-zai-fang-an/">
-                  <h2 class="post-title">oracle容灾方案</h2>
-                </a>
-                <div class="post-date">
-                  2019-06-12
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://mvicdu.github.io/post/flashback-shan-hui/">
-                  <h2 class="post-title">flashback 闪回</h2>
-                </a>
-                <div class="post-date">
-                  2019-06-03
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://mvicdu.github.io/post/qiantao-chaxun/">
-                  <h2 class="post-title">嵌套子查询和关联子查询</h2>
-                </a>
-                <div class="post-date">
-                  2019-05-29
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://mvicdu.github.io/post/oracle-kong-xian-chao-shi/">
-                  <h2 class="post-title">设置Oracle空闲超时</h2>
-                </a>
-                <div class="post-date">
-                  2019-05-21
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://mvicdu.github.io/post/firewalld-de-shi-yong/">
-                  <h2 class="post-title">firewalld的使用</h2>
-                </a>
-                <div class="post-date">
-                  2019-05-21
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://mvicdu.github.io/post/sqlplus_fanye/">
-                  <h2 class="post-title">sqlplus窗口下支持上下翻页</h2>
-                </a>
-                <div class="post-date">
-                  2019-05-15
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://mvicdu.github.io/post/zhi-shi-tu-cha-kan/">
-                  <h2 class="post-title">辅助管理之视图查看</h2>
-                </a>
-                <div class="post-date">
-                  2019-05-06
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://mvicdu.github.io/post/unique_index-normal_index/">
-                  <h2 class="post-title">oracle唯一索引与普通索引的区别和联系以及using index用法</h2>
-                </a>
-                <div class="post-date">
-                  2019-04-29
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://mvicdu.github.io/post/qiangzhibuneng/">
-                  <h2 class="post-title">linux下kill -9 pid 强制不能杀掉进程</h2>
-                </a>
-                <div class="post-date">
-                  2019-04-22
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://mvicdu.github.io/post/lie-yue-shu-ji-biao-yue-shu/">
-                  <h2 class="post-title">列约束及表约束</h2>
-                </a>
-                <div class="post-date">
-                  2019-04-22
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://mvicdu.github.io/post/mariadb-mi-ma-hou-xiu-gai/">
-                  <h2 class="post-title">Mariadb忘记密码后修改密码</h2>
-                </a>
-                <div class="post-date">
-                  2019-04-17
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://mvicdu.github.io/post/linux-ansible-zi-dong-hua-yun-wei-pei-zhi/">
-                  <h2 class="post-title">linux Ansible 自动化运维配置</h2>
-                </a>
-                <div class="post-date">
-                  2018-09-05
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://mvicdu.github.io/post/jian-cha-shi-fou-zhong-du/">
-                  <h2 class="post-title">检查是否中毒</h2>
-                </a>
-                <div class="post-date">
-                  2017-03-16
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
-
-          <div class="pagination-container">
+    
+        <div class="pagination-container">
   
-    <a href="https://mvicdu.github.io/page/2/" class="prev"><i class="icon-arrow-ios-back-outline"></i> 上一页</a>
+    <a href="https://mvicdu.github.io/page/2/" class="prev-page">上一页</a>
   
   
 </div>
 
-        </div>
+    
+        <div class="site-footer">
+  记录学习每一天
+  <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
       </div>
     </div>
-
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-<script type="application/javascript">
-
-AOS.init();
-
-var app = new Vue({
-  el: '#app',
-  data: {
-    menuVisible: false,
-  },
-})
-
-</script>
-
-
-
-
-
-
   </body>
 </html>

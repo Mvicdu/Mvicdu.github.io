@@ -1,20 +1,13 @@
-<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" >
-
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>检查是否中毒 | Vic Notes</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585373421020">
+<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585373563210">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://mvicdu.github.io/styles/main.css">
-
-
-
-<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<link rel="alternate" type="application/atom+xml" title="检查是否中毒 | Vic Notes - Atom Feed" href="https://mvicdu.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
@@ -25,81 +18,86 @@
 2）检查系统用户
 查看是否有异常的系统用户..." />
     <meta name="keywords" content="Linux" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
   <body>
-    <div id="app" class="main">
-
-      <div class="sidebar" :class="{ 'full-height': menuVisible }">
-  <div class="top-container" data-aos="fade-right">
-    <div class="top-header-container">
-      <a class="site-title-container" href="https://mvicdu.github.io">
-        <img src="https://mvicdu.github.io/images/avatar.png?v=1585373421020" class="site-logo">
-        <h1 class="site-title">Vic Notes</h1>
-      </a>
-      <div class="menu-btn" @click="menuVisible = !menuVisible">
-        <div class="line"></div>
-      </div>
-    </div>
-    <div>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://mvicdu.github.io">
+  <img class="avatar" src="https://mvicdu.github.io/images/avatar.png?v=1585373563210" alt="">
+  </a>
+  <h1 class="site-title">
+    Vic Notes
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
       
-        
-          <a href="/" class="site-nav">
-            首页
-          </a>
-        
+        <a href="/" class="menu">
+          首页
+        </a>
       
-        
-          <a href="/archives" class="site-nav">
-            归档
-          </a>
-        
+    
       
-        
-          <a href="/tags" class="site-nav">
-            标签
-          </a>
-        
+        <a href="/archives" class="menu">
+          归档
+        </a>
       
-        
-          <a href="/post/about" class="site-nav">
-            关于
-          </a>
-        
+    
       
-    </div>
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
   </div>
-  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
-    <div class="social-container">
+  <div class="social-container">
+    
       
-        
+    
       
-        
+    
       
-        
+    
       
-        
+    
       
-        
-      
-    </div>
-    <div class="site-description">
-      温故而知新
-    </div>
-    <div class="site-footer">
-      记录学习每一天 | <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">RSS</a>
-    </div>
+    
   </div>
 </div>
 
-
-      <div class="main-container">
-        <div class="content-container" data-aos="fade-up">
-          <div class="post-detail">
-            <h2 class="post-title">检查是否中毒</h2>
-            <div class="post-date">2017-03-16</div>
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              检查是否中毒
+            </h2>
+            <div class="post-info">
+              <span>
+                2017-03-16
+              </span>
+              <span>
+                9 min read
+              </span>
+              
+                <a href="https://mvicdu.github.io/tag/lKYi1T7d8/" class="post-tag">
+                  # Linux
+                </a>
+              
+            </div>
             
-            <div class="post-content" v-pre>
-              <p>一、是否入侵检查<br>
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>一、是否入侵检查<br>
 1）检查系统日志</p>
 <p>检查系统错误登陆日志，统计IP重试次数（last命令是查看系统登陆日志，比如系统被reboot或登陆情况）<br>
 [root@bastion-IDC ~]# last</p>
@@ -241,44 +239,81 @@ Change: 2017-05-07 17:14:37.146999967 +0800<br>
 发现ps命令的二进制文件果然在近期被改动过。<br>
 解决办法：可以拷贝别的机器上的/bin/ps二进制文件覆盖本机的这个文件。</p>
 
-            </div>
-            
-              <div class="tag-container">
-                
-                  <a href="https://mvicdu.github.io/tag/lKYi1T7d8/" class="tag">
-                    Linux
-                  </a>
-                
               </div>
-            
-            
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#echo-1-procsysnetipv4icmp_echo_ignore_all">echo 1 &gt; /proc/sys/net/ipv4/icmp_echo_ignore_all</a>
+<ul>
+<li><a href="#%E5%8F%91%E7%8E%B0%E4%B8%80%E6%AC%A1%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A2%ABgetshell%E6%B8%97%E9%80%8F%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%951%E4%BD%BF%E7%94%A8top%E5%91%BD%E4%BB%A4%E5%8F%91%E7%8E%B0%E4%B8%80%E4%B8%AApython%E7%A8%8B%E5%BA%8F%E5%8D%A0%E7%94%A8%E4%BA%8695%E7%9A%84cpu2%E4%BD%BF%E7%94%A8ps-efgrep-python%E5%8F%91%E7%8E%B0%E4%B8%8B%E9%9D%A2%E7%A8%8B%E5%BA%8Fpython-c-import-ptyptyspamnbinsh%E8%BF%99%E4%B8%AA%E7%A8%8B%E5%BA%8F%E5%91%BD%E4%BB%A4%E8%A1%A8%E7%A4%BA%E9%80%9A%E8%BF%87webshell%E5%8F%8D%E5%BC%B9shell%E5%9B%9E%E6%9D%A5%E4%B9%8B%E5%90%8E%E8%8E%B7%E5%8F%96%E7%9C%9F%E6%AD%A3%E7%9A%84ttyshell%E8%BF%9B%E8%A1%8C%E6%B8%97%E9%80%8F%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%87%8C-kill%E6%8E%89%E8%BF%99%E4%B8%AA%E8%BF%9B%E7%A8%8B3%E5%8F%91%E7%8E%B0%E5%9C%A8varspoolcron%E4%B8%8B%E9%9D%A2%E8%AE%BE%E7%BD%AE%E4%BA%86%E4%B8%80%E4%B8%AAnobody%E7%9A%84%E5%AE%9A%E6%97%B6%E6%89%A7%E8%A1%8C%E4%B8%8A%E9%9D%A2%E8%8E%B7%E5%8F%96getshell%E7%9A%84%E6%B8%97%E9%80%8F%E5%91%BD%E4%BB%A4%E6%9E%9C%E6%96%AD%E5%88%A0%E9%99%A4%E8%BF%99%E4%B8%AA%E4%BB%BB%E5%8A%A14ss-a%E5%8F%91%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%8F%AF%E7%96%91ip%E4%BB%A5%E5%8F%8A%E5%AE%83%E7%9A%84%E8%BF%9B%E7%A8%8B%E6%9E%9C%E6%96%AD%E5%9C%A8iptables%E9%87%8C%E7%A6%81%E6%AD%A2%E8%BF%99%E4%B8%AAip%E7%9A%84%E6%89%80%E6%9C%89%E8%AF%B7%E6%B1%82-i-input-s-180125131192-j-drop">发现一次服务器被getshell渗透的解决办法：<br>
+1）使用top命令发现一个python程序占用了95%的cpu<br>
+2）使用ps -ef|grep python发现下面程序：<br>
+python -c import pty;pty.spamn(&quot;/bin/sh&quot;)<br>
+这个程序命令表示通过webshell反弹shell回来之后获取真正的ttyshell进行渗透到服务器里。kill掉这个进程！<br>
+3）发现在/var/spool/cron下面设置了一个nobody的定时执行上面获取getshell的渗透命令！果断删除这个任务！<br>
+4）ss -a发现一个可疑ip以及它的进程，果断在iptables里禁止这个ip的所有请求：<br>
+-I INPUT -s 180.125.131.192 -j DROP</a></li>
+</ul>
+</li>
+</ul>
 
-            
-
-          </div>
-
+              </div>
+            </div>
+          </article>
         </div>
+
+        
+
+        
+
+        <div class="site-footer">
+  记录学习每一天
+  <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
       </div>
     </div>
 
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-<script type="application/javascript">
+    <script>
+      hljs.initHighlightingOnLoad()
 
-AOS.init();
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
 
-var app = new Vue({
-  el: '#app',
-  data: {
-    menuVisible: false,
-  },
-})
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
 
-</script>
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
 
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
 
-
-
-
-
+    </script>
   </body>
 </html>

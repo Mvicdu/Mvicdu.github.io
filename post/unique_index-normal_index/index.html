@@ -1,20 +1,13 @@
-<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" >
-
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>oracle唯一索引与普通索引的区别和联系以及using index用法 | Vic Notes</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585373421020">
+<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585373563210">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://mvicdu.github.io/styles/main.css">
-
-
-
-<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<link rel="alternate" type="application/atom+xml" title="oracle唯一索引与普通索引的区别和联系以及using index用法 | Vic Notes - Atom Feed" href="https://mvicdu.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
@@ -22,81 +15,86 @@
 区别：唯一索引unique index和一般索引normal index最大的差异是在索引列上增加一层唯一约束。添加唯一索引的数据列可以为空，但是只要尊在数据值，就必须是唯一的。
 联系：1）uni..." />
     <meta name="keywords" content="oracle" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
   <body>
-    <div id="app" class="main">
-
-      <div class="sidebar" :class="{ 'full-height': menuVisible }">
-  <div class="top-container" data-aos="fade-right">
-    <div class="top-header-container">
-      <a class="site-title-container" href="https://mvicdu.github.io">
-        <img src="https://mvicdu.github.io/images/avatar.png?v=1585373421020" class="site-logo">
-        <h1 class="site-title">Vic Notes</h1>
-      </a>
-      <div class="menu-btn" @click="menuVisible = !menuVisible">
-        <div class="line"></div>
-      </div>
-    </div>
-    <div>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://mvicdu.github.io">
+  <img class="avatar" src="https://mvicdu.github.io/images/avatar.png?v=1585373563210" alt="">
+  </a>
+  <h1 class="site-title">
+    Vic Notes
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
       
-        
-          <a href="/" class="site-nav">
-            首页
-          </a>
-        
+        <a href="/" class="menu">
+          首页
+        </a>
       
-        
-          <a href="/archives" class="site-nav">
-            归档
-          </a>
-        
+    
       
-        
-          <a href="/tags" class="site-nav">
-            标签
-          </a>
-        
+        <a href="/archives" class="menu">
+          归档
+        </a>
       
-        
-          <a href="/post/about" class="site-nav">
-            关于
-          </a>
-        
+    
       
-    </div>
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
   </div>
-  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
-    <div class="social-container">
+  <div class="social-container">
+    
       
-        
+    
       
-        
+    
       
-        
+    
       
-        
+    
       
-        
-      
-    </div>
-    <div class="site-description">
-      温故而知新
-    </div>
-    <div class="site-footer">
-      记录学习每一天 | <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">RSS</a>
-    </div>
+    
   </div>
 </div>
 
-
-      <div class="main-container">
-        <div class="content-container" data-aos="fade-up">
-          <div class="post-detail">
-            <h2 class="post-title">oracle唯一索引与普通索引的区别和联系以及using index用法</h2>
-            <div class="post-date">2019-04-29</div>
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              oracle唯一索引与普通索引的区别和联系以及using index用法
+            </h2>
+            <div class="post-info">
+              <span>
+                2019-04-29
+              </span>
+              <span>
+                3 min read
+              </span>
+              
+                <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="post-tag">
+                  # oracle
+                </a>
+              
+            </div>
             
-            <div class="post-content" v-pre>
-              <p>oracle唯一索引与普通索引的区别和联系<br>
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>oracle唯一索引与普通索引的区别和联系<br>
 区别：唯一索引unique index和一般索引normal index最大的差异是在索引列上增加一层唯一约束。添加唯一索引的数据列可以为空，但是只要尊在数据值，就必须是唯一的。<br>
 联系：1）unique index就是额外添加唯一性的约束。该约束严格的保证索引列的取值是唯一的，这在一些数据列上的业务约束是很重要的功能。比如一个数据列，不能作为主键，而且允许为空，但是业务上要求唯一特性，这个时候用唯一性索引就是最好的旋转。2）性能上两者并无很大区别。<br>
 using index用法：<br>
@@ -116,53 +114,86 @@ Alter table testone add constraint pk_testine1 primary key(name) using index tab
 一般索引单独建一个表空间。</h2>
 <p>本系列为最近一段时间学习oracle的学习笔记，记录于此作为自身回顾，其中有的来源网络，有的来自书籍，但时间已久，记不清哪些是引用，如是转载但没标注出特意致歉。</p>
 
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#create-table-testone-name-varchar10-char-tablespace1alter-table-testone-add-constraint-pk_testine1-primary-keyname-using-index-tablespace-tablespace2%E4%BD%9C%E4%B8%BA%E4%B8%80%E4%B8%AA%E5%A5%BD%E4%B9%A0%E6%83%AF%E4%B8%8D%E8%A6%81%E6%8A%8A%E7%B4%A2%E5%BC%95%E5%92%8C%E8%A1%A8%E6%A0%BC%E7%9A%84%E6%95%B0%E6%8D%AE%E6%94%BE%E5%9C%A8%E5%90%8C%E4%B8%80%E4%B8%AA%E8%A1%A8%E7%A9%BA%E9%97%B4-%E4%B8%80%E8%88%AC%E7%B4%A2%E5%BC%95%E5%8D%95%E7%8B%AC%E5%BB%BA%E4%B8%80%E4%B8%AA%E8%A1%A8%E7%A9%BA%E9%97%B4">Create table testone (name varchar(10 char)) tablespace1;<br>
+Alter table testone add constraint pk_testine1 primary key(name) using index tablespace tablespace2;<br>
+作为一个好习惯，不要把索引和表格的数据放在同一个表空间。<br>
+一般索引单独建一个表空间。</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
             </div>
-            
-              <div class="tag-container">
-                
-                  <a href="https://mvicdu.github.io/tag/YYinDW3Yw/" class="tag">
-                    oracle
-                  </a>
-                
-              </div>
-            
-            
-              <div class="next-post">
-                <div class="next">下一篇</div>
-                <a href="https://mvicdu.github.io/post/qiangzhibuneng/">
-                  <h3 class="post-title">
-                    linux下kill -9 pid 强制不能杀掉进程
-                  </h3>
-                </a>
-              </div>
-            
-
-            
-
-          </div>
-
+          </article>
         </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://mvicdu.github.io/post/qiangzhibuneng/">
+              <h3 class="post-title">
+                linux下kill -9 pid 强制不能杀掉进程
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  记录学习每一天
+  <a class="rss" href="https://mvicdu.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
       </div>
     </div>
 
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-<script type="application/javascript">
+    <script>
+      hljs.initHighlightingOnLoad()
 
-AOS.init();
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
 
-var app = new Vue({
-  el: '#app',
-  data: {
-    menuVisible: false,
-  },
-})
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
 
-</script>
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
 
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
 
-
-
-
-
+    </script>
   </body>
 </html>
