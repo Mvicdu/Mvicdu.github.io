@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585373101910">
+<link rel="shortcut icon" href="https://mvicdu.github.io/favicon.ico?v=1585373421020">
 <link rel="stylesheet" href="https://mvicdu.github.io/styles/main.css">
 
 
@@ -30,7 +30,7 @@ pip是 python 的包管理工具。在本文中将使用 python 版本的 shadow
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://mvicdu.github.io">
-        <img src="https://mvicdu.github.io/images/avatar.png?v=1585373101910" class="site-logo">
+        <img src="https://mvicdu.github.io/images/avatar.png?v=1585373421020" class="site-logo">
         <h1 class="site-title">Vic Notes</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -148,8 +148,8 @@ WantedBy=multi-user.target<br>
 ssserver -c /etc/shadowsocks.json -d start<br>
 #有其他文章用systemctl start sserver.service 命令来启动，但我安装的时候是用的上一条命令才生效的.</p>
 <p>附脚本：</p>
-<p>#!/bin/bash</p>
-<h1 id="install-shadowsocks-on-centos-7">Install Shadowsocks on CentOS 7</h1>
+<p>#!/bin/bash<br>
+#Install Shadowsocks on CentOS 7</p>
 <p>echo &quot;Installing Shadowsocks...&quot;</p>
 <p>random-string()<br>
 {<br>
@@ -162,14 +162,14 @@ SS_PORT=8078<br>
 SS_METHOD=aes-256-cfb<br>
 SS_IP=<code>ip route get 1 | awk '{print $NF;exit}'</code><br>
 GET_PIP_FILE=/tmp/get-pip.py</p>
-<h1 id="install-pip">install pip</h1>
-<p>curl &quot;https://bootstrap.pypa.io/get-pip.py&quot; -o &quot;${GET_PIP_FILE}&quot;<br>
+<p>#install pip<br>
+curl &quot;https://bootstrap.pypa.io/get-pip.py&quot; -o &quot;${GET_PIP_FILE}&quot;<br>
 python ${GET_PIP_FILE}</p>
-<h1 id="install-shadowsocks">install shadowsocks</h1>
-<p>pip install --upgrade pip<br>
+<p>#install shadowsocks<br>
+pip install --upgrade pip<br>
 pip install shadowsocks</p>
-<h1 id="create-shadowsocls-config">create shadowsocls config</h1>
-<p>cat &lt;&lt;EOF | sudo tee ${CONFIG_FILE}<br>
+<p>#create shadowsocls config<br>
+cat &lt;&lt;EOF | sudo tee ${CONFIG_FILE}<br>
 {<br>
 &quot;server&quot;: &quot;0.0.0.0&quot;,<br>
 &quot;server_port&quot;: <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mrow><mi>S</mi><msub><mi>S</mi><mi>P</mi></msub><mi>O</mi><mi>R</mi><mi>T</mi></mrow><mo separator="true">,</mo><mi mathvariant="normal">&quot;</mi><mi>p</mi><mi>a</mi><mi>s</mi><mi>s</mi><mi>w</mi><mi>o</mi><mi>r</mi><mi>d</mi><mi mathvariant="normal">&quot;</mi><mo>:</mo><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex">{SS_PORT},
@@ -177,8 +177,8 @@ pip install shadowsocks</p>
 &quot;method&quot;: &quot;${SS_METHOD}&quot;<br>
 }<br>
 EOF</p>
-<h1 id="create-service">create service</h1>
-<p>cat &lt;&lt;EOF | sudo tee ${SERVICE_FILE}<br>
+<p>#create service<br>
+cat &lt;&lt;EOF | sudo tee ${SERVICE_FILE}<br>
 [Unit]<br>
 Description=Shadowsocks</p>
 <p>[Service]<br>
@@ -187,11 +187,11 @@ ExecStart=/usr/bin/ssserver -c ${CONFIG_FILE}</p>
 <p>[Install]<br>
 WantedBy=multi-user.target<br>
 EOF</p>
-<h1 id="start-service">start service</h1>
-<p>systemctl enable shadowsocks<br>
+<p>#start service<br>
+systemctl enable shadowsocks<br>
 systemctl start shadowsocks</p>
-<h1 id="view-service-status">view service status</h1>
-<p>sleep 5<br>
+<p>#view service status<br>
+sleep 5<br>
 systemctl status shadowsocks -l</p>
 <p>echo &quot;================================&quot;<br>
 echo &quot;&quot;<br>
