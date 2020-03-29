@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://mvicdu.github.io</id>
     <title>Vic Notes</title>
-    <updated>2020-03-28T10:46:09.699Z</updated>
+    <updated>2020-03-29T04:51:39.325Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://mvicdu.github.io"/>
     <link rel="self" href="https://mvicdu.github.io/atom.xml"/>
@@ -30,6 +30,13 @@
         <link href="https://mvicdu.github.io/post/jiang-biao-nei-rong-zhuan-chu-dao-wen-jian/">
         </link>
         <updated>2020-03-28T04:47:28.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[mysql主从复制]]></title>
+        <id>https://mvicdu.github.io/post/mysql-zhu-cong-fu-zhi/</id>
+        <link href="https://mvicdu.github.io/post/mysql-zhu-cong-fu-zhi/">
+        </link>
+        <updated>2019-12-30T04:50:41.000Z</updated>
     </entry>
     <entry>
         <title type="html"><![CDATA[Ansible 自动化运维模块实战]]></title>
@@ -72,12 +79,5 @@
         <link href="https://mvicdu.github.io/post/zabbix-an-zhuang-lamp-huan-jing/">
         </link>
         <updated>2019-11-21T05:15:10.000Z</updated>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[容灾方案的选择]]></title>
-        <id>https://mvicdu.github.io/post/rong-zai-fang-an-de-xuan-ze/</id>
-        <link href="https://mvicdu.github.io/post/rong-zai-fang-an-de-xuan-ze/">
-        </link>
-        <updated>2019-11-13T04:56:21.000Z</updated>
     </entry>
 </feed>
